@@ -6,19 +6,25 @@ const Sequelize = require("sequelize");
 // const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.json")[env];
+const config = require(__dirname + "/../database/config/config.js")[env];
 const db: any = {};
 
 let sequelize: any;
+const options = {
+  define: {
+    freezeTableName: true,
+  },
+};
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    ...config,
+    ...options,
+  });
 } else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    ...config,
+    ...options,
+  });
 }
 
 fs.readdirSync(__dirname)
@@ -47,4 +53,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+export default db;

@@ -5,23 +5,30 @@ module.exports = (sequelize: any, DataTypes: any) => {
     InferAttributes<PatientPhoneNumber>,
     InferCreationAttributes<PatientPhoneNumber>
   > {
-    declare patientPhoneNumber_id: number;
+    // declare patientPhoneNumber_id: number;
+    declare patient_id: number;
     declare PhoneNumber: number;
     static associate(models: any) {
       PatientPhoneNumber.belongsTo(models.Patient, {
         foreignKey: "patient_id",
         as: "patient",
+        targetKey: "patient_id",
       });
     }
   }
   PatientPhoneNumber.init(
     {
-      patientPhoneNumber_id: {
+      // patientPhoneNumber_id: {
+      //   primaryKey: true,
+      //   autoIncrement: true,
+      //   type: DataTypes.INTEGER,
+      // },
+      patient_id: {
         primaryKey: true,
-        autoIncrement: true,
         type: DataTypes.INTEGER,
       },
       PhoneNumber: {
+        primaryKey: true,
         allowNull: false,
         type: DataTypes.INTEGER,
       },

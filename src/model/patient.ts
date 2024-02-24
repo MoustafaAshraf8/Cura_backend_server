@@ -20,7 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         as: "emr",
       });
 
-      Patient.hasOne(models.PatientPhoneNumber, {
+      Patient.hasMany(models.PatientPhoneNumber, {
         foreignKey: "patient_id",
         as: "patientphonenumber",
       });
@@ -29,9 +29,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
   Patient.init(
     {
       patient_id: {
-        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        type: DataTypes.INTEGER,
       },
       FirstName: {
         type: DataTypes.STRING,
@@ -40,16 +40,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
       },
       Email: {
-        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         //   validate: {
         //     isEmail: true,
         //   },
+        type: DataTypes.STRING,
       },
       Password: {
-        type: DataTypes.STRING,
         allowNull: false,
+        type: DataTypes.STRING,
       },
       Gender: {
         defaultValue: "male",

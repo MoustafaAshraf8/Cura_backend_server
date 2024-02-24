@@ -13,6 +13,7 @@ let sequelize: any;
 const options = {
   define: {
     freezeTableName: true,
+    // timestamps: false,
   },
 };
 if (config.use_env_variable) {

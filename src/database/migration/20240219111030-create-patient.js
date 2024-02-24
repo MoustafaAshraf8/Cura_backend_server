@@ -7,20 +7,22 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("patient", {
       patient_id: {
+        field: "patient_id",
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
-        //   onDelete: "cascade",
-        //   onUpdate: "cascade",
         type: Sequelize.INTEGER,
       },
       FirstName: {
+        field: "FirstName",
         type: Sequelize.STRING,
       },
       LastName: {
+        field: "LastName",
         type: Sequelize.STRING,
       },
       Email: {
+        field: "Email",
         type: Sequelize.STRING,
         // unique: true,
         allowNull: false,
@@ -29,9 +31,11 @@ module.exports = {
         //   },
       },
       Password: {
+        field: "Password",
         type: Sequelize.STRING,
       },
       Gender: {
+        field: "Gender",
         allowNull: false,
         defaultValue: "male",
         type: DataTypes.ENUM({
@@ -39,6 +43,7 @@ module.exports = {
         }),
       },
       DOB: {
+        field: "DOB",
         allowNull: true,
         default: null,
         type: DataTypes.DATE,

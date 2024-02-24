@@ -20,6 +20,28 @@ module.exports = {
         onUpdate: "cascade",
         type: Sequelize.INTEGER,
       },
+      desease_id: {
+        references: {
+          model: {
+            tableName: "desease",
+          },
+          key: "desease_id",
+        },
+        onDelete: "cascade",
+        onUpdate: "cascade",
+        type: Sequelize.INTEGER,
+      },
+      surgery_id: {
+        references: {
+          model: {
+            tableName: "surgery",
+          },
+          key: "surgery_id",
+        },
+        onDelete: "cascade",
+        onUpdate: "cascade",
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

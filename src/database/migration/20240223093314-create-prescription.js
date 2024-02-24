@@ -2,25 +2,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("patientphonenumber", {
-      patient_id: {
-        field: "patient_id",
-        references: {
-          model: {
-            tableName: "patient",
-          },
-          key: "patient_id",
-        },
-        onDelete: "cascade",
-        onUpdate: "cascade",
+    await queryInterface.createTable("prescription", {
+      prescription_id: {
         primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
-
-      PhoneNumber: {
-        field: "PhoneNumber",
+      desease_id: {
+        references: {
+          model: {
+            tableName: "desease",
+          },
+          key: "desease_id",
+        },
+        onUpdate: "cascade",
+        onDelete: "cascade",
+        type: Sequelize.INTEGER,
+      },
+      Name: {
         allowNull: false,
-        primaryKey: true,
+        type: Sequelize.STRING,
+      },
+      Dose: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      Frequency: {
+        allowNull: false,
+        defaultValue: 24,
         type: Sequelize.INTEGER,
       },
       createdAt: {
@@ -34,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("patientphonenumber");
+    await queryInterface.dropTable("prescription");
   },
 };

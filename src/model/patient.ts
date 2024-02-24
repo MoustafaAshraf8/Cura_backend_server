@@ -1,5 +1,6 @@
 "use strict";
 import { Model, InferAttributes, InferCreationAttributes } from "sequelize";
+import { Hasher } from "../utility/Hasher";
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Patient extends Model<
@@ -49,6 +50,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       Password: {
         allowNull: false,
+        async set(value: string) {
+          // Storing passwords in plaintext in the database is terrible.
+          // Hashing the value with an appropriate cryptographic hash function is better.
+          //  const hashed = await Hasher.hashPassword(value);
+          //  console.log(hashed);
+          this.setDataValue("Password", value);
+        },
         type: DataTypes.STRING,
       },
       Gender: {

@@ -8,5 +8,5 @@ export interface Patient_Interface {
   Gender: string | null;
   DOB: string | null;
   EMR: EMR_Interfce;
-  PhoneNumber: [PatientPhoneNumber_Interface];
+  patientphonenumber: [PatientPhoneNumber_Interface];
 }

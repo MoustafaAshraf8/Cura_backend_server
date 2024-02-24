@@ -1,15 +1,29 @@
 import { Patient_Interface } from "../type/Patient_Interface";
 import db from "../model/index";
+import { LoginCredential_Interface } from "../type/LoginCredential_Interface";
+import { Op } from "sequelize";
 export class PatientService {
-  static async login(): Promise<void> {
-    console.log("patient service");
-    return;
+  static async login(
+    credential: LoginCredential_Interface
+  ): Promise<Patient_Interface> {
+    const patient: Patient_Interface = await db.Patient.findOne({
+      where: {
+        [Op.and]: [
+          { Email: credential.Email },
+          { Password: credential.Password },
+        ],
+      },
+      attributes: ["patient_id"],
+    });
+    return patient;
   }
 
-  static async signup(patient: Patient_Interface): Promise<void> {
+  static async signup(patient: Patient_Interface): Promise<any> {
     console.log("patient service");
-    await db.Patient.create(patient);
-    return;
+    const result: Patient_Interface = await db.Patient.create(patient, {
+      include: [{ model: db.PatientPhoneNumber, as: "patientphonenumber" }],
+    });
+    return result;
   }
 
   static async getAll(): Promise<Patient_Interface> {

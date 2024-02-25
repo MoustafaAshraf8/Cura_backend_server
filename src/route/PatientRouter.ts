@@ -1,11 +1,15 @@
 import express, { Router, Request, Response, NextFunction } from "express";
 import { patientRoute } from "../constant/route";
 import { PatientController } from "../controller/PatientController";
+import { tryCatch } from "../utility/tryCatch";
+// import { tryCatch } from "../utility/tryCatch";
 const PatientRouter: Router = express.Router();
 
-PatientRouter.route(patientRoute.root).get(PatientController.getAll);
+PatientRouter.route(patientRoute.root).get(tryCatch(PatientController.getAll));
 
-PatientRouter.route(patientRoute.login).post(PatientController.login);
-PatientRouter.route(patientRoute.signup).post(PatientController.signup);
+PatientRouter.route(patientRoute.login).post(tryCatch(PatientController.login));
+PatientRouter.route(patientRoute.signup).post(
+  tryCatch(PatientController.signup)
+);
 
 export { PatientRouter };

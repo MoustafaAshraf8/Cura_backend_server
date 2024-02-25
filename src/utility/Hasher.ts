@@ -12,7 +12,7 @@ export class Hasher {
   public static verifyPassword = async (
     plaintext: string,
     hashedPassword: string
-  ) => {
-    return await bcrypt.compare(plaintext, hashedPassword);
+  ): Promise<boolean> => {
+    return bcrypt.compare(plaintext, hashedPassword);
   };
 }

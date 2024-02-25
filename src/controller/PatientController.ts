@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { PatientService } from "../service/PatientService";
-import { Patient_Interface } from "../type/Patient_Interface";
+import { Patient_Interface } from "../type/Patient/Patient_Interface";
 import { Hasher } from "../utility/Hasher";
-import { LogicalOperator } from "typescript";
-import { LoginCredential_Interface } from "../type/LoginCredential_Interface";
-
+import { LoginCredential_Interface } from "../type/Generic/LoginCredential_Interface";
+import { UserNotFoundException } from "../error/UserNotFoundException";
+import { WrongPasswordException } from "../error/WrongPasswordException";
 export class PatientController {
   static async signup(
     req: Request,
@@ -26,8 +26,16 @@ export class PatientController {
   ): Promise<void> {
     const credential: LoginCredential_Interface = { ...req.body };
     const patient: Patient_Interface = await PatientService.login(credential);
+
+    console.log(patient);
+    const verified: boolean = await Hasher.verifyPassword(
+      credential.Password,
+      patient.Password
+    );
+    if (!verified) {
+      throw WrongPasswordException;
+    }
     res.json(patient);
-    return;
   }
 
   static async getAll(

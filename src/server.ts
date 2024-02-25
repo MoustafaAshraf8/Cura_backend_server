@@ -4,6 +4,7 @@ import db from "./model/index";
 import { patientRoute, serverRoute } from "./constant/route";
 import { PatientRouter } from "./route/PatientRouter";
 import dotenv from "dotenv";
+import { errorHandler } from "./middleware/errorHandler";
 dotenv.config();
 const port = process.env.PORT || 8080;
 const server: Application = express();
@@ -29,6 +30,8 @@ server.get("/", async (req: Request, res: Response, next: NextFunction) => {
   res.json(patient);
 });
 
+server.use(errorHandler);
+
 server.listen(port, async () => {
   console.log(`server listening on port: 8080`);
   await db.sequelize.authenticate();
@@ -36,7 +39,7 @@ server.listen(port, async () => {
   //   const user = {
   //     FirstName: "test",
   //     LastName: "test",
-  //     Email: "email1`",
+  //     Email: "email2",
   //     Password: "123",
   //     patientphonenumber: [
   //       { PhoneNumber: 1 },

@@ -1,21 +1,25 @@
-import { Patient_Interface } from "../type/Patient_Interface";
+import { Patient_Interface } from "../type/Patient/Patient_Interface";
 import db from "../model/index";
-import { LoginCredential_Interface } from "../type/LoginCredential_Interface";
+import { LoginCredential_Interface } from "../type/Generic/LoginCredential_Interface";
 import { Op } from "sequelize";
+import { UserNotFoundException } from "../error/UserNotFoundException";
 export class PatientService {
   static async login(
     credential: LoginCredential_Interface
   ): Promise<Patient_Interface> {
-    const patient: Patient_Interface = await db.Patient.findOne({
-      where: {
-        [Op.and]: [
-          { Email: credential.Email },
-          { Password: credential.Password },
-        ],
-      },
-      attributes: ["patient_id"],
-    });
-    return patient;
+    try {
+      const patientData = await db.Patient.findOne({
+        where: {
+          [Op.and]: [{ Email: credential.Email }],
+        },
+        attributes: ["patient_id", "Password"],
+      });
+      const patient: Patient_Interface = patientData.dataValues;
+
+      return patient;
+    } catch (err) {
+      throw UserNotFoundException;
+    }
   }
 
   static async signup(patient: Patient_Interface): Promise<any> {

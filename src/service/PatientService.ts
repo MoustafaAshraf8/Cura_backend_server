@@ -22,12 +22,13 @@ export class PatientService {
     }
   }
 
-  static async signup(patient: Patient_Interface): Promise<any> {
+  static async signup(patient: Patient_Interface): Promise<Patient_Interface> {
     console.log("patient service");
-    const result: Patient_Interface = await db.Patient.create(patient, {
+    const patientData = await db.Patient.create(patient, {
       include: [{ model: db.PatientPhoneNumber, as: "patientphonenumber" }],
     });
-    return result;
+
+    return patientData;
   }
 
   static async getAll(): Promise<Patient_Interface> {

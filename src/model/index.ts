@@ -9,6 +9,7 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../database/config/config.js")[env];
 const db: any = {};
 
+// create connection instance
 let sequelize: any;
 const options = {
   define: {
@@ -28,6 +29,7 @@ if (config.use_env_variable) {
   });
 }
 
+// read models
 fs.readdirSync(__dirname)
   .filter((file: any) => {
     return (
@@ -44,6 +46,28 @@ fs.readdirSync(__dirname)
     );
     db[model.name] = model;
   });
+
+// fs.readdirSync(__dirname).forEach((dir: any) => {
+//   if (dir.slice(-3) !== ".ts") {
+//     console.log(dir);
+//     fs.readdirSync(__dirname + dir).filter((file: any) => {
+//       return (
+//         file.indexOf(".") !== 0 &&
+//         file !== basename &&
+//         file.slice(-3) === ".ts" &&
+//         file.indexOf(".test.js") === -1
+//       );
+//     });
+//   }
+//   return;
+//   // .forEach((file: any) => {
+//   //    const model = require(path.join(__dirname, file))(
+//   //      sequelize,
+//   //      Sequelize.DataTypes
+//   //    );
+//   //    db[model.name] = model;
+//   //  });
+// });
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

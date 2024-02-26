@@ -14,8 +14,10 @@ export class PatientController {
     const patientData: Patient_Interface = { ...req.body };
     // to be properly implemented in model setter using hooks
     patientData.Password = await Hasher.hashPassword(patientData.Password);
-    const result: Patient_Interface = await PatientService.signup(patientData);
-    res.json(result);
+    const patient: Patient_Interface = await PatientService.signup(patientData);
+    const jwt = await JWT.createAccessToken({ id: patient.patient_id });
+    res.json({ accessToken: jwt });
+    // res.json(result);
     return;
   }
 

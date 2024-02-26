@@ -1,0 +1,15 @@
+POST http://localhost:8080/api/patient/signup HTTP/1.1
+content-type: application/json
+
+{
+    "FirstName":"user2",
+    "LastName":"user2",
+    "Email":"email28",
+    "Password":"123",
+    "patientphonenumber":[
+        {"PhoneNumber":1},
+        {"PhoneNumber":2},
+        {"PhoneNumber":3},
+        {"PhoneNumber":4}
+    ]
+}

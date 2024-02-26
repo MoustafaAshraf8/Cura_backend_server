@@ -1,13 +1,10 @@
 "use strict";
-
-const { DataTypes } = require("sequelize");
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("patient", {
-      patient_id: {
-        field: "patient_id",
+    await queryInterface.createTable("doctor", {
+      doctor_id: {
+        field: "doctor_id",
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
@@ -48,6 +45,11 @@ module.exports = {
         default: null,
         type: Sequelize.DATE,
       },
+      Speciality: {
+        allowNull: false,
+        defaultValue: "general practitioner",
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -59,6 +61,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("patient");
+    await queryInterface.dropTable("doctor");
   },
 };

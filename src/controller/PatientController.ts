@@ -3,8 +3,8 @@ import { PatientService } from "../service/PatientService";
 import { Patient_Interface } from "../type/Patient/Patient_Interface";
 import { Hasher } from "../utility/Hasher";
 import { LoginCredential_Interface } from "../type/Generic/LoginCredential_Interface";
-import { UserNotFoundException } from "../error/UserNotFoundException";
 import { WrongPasswordException } from "../error/WrongPasswordException";
+import { JWT } from "../utility/JWT";
 export class PatientController {
   static async signup(
     req: Request,
@@ -35,7 +35,8 @@ export class PatientController {
     if (!verified) {
       throw WrongPasswordException;
     }
-    res.json(patient);
+    const jwt = await JWT.createAccessToken({ id: patient.patient_id });
+    res.json({ accessToken: jwt });
   }
 
   static async getAll(

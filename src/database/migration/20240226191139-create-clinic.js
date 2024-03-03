@@ -28,7 +28,7 @@ module.exports = {
       },
       Fee: {
         allowNull: false,
-        defaultValue: 10,
+        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       Rating: {

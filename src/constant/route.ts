@@ -10,4 +10,11 @@ const patientRoute = {
   emr: "/emr",
 };
 
-export { patientRoute, serverRoute };
+const doctorRoute = {
+  baseUrl: `${serverRoute.baseUrl}/doctor`,
+  root: "/",
+  login: "/login",
+  signup: "/signup",
+};
+
+export { patientRoute, serverRoute, doctorRoute };

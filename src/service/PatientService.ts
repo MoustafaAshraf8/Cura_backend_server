@@ -1,9 +1,9 @@
-import { Patient_Interface } from "../type/Patient/Patient_Interface";
-import { EMR_Interface } from "../type/Patient/EMR_Interface";
+import { Patient_Interface } from "../type/patient/Patient_Interface";
 import db from "../model/index";
-import { LoginCredential_Interface } from "../type/Generic/LoginCredential_Interface";
+import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
+import { EMR_Interface } from "../type/patient/EMR_Interface";
 export class PatientService {
   static async login(
     credential: LoginCredential_Interface

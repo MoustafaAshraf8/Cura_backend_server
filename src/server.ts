@@ -1,8 +1,9 @@
 import { Express, Application, Request, Response, NextFunction } from "express";
 import express from "express";
 import db from "./model/index";
-import { patientRoute, serverRoute } from "./constant/route";
+import { doctorRoute, patientRoute, serverRoute } from "./constant/route";
 import { PatientRouter } from "./route/PatientRouter";
+import { DoctorRouter } from "./route/DoctorRouter";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
 dotenv.config();
@@ -18,6 +19,7 @@ server.use(
   }
 );
 server.use(patientRoute.baseUrl, PatientRouter);
+server.use(doctorRoute.baseUrl, DoctorRouter);
 
 server.get(
   serverRoute.baseUrl,

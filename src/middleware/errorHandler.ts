@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Exception_Interface } from "../type/Exception/Exception_Interface";
+import { Exception_Interface } from "../type/exception/Exception_Interface";
 import { statusCode } from "../constant/StatusCode";
 
 function errorHandler(

@@ -1,9 +1,8 @@
-import express, { Router, Request, Response, NextFunction } from "express";
+import express, { Router } from "express";
 import { patientRoute } from "../constant/route";
 import { PatientController } from "../controller/PatientController";
 import { tryCatch } from "../utility/tryCatch";
 import { setId } from "../middleware/setId";
-// import { tryCatch } from "../utility/tryCatch";
 const PatientRouter: Router = express.Router();
 
 PatientRouter.route(patientRoute.root).get(tryCatch(PatientController.getAll));

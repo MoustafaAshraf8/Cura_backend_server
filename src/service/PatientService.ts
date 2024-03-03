@@ -1,4 +1,5 @@
 import { Patient_Interface } from "../type/Patient/Patient_Interface";
+import { EMR_Interface } from "../type/Patient/EMR_Interface";
 import db from "../model/index";
 import { LoginCredential_Interface } from "../type/Generic/LoginCredential_Interface";
 import { Op } from "sequelize";
@@ -38,6 +39,27 @@ export class PatientService {
     });
 
     return patientData.dataValues;
+  }
+
+  static async getEMR(id: number): Promise<EMR_Interface> {
+    console.log("get emr service");
+
+    const emr = await db.EMR.findOne({
+      where: {
+        patient_id: id,
+      },
+      // include: [{ all: true, nested: true }],
+      include: [
+        {
+          model: db.Desease,
+          as: "desease",
+          include: [{ model: db.Prescription, as: "prescription" }],
+        },
+        { model: db.Surgery, as: "surgery", nested: true },
+      ],
+    });
+
+    return emr;
   }
 
   static async getAll(): Promise<Patient_Interface> {

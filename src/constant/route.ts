@@ -7,6 +7,7 @@ const patientRoute = {
   root: "/",
   login: "/login",
   signup: "/signup",
+  emr: "/emr",
 };
 
 export { patientRoute, serverRoute };

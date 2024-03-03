@@ -22,7 +22,6 @@ server.use(patientRoute.baseUrl, PatientRouter);
 server.get(
   serverRoute.baseUrl,
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("__________666666______");
     //   const desease = await db.Desease.findAll({
     //     include: [{ model: db.Prescription, as: "prescription" }],
     //   });

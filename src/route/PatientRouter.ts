@@ -2,6 +2,7 @@ import express, { Router, Request, Response, NextFunction } from "express";
 import { patientRoute } from "../constant/route";
 import { PatientController } from "../controller/PatientController";
 import { tryCatch } from "../utility/tryCatch";
+import { setId } from "../middleware/setId";
 // import { tryCatch } from "../utility/tryCatch";
 const PatientRouter: Router = express.Router();
 
@@ -10,6 +11,10 @@ PatientRouter.route(patientRoute.root).get(tryCatch(PatientController.getAll));
 PatientRouter.route(patientRoute.login).post(tryCatch(PatientController.login));
 PatientRouter.route(patientRoute.signup).post(
   tryCatch(PatientController.signup)
+);
+PatientRouter.route(patientRoute.emr).get(
+  setId,
+  tryCatch(PatientController.getEMR)
 );
 
 export { PatientRouter };

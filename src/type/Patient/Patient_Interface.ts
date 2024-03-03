@@ -1,5 +1,5 @@
 import { PatientPhoneNumber_Interface } from "./PatientPhoneNumber_Interface";
-import { EMR_Interfce } from "./EMR_Interface";
+import { EMR_Interface } from "./EMR_Interface";
 export interface Patient_Interface {
   patient_id: number;
   FirstName: string;
@@ -8,6 +8,6 @@ export interface Patient_Interface {
   Password: string;
   Gender: string | null;
   DOB: string | null;
-  EMR: EMR_Interfce;
+  EMR: EMR_Interface;
   patientphonenumber: [PatientPhoneNumber_Interface];
 }

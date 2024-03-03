@@ -40,6 +40,17 @@ export class PatientController {
     res.json({ accessToken: jwt });
   }
 
+  static async getEMR(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const id: number = Object(req).id;
+    const emr = await PatientService.getEMR(id);
+    res.statusCode = 200;
+    res.json(emr);
+  }
+
   static async getAll(
     req: Request,
     res: Response,

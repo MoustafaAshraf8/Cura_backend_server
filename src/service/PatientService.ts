@@ -58,7 +58,9 @@ export class PatientService {
         { model: db.Surgery, as: "surgery", nested: true },
       ],
     });
-
+    if (emr == null) {
+      throw UserNotFoundException;
+    }
     return emr;
   }
 

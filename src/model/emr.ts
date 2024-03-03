@@ -36,6 +36,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     {
       sequelize,
+      timestamps: false,
       tableName: "emr",
       modelName: "EMR",
     }

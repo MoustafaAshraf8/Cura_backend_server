@@ -17,32 +17,8 @@ module.exports = {
           key: "patient_id",
         },
         primaryKey: true,
-        onDelete: "cascade",
-        onUpdate: "cascade",
-        type: Sequelize.INTEGER,
-      },
-      desease_id: {
-        references: {
-          model: {
-            tableName: "desease",
-          },
-          key: "desease_id",
-        },
-        primaryKey: true,
-        onDelete: "cascade",
-        onUpdate: "cascade",
-        type: Sequelize.INTEGER,
-      },
-      surgery_id: {
-        references: {
-          model: {
-            tableName: "surgery",
-          },
-          key: "surgery_id",
-        },
-        primaryKey: true,
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         type: Sequelize.INTEGER,
       },
       createdAt: {

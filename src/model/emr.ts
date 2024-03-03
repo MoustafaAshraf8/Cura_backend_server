@@ -3,32 +3,22 @@ import { InferAttributes, InferCreationAttributes, Model } from "sequelize";
 module.exports = (sequelize: any, DataTypes: any) => {
   class EMR extends Model<InferAttributes<EMR>, InferCreationAttributes<EMR>> {
     declare emr_id: number;
-    //  static associate(models: any) {
-    //    EMR.belongsTo(models.Patient, {
-    //      foreignKey: "patient_id",
-    //      as: "patient",
-    //      //   onDelete: "cascade",
-    //      //   onUpdate: "cascade",
-    //    });
-    //  }
     declare patient_id: number;
-    declare desease_id: number;
-    declare surgery_id: number;
     static associate(models: any) {
       EMR.belongsTo(models.Patient, {
         foreignKey: "patient_id",
         as: "patient",
         targetKey: "patient_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
-      EMR.belongsTo(models.Desease, {
-        foreignKey: "desease_id",
+      EMR.hasMany(models.Desease, {
+        foreignKey: "emr_id",
         as: "desease",
-        targetKey: "desease_id",
       });
-      EMR.belongsTo(models.Surgery, {
-        foreignKey: "surgery_id",
+      EMR.hasMany(models.Surgery, {
+        foreignKey: "emr_id",
         as: "surgery",
-        targetKey: "surgery_id",
       });
     }
   }
@@ -40,14 +30,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
       },
       patient_id: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      desease_id: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      surgery_id: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },

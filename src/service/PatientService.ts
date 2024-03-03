@@ -24,11 +24,20 @@ export class PatientService {
 
   static async signup(patient: Patient_Interface): Promise<Patient_Interface> {
     console.log("patient service");
-    const patientData = await db.Patient.create(patient, {
-      include: [{ model: db.PatientPhoneNumber, as: "patientphonenumber" }],
+
+    const patientData = await db.sequelize.transaction(async (t: any) => {
+      const patientData = await db.Patient.create(patient, {
+        include: [{ model: db.PatientPhoneNumber, as: "patientphonenumber" }],
+      });
+
+      const emr = await db.EMR.create({
+        patient_id: patientData.dataValues.patient_id,
+      });
+
+      return patientData;
     });
 
-    return patientData;
+    return patientData.dataValues;
   }
 
   static async getAll(): Promise<Patient_Interface> {

@@ -13,6 +13,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "patient_id",
         as: "patient",
         targetKey: "patient_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
     }
   }

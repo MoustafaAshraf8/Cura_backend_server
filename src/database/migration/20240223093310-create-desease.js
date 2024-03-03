@@ -9,18 +9,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      emr_id: {
+        references: {
+          model: {
+            tableName: "emr",
+          },
+          key: "emr_id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        type: Sequelize.INTEGER,
+      },
       Diagnose: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      // prescription_id:{
-      //    references: {
-      //       model: {
-      //         tableName: "prescription",
-      //       },
-      //       key: "patient_id",
-      //     },
-      // }
       Note: {
         allowNull: false,
         type: Sequelize.STRING,

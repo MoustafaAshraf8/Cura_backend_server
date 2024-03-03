@@ -6,6 +6,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     InferCreationAttributes<Desease>
   > {
     declare desease_id: number;
+    declare emr_id: number;
     declare Diagnose: string;
     declare Note: string;
     static associate(models: any) {
@@ -13,9 +14,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "desease_id",
         as: "prescription",
       });
-      Desease.hasOne(models.EMR, {
+      Desease.belongsTo(models.EMR, {
         foreignKey: "desease_id",
         as: "emr",
+        targetKey: "emr_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
     }
   }
@@ -24,6 +28,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       desease_id: {
         primaryKey: true,
         autoIncrement: true,
+        type: DataTypes.INTEGER,
+      },
+      emr_id: {
+        allowNull: false,
         type: DataTypes.INTEGER,
       },
       Diagnose: {

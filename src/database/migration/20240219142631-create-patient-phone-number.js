@@ -11,12 +11,12 @@ module.exports = {
           },
           key: "patient_id",
         },
-        onDelete: "cascade",
-        onUpdate: "cascade",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-
       PhoneNumber: {
         field: "PhoneNumber",
         allowNull: false,

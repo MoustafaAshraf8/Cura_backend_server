@@ -17,7 +17,6 @@ export class PatientController {
     const patient: Patient_Interface = await PatientService.signup(patientData);
     const jwt = await JWT.createAccessToken({ id: patient.patient_id });
     res.json({ accessToken: jwt });
-    // res.json(result);
     return;
   }
 

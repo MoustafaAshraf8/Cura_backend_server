@@ -16,6 +16,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "desease_id",
         as: "desease",
         targetKey: "desease_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
     }
   }

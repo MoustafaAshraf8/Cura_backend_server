@@ -15,8 +15,8 @@ module.exports = {
           },
           key: "desease_id",
         },
-        onUpdate: "cascade",
-        onDelete: "cascade",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
         type: Sequelize.INTEGER,
       },
       Name: {

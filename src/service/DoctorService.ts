@@ -3,15 +3,18 @@ import db from "../model/index";
 import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
+import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
+import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotFoundException";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface
   ): Promise<Doctor_Interface> {
-    const doctorData = await db.Patient.findOne({
+    const doctorData = await db.Doctor.findOne({
       where: {
         [Op.and]: [{ Email: credential.Email }],
       },
-      attributes: ["patient_id", "Password"],
+      // attributes: ["patient_id", "Password"],
+      include: { model: db.Speciality, as: "speciality" },
     });
     if (!doctorData) {
       throw UserNotFoundException;
@@ -24,9 +27,6 @@ export class DoctorService {
     console.log("doctor signup service");
 
     const doctorData = await db.sequelize.transaction(async (t: any) => {
-      // const doctorData = await db.Patient.create(doctor, {
-      //   include: [{ model: db.PatientPhoneNumber, as: "patientphonenumber" }],
-      // });
       const doctorData = await db.Doctor.create(doctor);
 
       const clinic = await db.Clinic.create({
@@ -40,36 +40,31 @@ export class DoctorService {
     return doctorData;
   }
 
-  //   static async getEMR(id: number): Promise<EMR_Interface> {
-  //     console.log("get emr service");
+  static async addSchedule(
+    schedule: Schedule_Interface
+  ): Promise<Schedule_Interface> {
+    console.log("doctor addSchedule service");
 
-  //     const emr = await db.EMR.findOne({
-  //       where: {
-  //         patient_id: id,
-  //       },
-  //       // include: [{ all: true, nested: true }],
-  //       include: [
-  //         {
-  //           model: db.Desease,
-  //           as: "desease",
-  //           include: [{ model: db.Prescription, as: "prescription" }],
-  //         },
-  //         { model: db.Surgery, as: "surgery", nested: true },
-  //       ],
-  //     });
-  //     if (emr == null) {
-  //       throw UserNotFoundException;
-  //     }
-  //     return emr;
-  //   }
+    const scheduleData = await db.Schedule.create(schedule);
+    if (scheduleData == null) {
+      throw new Error();
+    }
 
-  //   static async getAll(): Promise<Patient_Interface> {
-  //     const patients = await db.Patient.findAll({
-  //       include: [
-  //         { model: db.EMR, association: "emr" },
-  //         { model: db.PatientPhoneNumber, association: "patientphonenumber" },
-  //       ],
-  //     });
-  //     return patients;
-  //   }
+    return scheduleData;
+  }
+
+  static async getSchedule(clinic_id: number): Promise<Schedule_Interface> {
+    console.log("doctor getSchedule service");
+
+    const scheduleData = await db.Schedule.findAll({
+      where: {
+        clinic_id: clinic_id,
+      },
+    });
+    if (scheduleData == null) {
+      throw ScheduleNotFoundException;
+    }
+
+    return scheduleData;
+  }
 }

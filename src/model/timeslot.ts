@@ -7,11 +7,28 @@ module.exports = (sequelize: any, DataTypes: any) => {
   > {
     declare timeslot_id: number;
     declare clinic_id: number;
-    declare patient_id: number;
-    declare time: Date;
-    declare available: boolean;
+    declare schedule_id: number;
+    declare patient_id: number | null;
+    declare Date: Date;
+    declare Available: boolean;
     static associate(models: any) {
-      // define association here
+      TimeSlot.belongsTo(models.Clinic, {
+        foreignKey: "clinic_id",
+        as: "clinic",
+        targetKey: "clinic_id",
+      });
+
+      TimeSlot.belongsTo(models.Schedule, {
+        foreignKey: "schedule_id",
+        as: "schedule",
+        targetKey: "schedule_id",
+      });
+
+      TimeSlot.belongsTo(models.Patient, {
+        foreignKey: "patient_id",
+        as: "patient",
+        targetKey: "patient_id",
+      });
     }
   }
   TimeSlot.init(
@@ -25,15 +42,21 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      patient_id: {
+      schedule_id: {
         allowNull: false,
         type: DataTypes.INTEGER,
       },
-      time: {
+      patient_id: {
+        allowNull: true,
+        defaultValue: null,
+        type: DataTypes.INTEGER,
+      },
+      Date: {
         allowNull: false,
         type: DataTypes.DATE,
       },
-      available: {
+      Available: {
+        allowNull: true,
         defaultValue: true,
         type: DataTypes.BOOLEAN,
       },

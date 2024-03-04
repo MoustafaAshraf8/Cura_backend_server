@@ -45,10 +45,21 @@ module.exports = {
         default: null,
         type: Sequelize.DATE,
       },
-      Speciality: {
+      speciality_id: {
+        references: {
+          model: {
+            tableName: "speciality",
+          },
+          key: "speciality_id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         allowNull: false,
-        defaultValue: "general practitioner",
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+      },
+      Approved: {
+        defaultValue: false,
+        type: Sequelize.BOOLEAN,
       },
       // createdAt: {
       //   allowNull: false,

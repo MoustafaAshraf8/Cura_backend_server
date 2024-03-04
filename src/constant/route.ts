@@ -15,6 +15,8 @@ const doctorRoute = {
   root: "/",
   login: "/login",
   signup: "/signup",
+  schedule: "/schedule",
+  timeSlot: "/timeslot",
 };
 
 export { patientRoute, serverRoute, doctorRoute };

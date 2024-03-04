@@ -12,11 +12,20 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare Password: string;
     declare Gender: string;
     declare DOB: Date;
-    declare Speciality: string;
+    declare speciality_id: number;
+    declare Approved: boolean;
     static associate(models: any) {
       Doctor.hasOne(models.Clinic, {
         foreignKey: "doctor_id",
         as: "clinic",
+      });
+
+      Doctor.belongsTo(models.Speciality, {
+        foreignKey: "speciality_id",
+        as: "speciality",
+        targetKey: "speciality_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
     }
   }
@@ -61,10 +70,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: null,
         type: DataTypes.STRING,
       },
-      Speciality: {
+      speciality_id: {
         allowNull: false,
-        defaultValue: "general practitioner",
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
+      },
+      Approved: {
+        defaultValue: false,
+        type: DataTypes.BOOLEAN,
       },
     },
     {

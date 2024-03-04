@@ -15,6 +15,20 @@ module.exports = {
           },
           key: "clinic_id",
         },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      schedule_id: {
+        references: {
+          model: {
+            tableName: "schedule",
+          },
+          key: "schedule_id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
         allowNull: false,
         type: Sequelize.INTEGER,
       },
@@ -26,13 +40,15 @@ module.exports = {
           key: "patient_id",
         },
         allowNull: true,
+        defaultValue: null,
         type: Sequelize.INTEGER,
       },
-      time: {
+      Date: {
         allowNull: false,
         type: Sequelize.DATE,
       },
       available: {
+        allowNull: true,
         defaultValue: true,
         type: Sequelize.BOOLEAN,
       },

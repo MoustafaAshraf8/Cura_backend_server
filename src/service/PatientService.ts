@@ -4,6 +4,8 @@ import { LoginCredential_Interface } from "../type/generic/LoginCredential_Inter
 import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
 import { EMR_Interface } from "../type/patient/EMR_Interface";
+import mongoose from "mongoose";
+import { EMR } from "../database/mongo/model/EMR";
 export class PatientService {
   static async login(
     credential: LoginCredential_Interface
@@ -38,6 +40,10 @@ export class PatientService {
       return patientData;
     });
 
+    console.log(patientData.dataValues);
+    const emr = await EMR.create({
+      patient_id: patientData.dataValues.patient_id!,
+    });
     return patientData.dataValues;
   }
 

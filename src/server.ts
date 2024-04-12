@@ -1,5 +1,6 @@
 import { Express, Application, Request, Response, NextFunction } from "express";
 import express from "express";
+import mongoose from "mongoose";
 import db from "./model/index";
 import { doctorRoute, patientRoute, serverRoute } from "./constant/route";
 import { PatientRouter } from "./route/PatientRouter";
@@ -46,8 +47,12 @@ server.use(errorHandler);
 
 server.listen(port, async () => {
   console.log(`server listening on port: 8080`);
-  await db.sequelize.authenticate();
-
+  try {
+    await db.sequelize.authenticate();
+    await mongoose.connect(process.env.MONGODB_URI as string);
+  } catch (error) {
+    console.log(error);
+  }
   //   const user = {
   //     FirstName: "user_001",
   //     LastName: "testLastName",

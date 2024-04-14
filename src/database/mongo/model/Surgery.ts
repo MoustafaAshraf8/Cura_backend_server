@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 interface ISurgery {
+  scan: mongoose.Types.ObjectId[];
   name: String;
   createdAt: Date;
   updateddAt: Date;
@@ -13,6 +14,9 @@ export const surgerySchema: mongoose.Schema<ISurgeryModel> =
     _id: {
       type: mongoose.Schema.Types.ObjectId,
       auto: true,
+    },
+    scan: {
+      type: [mongoose.Schema.Types.ObjectId],
     },
     name: {
       type: String,

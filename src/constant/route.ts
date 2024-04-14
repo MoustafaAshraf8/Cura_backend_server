@@ -5,7 +5,7 @@ const serverRoute = {
 const patientRoute = {
   baseUrl: `${serverRoute.baseUrl}/patient`,
   root: "/",
-  login: "/login",
+  login: "/signin",
   signup: "/signup",
   emr: "/emr",
 };

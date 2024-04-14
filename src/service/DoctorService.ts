@@ -1,7 +1,7 @@
 import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import db from "../model/index";
 import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotFoundException";
@@ -66,5 +66,26 @@ export class DoctorService {
     }
 
     return scheduleData;
+  }
+
+  static async getDoctorBySpeciality(
+    speciality: String
+  ): Promise<Doctor_Interface[]> {
+    const specialityData = await db.Speciality.findOne({
+      where: {
+        Name: speciality,
+      },
+    });
+
+    const speciality_id: number = specialityData.dataValues.speciality_id;
+
+    const docotrList: Doctor_Interface[] = await db.Doctor.findAll({
+      where: {
+        speciality_id: speciality_id,
+      },
+      attributes: ["doctor_id", "FirstName", "LastName", "Gender"],
+    });
+
+    return docotrList;
   }
 }

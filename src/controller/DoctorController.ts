@@ -85,6 +85,16 @@ export class DoctorController {
     res.json(result);
   }
 
+  static async getDoctor(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const speciality = req.query.speciality as String;
+    const result = await DoctorService.getDoctorBySpeciality(speciality);
+    res.json(result);
+  }
+
   //   static async getAll(
   //     req: Request,
   //     res: Response,

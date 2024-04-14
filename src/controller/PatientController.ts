@@ -5,6 +5,8 @@ import { Hasher } from "../utility/Hasher";
 import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { WrongPasswordException } from "../error/WrongPasswordException";
 import { JWT } from "../utility/JWT";
+import { IncomingHttpHeaders } from "http";
+import busboy from "busboy";
 export class PatientController {
   static async signup(
     req: Request,
@@ -59,5 +61,20 @@ export class PatientController {
     const patients = await PatientService.getAll();
     res.statusCode = 200;
     res.json(patients);
+  }
+
+  static async addSurgery(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const headers: IncomingHttpHeaders = req.headers;
+    const surgeryName: String = req.body!.surgeryName;
+    const bb: busboy.Busboy = await PatientService.addSurgery(
+      surgeryName,
+      headers
+    );
+    req.pipe(bb);
+    res.end();
   }
 }

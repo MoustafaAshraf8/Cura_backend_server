@@ -6,6 +6,7 @@ import { doctorClinicSetId } from "../middleware/doctorClinicSetId";
 
 const DoctorRouter: Router = express.Router();
 
+DoctorRouter.route(doctorRoute.root).get(tryCatch(DoctorController.getDoctor));
 DoctorRouter.route(doctorRoute.signup).post(tryCatch(DoctorController.signup));
 DoctorRouter.route(doctorRoute.login).post(tryCatch(DoctorController.login));
 DoctorRouter.route(doctorRoute.schedule)

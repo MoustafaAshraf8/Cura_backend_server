@@ -6,6 +6,11 @@ import { UserNotFoundException } from "../error/UserNotFoundException";
 import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
 import { EMR } from "../database/mongo/model/EMR";
+import internal from "stream";
+import busboy from "busboy";
+import { IncomingHttpHeaders } from "http";
+import path from "path";
+import { MailService } from "./MailService";
 export class PatientService {
   static async login(
     credential: LoginCredential_Interface
@@ -36,6 +41,8 @@ export class PatientService {
       const emr = await db.EMR.create({
         patient_id: patientData.dataValues.patient_id,
       });
+
+      await MailService.sendMail(patient.Email);
 
       return patientData;
     });
@@ -78,5 +85,29 @@ export class PatientService {
       ],
     });
     return patients;
+  }
+
+  static async addSurgery(
+    surgeryName: String,
+    //  name: String,
+    //  file: internal.Readable,
+    //  info: busboy.FileInfo,
+    headers: IncomingHttpHeaders
+  ): Promise<busboy.Busboy> {
+    const db = mongoose.connections[0].db;
+    const gridFSBucket: mongoose.mongo.GridFSBucket =
+      new mongoose.mongo.GridFSBucket(db, {
+        bucketName: "newUploads",
+      });
+    const bb: busboy.Busboy = busboy({ headers: headers });
+    bb.on("file", (name, file, info) => {
+      console.log("file found");
+      const { filename, encoding, mimeType } = info;
+      const saveTo = path.join(".", filename);
+      // here we PIPE the file to DB.
+      file.pipe(gridFSBucket.openUploadStream(saveTo));
+    });
+    //  req.pipe(bb);
+    return bb;
   }
 }

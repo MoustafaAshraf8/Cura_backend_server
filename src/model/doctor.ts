@@ -13,6 +13,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare Gender: string;
     declare DOB: Date;
     declare speciality_id: number;
+    declare Rating: number;
     declare Approved: boolean;
     static associate(models: any) {
       Doctor.hasOne(models.Clinic, {
@@ -69,6 +70,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: true,
         defaultValue: null,
         type: DataTypes.STRING,
+      },
+      Rating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
       speciality_id: {
         allowNull: false,

@@ -49,9 +49,11 @@ export class DoctorController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const clinic_id: number = Object(req).clinic_id;
+    const doctor_id: number = Object(req).doctor_id;
+    console.log(`doctor_id --> ${doctor_id}`);
     const schedule: Schedule_Interface = { ...req.body };
     const result: Schedule_Interface = await DoctorService.addSchedule(
+      doctor_id,
       schedule
     );
     res.statusCode = 200;
@@ -63,29 +65,30 @@ export class DoctorController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const clinic_id: number = Object(req).clinic_id;
-    const schedule: Schedule_Interface = await DoctorService.getSchedule(
-      clinic_id
+    const doctor_id: number = Object(req).doctor_id;
+    const schedule: Schedule_Interface[] = await DoctorService.getSchedule(
+      doctor_id
     );
     res.statusCode = 200;
     res.json(schedule);
   }
 
-  static async addTimeSlot(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const clinic_id: number = Object(req).clinic_id;
-    const schedule: Schedule_Interface = { ...req.body };
-    const result: Schedule_Interface = await DoctorService.addSchedule(
-      schedule
-    );
-    res.statusCode = 200;
-    res.json(result);
-  }
+  //   static async addTimeSlot(
+  //     req: Request,
+  //     res: Response,
+  //     next: NextFunction
+  //   ): Promise<void> {
+  //     const doctor_id: number = Object(req).doctor_id;
+  //     const schedule: Schedule_Interface = { ...req.body };
+  //     const result: Schedule_Interface = await DoctorService.addTimeSlot(
+  //       doctor_id,
+  //       schedule
+  //     );
+  //     res.statusCode = 200;
+  //     res.json(result);
+  //   }
 
-  static async getDoctor(
+  static async getDoctorBySpeciality(
     req: Request,
     res: Response,
     next: NextFunction

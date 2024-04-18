@@ -7,11 +7,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
   > {
     declare schedule_id: number;
     declare clinic_id: number;
-    declare Day: Enumerator<[1, 2, 3, 4, 5, 6, 7]>;
+    declare Day: Enumerator<["1", "2", "3", "4", "5", "6", "7"]>;
     declare Start: string;
     declare End: string;
     static associate(models: any) {
-      // define association here
+      // Schedule.belongsTo(models.Clinic, {
+      //   foreignKey: "patient_id",
+      //   as: "patient",
+      //   targetKey: "patient_id",
+      //   onDelete: "CASCADE",
+      //   onUpdate: "CASCADE",
+      // });
     }
   }
   Schedule.init(

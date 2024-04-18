@@ -8,6 +8,7 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ): void {
+  console.log(exception);
   res.statusCode =
     exception.statusCode || statusCode.serverError.internalServerError;
   res.json({

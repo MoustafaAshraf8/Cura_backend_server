@@ -30,27 +30,48 @@ export class PatientService {
     }
   }
 
-  static async signup(patient: Patient_Interface): Promise<Patient_Interface> {
-    console.log("patient service");
-
+  static async signup(
+    patient: Patient_Interface,
+    headers: IncomingHttpHeaders
+  ): Promise<Patient_Interface> {
+    // create sql data entry
     const patientData = await db.sequelize.transaction(async (t: any) => {
       const patientData = await db.Patient.create(patient, {
         include: [{ model: db.PatientPhoneNumber, as: "patientphonenumber" }],
       });
-
       const emr = await db.EMR.create({
         patient_id: patientData.dataValues.patient_id,
       });
-
-      await MailService.sendMail(patient.Email);
-
       return patientData;
     });
 
-    console.log(patientData.dataValues);
-    const emr = await EMR.create({
-      patient_id: patientData.dataValues.patient_id!,
+    const patientId = patientData.dataValues.patient_id;
+
+    // create mongo data entry
+    const emrMongo = await EMR.create({
+      patient_id: patientId,
     });
+
+    // create profile image
+    const ObjectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(
+      patientId
+    );
+
+    //  const mongoDB = mongoose.connections[0].db;
+    //  const gridFSBucket: mongoose.mongo.GridFSBucket =
+    //    new mongoose.mongo.GridFSBucket(mongoDB, {
+    //      bucketName: "Images",
+    //    });
+    //  const bb: busboy.Busboy = busboy({ headers: headers });
+    //  bb.on("file", async (name, file, info) => {
+    //    const { filename, encoding, mimeType } = info;
+    //    const newFileName = patientId + "_" + "profile_image";
+    //    const saveTo = path.join(".", newFileName);
+    //    const stream: mongoose.mongo.GridFSBucketWriteStream = await file.pipe(
+    //      gridFSBucket.openUploadStreamWithId(ObjectId, saveTo)
+    //    );
+    //  });
+
     return patientData.dataValues;
   }
 

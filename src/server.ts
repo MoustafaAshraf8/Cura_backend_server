@@ -49,6 +49,8 @@ server.listen(port, async () => {
   console.log(`server listening on port: 8080`);
   try {
     await db.sequelize.authenticate();
+    // await db.sequelize.sync({ force: true });
+
     await mongoose.connect(process.env.MONGODB_URI as string);
   } catch (error) {
     console.log(error);

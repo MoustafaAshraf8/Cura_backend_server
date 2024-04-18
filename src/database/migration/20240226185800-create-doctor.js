@@ -45,6 +45,12 @@ module.exports = {
         default: null,
         type: Sequelize.DATE,
       },
+      Rating: {
+        field: "Rating",
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.INTEGER,
+      },
       speciality_id: {
         references: {
           model: {
@@ -58,6 +64,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       Approved: {
+        field: "Approved",
         defaultValue: false,
         type: Sequelize.BOOLEAN,
       },

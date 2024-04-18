@@ -10,12 +10,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare Name: string;
     declare Address: string;
     declare Fee: number;
-    declare Rating: number;
     static associate(models: any) {
       Clinic.belongsTo(models.Doctor, {
         foreignKey: "doctor_id",
         as: "doctor",
         targetKey: "doctor_id",
+      });
+      Clinic.hasMany(models.Schedule, {
+        foreignKey: "clinic_id",
+        as: "schedule",
       });
     }
   }
@@ -42,11 +45,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Fee: {
         allowNull: false,
         defaultValue: 10,
-        type: DataTypes.INTEGER,
-      },
-      Rating: {
-        allowNull: false,
-        defaultValue: 0,
         type: DataTypes.INTEGER,
       },
     },

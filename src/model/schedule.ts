@@ -7,17 +7,31 @@ module.exports = (sequelize: any, DataTypes: any) => {
   > {
     declare schedule_id: number;
     declare clinic_id: number;
-    declare Day: Enumerator<["1", "2", "3", "4", "5", "6", "7"]>;
-    declare Start: string;
-    declare End: string;
+    declare Day: Enumerator<
+      [
+        "saturday",
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday"
+      ]
+    >;
+
     static associate(models: any) {
-      // Schedule.belongsTo(models.Clinic, {
-      //   foreignKey: "patient_id",
-      //   as: "patient",
-      //   targetKey: "patient_id",
-      //   onDelete: "CASCADE",
-      //   onUpdate: "CASCADE",
-      // });
+      Schedule.belongsTo(models.Clinic, {
+        foreignKey: "clinic_id",
+        as: "clinic",
+        targetKey: "clinic_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
+
+      Schedule.hasMany(models.TimeSlot, {
+        foreignKey: "schedule_id",
+        as: "timeslot",
+      });
     }
   }
   Schedule.init(
@@ -28,31 +42,35 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      // clinic_id: {
+      //   references: {
+      //     model: {
+      //       tableName: "clinic",
+      //     },
+      //     key: "clinic_id",
+      //   },
+      //   onDelete: "CASCADE",
+      //   onUpdate: "CASCADE",
+      //   type: DataTypes.INTEGER,
+      // },
       clinic_id: {
-        references: {
-          model: {
-            tableName: "clinic",
-          },
-          key: "clinic_id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        allowNull: false,
         type: DataTypes.INTEGER,
       },
       Day: {
         allowNull: true,
-        defaultValue: 1,
+        defaultValue: "saturday",
         type: DataTypes.ENUM({
-          values: [1, 2, 3, 4, 5, 6, 7],
+          values: [
+            "saturday",
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+          ],
         }),
-      },
-      Start: {
-        allowNull: false,
-        type: DataTypes.TIME,
-      },
-      End: {
-        allowNull: false,
-        type: DataTypes.TIME,
       },
     },
 

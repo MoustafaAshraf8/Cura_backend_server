@@ -6,6 +6,7 @@ import { UserNotFoundException } from "../error/UserNotFoundException";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotFoundException";
 import { model } from "mongoose";
+import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface
@@ -54,6 +55,9 @@ export class DoctorService {
       attributes: ["clinic_id"],
     });
 
+    if (clinic_id == null) {
+      throw UserNotFoundException;
+    }
     const scheduleObj = {
       clinic_id: clinic_id.dataValues.clinic_id,
       ...schedule,
@@ -66,7 +70,7 @@ export class DoctorService {
     return scheduleData.dataValues;
   }
 
-  static async getSchedule(doctor_id: number): Promise<Schedule_Interface[]> {
+  static async getMySchedule(doctor_id: number): Promise<Schedule_Interface[]> {
     console.log("doctor getSchedule service");
 
     const clinic_id = await db.Clinic.findOne({
@@ -76,7 +80,42 @@ export class DoctorService {
       attributes: ["clinic_id"],
     });
 
+    if (clinic_id == null) {
+      throw UserNotFoundException;
+    }
     const scheduleData: Schedule_Interface[] = await db.Schedule.findAll({
+      where: {
+        clinic_id: clinic_id.dataValues.clinic_id,
+      },
+      attributes: {
+        exclude: ["clinic_id"],
+      },
+    });
+    if (scheduleData == null) {
+      throw ScheduleNotFoundException;
+    }
+
+    return scheduleData;
+  }
+
+  static async getScheduleById(
+    doctor_id: number
+  ): Promise<Schedule_Interface[]> {
+    console.log("doctor getSchedule service");
+
+    const clinic_id = await db.Clinic.findOne({
+      where: {
+        doctor_id: doctor_id,
+      },
+      attributes: ["clinic_id"],
+    });
+    if (clinic_id == null) {
+      throw UserNotFoundException;
+    }
+    const scheduleData: Schedule_Interface[] = await db.Schedule.findAll({
+      include: {
+        association: "timeslot",
+      },
       where: {
         clinic_id: clinic_id.dataValues.clinic_id,
       },
@@ -94,32 +133,6 @@ export class DoctorService {
   static async getDoctorBySpeciality(
     speciality: String
   ): Promise<Doctor_Interface[]> {
-    //  const specialityData = await db.Speciality.findOne({
-    //    where: {
-    //      Name: speciality,
-    //    },
-    //  });
-
-    //  const speciality_id: number = specialityData.dataValues.speciality_id;
-
-    //  const docotrList: Doctor_Interface[] = await db.Doctor.findAll({
-    //    include: { association: "speciality", require: true, right: true },
-    //    where: {
-    //      Name: speciality,
-    //    },
-    //    // attributes: ["doctor_id", "FirstName", "LastName", "Gender"],
-    //  });
-
-    //  const doctorList = await db.Speciality.findOne({
-    //    include: {
-    //      association: "doctor",
-    //      attributes: ["doctor_id", "FirstName", "LastName", "Gender", "Rating"],
-    //    },
-    //    where: {
-    //      Name: speciality,
-    //    },
-    //    attributes: [],
-    //  });
     const doctorList = await db.Doctor.findAll({
       include: {
         association: "speciality",
@@ -130,5 +143,15 @@ export class DoctorService {
     });
 
     return doctorList;
+  }
+
+  static async addTimeSlot(
+    doctor_id: number,
+    timeSlot: TimeSlot_Interface
+  ): Promise<TimeSlot_Interface> {
+    console.log("doctor addTimeSlot service");
+
+    const timeSlotData = await db.TimeSlot.create(timeSlot);
+    return timeSlotData.dataValues;
   }
 }

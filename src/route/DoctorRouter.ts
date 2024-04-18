@@ -11,12 +11,16 @@ DoctorRouter.route(doctorRoute.root).get(
 );
 DoctorRouter.route(doctorRoute.signup).post(tryCatch(DoctorController.signup));
 DoctorRouter.route(doctorRoute.login).post(tryCatch(DoctorController.login));
-DoctorRouter.route(doctorRoute.schedule)
+DoctorRouter.route(doctorRoute.mySchedule)
   .post(doctorSetVirtualId, tryCatch(DoctorController.addSchedule))
-  .get(doctorSetVirtualId, tryCatch(DoctorController.getSchedule));
-// DoctorRouter.route(doctorRoute.timeSlot).post(
-//   doctorSetVirtualId,
-//   tryCatch(DoctorController.addTimeSlot)
-// );
+  .get(doctorSetVirtualId, tryCatch(DoctorController.getMySchedule));
+
+DoctorRouter.route(doctorRoute.schedule).get(
+  tryCatch(DoctorController.getScheduleById)
+);
+DoctorRouter.route(doctorRoute.timeSlot).post(
+  doctorSetVirtualId,
+  tryCatch(DoctorController.addTimeSlot)
+);
 
 export { DoctorRouter };

@@ -6,28 +6,32 @@ module.exports = (sequelize: any, DataTypes: any) => {
     InferCreationAttributes<TimeSlot>
   > {
     declare timeslot_id: number;
-    declare clinic_id: number;
     declare schedule_id: number;
     declare patient_id: number | null;
     declare Date: Date;
-    declare Available: boolean;
+    declare Start: string;
+    declare End: string;
     static associate(models: any) {
-      TimeSlot.belongsTo(models.Clinic, {
-        foreignKey: "clinic_id",
-        as: "clinic",
-        targetKey: "clinic_id",
-      });
+      // TimeSlot.belongsTo(models.Clinic, {
+      //   foreignKey: "clinic_id",
+      //   as: "clinic",
+      //   targetKey: "clinic_id",
+      // });
 
       TimeSlot.belongsTo(models.Schedule, {
         foreignKey: "schedule_id",
         as: "schedule",
         targetKey: "schedule_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
 
       TimeSlot.belongsTo(models.Patient, {
         foreignKey: "patient_id",
         as: "patient",
         targetKey: "patient_id",
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       });
     }
   }
@@ -36,10 +40,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       timeslot_id: {
         primaryKey: true,
         autoIncrement: true,
-        type: DataTypes.INTEGER,
-      },
-      clinic_id: {
-        allowNull: false,
         type: DataTypes.INTEGER,
       },
       schedule_id: {
@@ -55,10 +55,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         type: DataTypes.DATE,
       },
-      Available: {
-        allowNull: true,
-        defaultValue: true,
-        type: DataTypes.BOOLEAN,
+      Start: {
+        allowNull: false,
+        type: DataTypes.TIME,
+      },
+      End: {
+        allowNull: false,
+        type: DataTypes.TIME,
       },
     },
     {

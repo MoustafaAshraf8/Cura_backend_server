@@ -15,7 +15,8 @@ const doctorRoute = {
   root: "/",
   login: "/login",
   signup: "/signup",
-  schedule: "/schedule",
+  mySchedule: "/schedule",
+  schedule: "/schedule/:id",
   timeSlot: "/timeslot",
 };
 

@@ -8,6 +8,7 @@ import { JWT } from "../utility/JWT";
 import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import { DoctorService } from "../service/DoctorService";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
+import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 export class DoctorController {
   static async signup(
     req: Request,
@@ -60,33 +61,48 @@ export class DoctorController {
     res.json(result);
   }
 
-  static async getSchedule(
+  static async getMySchedule(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     const doctor_id: number = Object(req).doctor_id;
-    const schedule: Schedule_Interface[] = await DoctorService.getSchedule(
+    const schedule: Schedule_Interface[] = await DoctorService.getMySchedule(
       doctor_id
     );
     res.statusCode = 200;
     res.json(schedule);
   }
 
-  //   static async addTimeSlot(
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> {
-  //     const doctor_id: number = Object(req).doctor_id;
-  //     const schedule: Schedule_Interface = { ...req.body };
-  //     const result: Schedule_Interface = await DoctorService.addTimeSlot(
-  //       doctor_id,
-  //       schedule
-  //     );
-  //     res.statusCode = 200;
-  //     res.json(result);
-  //   }
+  static async addTimeSlot(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const doctor_id: number = Object(req).doctor_id;
+    const timeSlot: TimeSlot_Interface = { ...req.body };
+    // const result: Schedule_Interface = await DoctorService.addTimeSlot(
+    //   doctor_id,
+    //   schedule
+    // );
+
+    const result = await DoctorService.addTimeSlot(doctor_id, timeSlot);
+    res.statusCode = 200;
+    res.json(result);
+  }
+
+  static async getScheduleById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const doctor_id: number = Number(req.params.id);
+    const schedule: Schedule_Interface[] = await DoctorService.getScheduleById(
+      doctor_id
+    );
+    res.statusCode = 200;
+    res.json(schedule);
+  }
 
   static async getDoctorBySpeciality(
     req: Request,

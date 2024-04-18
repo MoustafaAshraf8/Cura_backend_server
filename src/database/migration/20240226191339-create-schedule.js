@@ -22,16 +22,16 @@ module.exports = {
       },
       Day: {
         allowNull: true,
-        defaultValue: 1,
-        type: Sequelize.ENUM("1", "2", "3", "4", "5", "6", "7"),
-      },
-      Start: {
-        allowNull: false,
-        type: Sequelize.TIME,
-      },
-      End: {
-        allowNull: false,
-        type: Sequelize.TIME,
+        defaultValue: "saturday",
+        type: Sequelize.ENUM(
+          "saturday",
+          "sunday",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday"
+        ),
       },
     });
   },

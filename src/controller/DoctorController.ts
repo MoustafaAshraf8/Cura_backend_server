@@ -9,6 +9,7 @@ import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import { DoctorService } from "../service/DoctorService";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
+import { MailService } from "../service/MailService";
 export class DoctorController {
   static async signup(
     req: Request,
@@ -20,8 +21,9 @@ export class DoctorController {
     doctorData.Password = await Hasher.hashPassword(doctorData.Password);
     const doctor: Doctor_Interface = await DoctorService.signup(doctorData);
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
-    // res.json({ accessToken: jwt });
-    res.json(doctor);
+    await MailService.sendMail(doctor.Email);
+    res.json({ accessToken: jwt });
+    // res.json(doctor);
   }
 
   static async login(

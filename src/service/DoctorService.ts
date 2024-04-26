@@ -115,6 +115,7 @@ export class DoctorService {
     const scheduleData: Schedule_Interface[] = await db.Schedule.findAll({
       include: {
         association: "timeslot",
+        attributes: ["timeslot_id", "Date", "Start", "End"],
       },
       where: {
         clinic_id: clinic_id.dataValues.clinic_id,

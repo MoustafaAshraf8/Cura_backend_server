@@ -7,6 +7,6 @@ export function doctorSetVirtualId(
   res: Response,
   next: NextFunction
 ) {
-  Object(req).doctor_id = 4;
+  Object(req).doctor_id = 2;
   next();
 }

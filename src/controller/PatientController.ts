@@ -7,6 +7,7 @@ import { WrongPasswordException } from "../error/WrongPasswordException";
 import { JWT } from "../utility/JWT";
 import { IncomingHttpHeaders } from "http";
 import busboy from "busboy";
+import { MailService } from "../service/MailService";
 export class PatientController {
   static async signup(
     req: Request,
@@ -21,6 +22,7 @@ export class PatientController {
       patientData,
       headers
     );
+    await MailService.sendMail(patient.Email);
     const jwt = await JWT.createAccessToken({ id: patient.patient_id });
     res.json({ accessToken: jwt });
     return;

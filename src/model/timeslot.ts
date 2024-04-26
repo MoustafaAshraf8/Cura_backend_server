@@ -8,6 +8,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare timeslot_id: number;
     declare schedule_id: number;
     declare patient_id: number | null;
+    // Date: 'YYYY-MM-DD'
+    // Start/End: 'hh:mm:ss'
     declare Date: Date;
     declare Start: string;
     declare End: string;
@@ -53,7 +55,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       Date: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
       Start: {
         allowNull: false,

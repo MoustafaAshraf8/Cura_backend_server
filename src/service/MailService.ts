@@ -23,7 +23,7 @@ export class MailService {
         to: [email],
         subject: "Cura sign up",
         text: "hello world",
-        html: "<h1>thank you for signin up at cura</h1>",
+        html: "<h1>thank you for signing up at Cura</h1>",
       };
 
       await transport.sendMail(mailOptions);

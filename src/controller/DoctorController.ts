@@ -102,6 +102,7 @@ export class DoctorController {
     const schedule: Schedule_Interface[] = await DoctorService.getScheduleById(
       doctor_id
     );
+    console.log(schedule);
     res.statusCode = 200;
     res.json(schedule);
   }

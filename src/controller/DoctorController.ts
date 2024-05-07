@@ -21,7 +21,7 @@ export class DoctorController {
     doctorData.Password = await Hasher.hashPassword(doctorData.Password);
     const doctor: Doctor_Interface = await DoctorService.signup(doctorData);
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
-    await MailService.sendMail(doctor.Email);
+    // await MailService.sendMail(doctor.Email);
     res.json({ accessToken: jwt });
     // res.json(doctor);
   }
@@ -40,7 +40,7 @@ export class DoctorController {
       doctor.Password
     );
     if (!verified) {
-      throw WrongPasswordException;
+      throw new WrongPasswordException();
     }
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
     // res.json({ accessToken: jwt });
@@ -55,6 +55,7 @@ export class DoctorController {
     const doctor_id: number = Object(req).doctor_id;
     console.log(`doctor_id --> ${doctor_id}`);
     const schedule: Schedule_Interface = { ...req.body };
+    console.log(`schedule: ${schedule}`);
     const result: Schedule_Interface = await DoctorService.addSchedule(
       doctor_id,
       schedule
@@ -115,6 +116,24 @@ export class DoctorController {
     const speciality = req.query.speciality as String;
     const result = await DoctorService.getDoctorBySpeciality(speciality);
     res.json(result);
+  }
+
+  static async getDoctorById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const doctor_id: number = Number(req.params.id);
+  }
+
+  static async getDoctorProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const doctor_id: number = Number(req.params.id);
+    const doctorData = await DoctorService.getDoctorProfile(doctor_id);
+    res.json(doctorData);
   }
 
   //   static async getAll(

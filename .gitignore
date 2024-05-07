@@ -4,3 +4,5 @@ node_modules
 migrations
 database.json
 api
+src/template/
+src/validation/

@@ -23,12 +23,27 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      Address: {
+      City: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.STRING,
+      },
+      Longtitude: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.STRING,
+      },
+      Latitude: {
         allowNull: true,
         defaultValue: null,
         type: Sequelize.STRING,
       },
       Fee: {
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.STRING,
+      },
+      PatientCount: {
         allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER,

@@ -23,4 +23,8 @@ DoctorRouter.route(doctorRoute.timeSlot).post(
   tryCatch(DoctorController.addTimeSlot)
 );
 
+DoctorRouter.route(doctorRoute.profile).get(
+  tryCatch(DoctorController.getDoctorProfile)
+);
+
 export { DoctorRouter };

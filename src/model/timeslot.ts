@@ -10,7 +10,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare patient_id: number | null;
     // Date: 'YYYY-MM-DD'
     // Start/End: 'hh:mm:ss'
-    declare Date: Date;
+    //  declare Date: Date;
     declare Start: string;
     declare End: string;
     static associate(models: any) {
@@ -53,10 +53,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: null,
         type: DataTypes.INTEGER,
       },
-      Date: {
-        allowNull: false,
-        type: DataTypes.DATEONLY,
-      },
+      // Date: {
+      //   allowNull: false,
+      //   type: DataTypes.DATEONLY,
+      // },
       Start: {
         allowNull: false,
         type: DataTypes.TIME,

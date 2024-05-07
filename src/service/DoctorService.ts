@@ -19,7 +19,7 @@ export class DoctorService {
       include: { model: db.Speciality, as: "speciality" },
     });
     if (!doctorData) {
-      throw UserNotFoundException;
+      throw new UserNotFoundException();
     }
     const doctor: Doctor_Interface = doctorData.dataValues;
     return doctor;
@@ -56,7 +56,7 @@ export class DoctorService {
     });
 
     if (clinic_id == null) {
-      throw UserNotFoundException;
+      throw new UserNotFoundException();
     }
     const scheduleObj = {
       clinic_id: clinic_id.dataValues.clinic_id,
@@ -92,7 +92,7 @@ export class DoctorService {
       },
     });
     if (scheduleData == null) {
-      throw ScheduleNotFoundException;
+      throw new ScheduleNotFoundException();
     }
 
     return scheduleData;
@@ -115,7 +115,7 @@ export class DoctorService {
     const scheduleData: Schedule_Interface[] = await db.Schedule.findAll({
       include: {
         association: "timeslot",
-        attributes: ["timeslot_id", "Date", "Start", "End"],
+        attributes: ["timeslot_id", "Start", "End"],
       },
       where: {
         clinic_id: clinic_id.dataValues.clinic_id,
@@ -140,7 +140,14 @@ export class DoctorService {
         attributes: [],
         where: { Name: speciality },
       },
-      attributes: ["doctor_id", "FirstName", "LastName", "Gender", "Rating"],
+      attributes: [
+        "doctor_id",
+        "FirstName",
+        "LastName",
+        "Gender",
+        "Rating",
+        "Experience",
+      ],
     });
 
     return doctorList;
@@ -154,5 +161,39 @@ export class DoctorService {
 
     const timeSlotData = await db.TimeSlot.create(timeSlot);
     return timeSlotData.dataValues;
+  }
+
+  static async getDoctorProfile(
+    doctor_id: number
+  ): Promise<Schedule_Interface[]> {
+    console.log("doctor getProfile service");
+
+    const doctorData = await db.Doctor.findOne({
+      where: {
+        doctor_id: doctor_id,
+      },
+      include: [
+        {
+          association: "speciality",
+        },
+        {
+          association: "clinic",
+          attributes: {
+            exclude: ["doctor_id"],
+          },
+          include: [
+            { association: "schedule", include: [{ association: "timeslot" }] },
+          ],
+        },
+      ],
+      attributes: {
+        exclude: ["Password", "speciality_id", "DOB"],
+      },
+    });
+    if (doctorData == null) {
+      throw UserNotFoundException;
+    }
+
+    return doctorData;
   }
 }

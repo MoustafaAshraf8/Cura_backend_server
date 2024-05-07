@@ -8,7 +8,7 @@ function errorHandler(
   res: Response,
   next: NextFunction
 ): void {
-  console.log(exception);
+  console.log(`global error handler: ${exception}`);
   res.statusCode =
     exception.statusCode || statusCode.serverError.internalServerError;
   res.json({

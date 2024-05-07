@@ -33,6 +33,10 @@ module.exports = {
           "friday"
         ),
       },
+      Date: {
+        allowNull: false,
+        type: Sequelize.DATEONLY,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

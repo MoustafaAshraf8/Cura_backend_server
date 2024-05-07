@@ -8,8 +8,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare clinic_id: number;
     declare doctor_id: number;
     declare Name: string;
-    declare Address: string;
-    declare Fee: number;
+    declare City: string;
+    declare Longtitude: string;
+    declare Latitude: string;
+    declare Fee: string;
+    declare PatientCount: number;
     static associate(models: any) {
       Clinic.belongsTo(models.Doctor, {
         foreignKey: "doctor_id",
@@ -37,7 +40,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      Address: {
+      City: {
+        allowNull: true,
+        defaultValue: null,
+        type: DataTypes.STRING,
+      },
+      Longtitude: {
+        allowNull: true,
+        defaultValue: null,
+        type: DataTypes.STRING,
+      },
+      Latitude: {
         allowNull: true,
         defaultValue: null,
         type: DataTypes.STRING,
@@ -45,6 +58,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Fee: {
         allowNull: false,
         defaultValue: 10,
+        type: DataTypes.STRING,
+      },
+      PatientCount: {
+        allowNull: false,
+        defaultValue: 0,
         type: DataTypes.INTEGER,
       },
     },

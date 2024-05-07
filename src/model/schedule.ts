@@ -18,6 +18,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         "friday"
       ]
     >;
+    declare Date: Date;
 
     static associate(models: any) {
       Schedule.belongsTo(models.Clinic, {
@@ -71,6 +72,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
             "friday",
           ],
         }),
+      },
+      Date: {
+        allowNull: false,
+        type: DataTypes.DATEONLY,
       },
     },
 

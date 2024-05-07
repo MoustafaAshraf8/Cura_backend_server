@@ -51,6 +51,11 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
+      Experience: {
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.STRING,
+      },
       speciality_id: {
         references: {
           model: {

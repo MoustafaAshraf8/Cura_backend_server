@@ -18,6 +18,7 @@ const doctorRoute = {
   mySchedule: "/schedule",
   schedule: "/schedule/:id",
   timeSlot: "/timeslot",
+  profile: "/profile/:id",
 };
 
 export { patientRoute, serverRoute, doctorRoute };

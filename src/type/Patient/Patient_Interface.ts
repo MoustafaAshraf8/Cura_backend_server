@@ -10,4 +10,5 @@ export interface Patient_Interface {
   DOB: string | null;
   EMR: EMR_Interface;
   patientphonenumber: [PatientPhoneNumber_Interface];
+  accessToken: string;
 }

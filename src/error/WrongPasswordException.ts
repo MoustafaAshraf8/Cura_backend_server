@@ -1,7 +1,11 @@
 import { statusCode } from "../constant/StatusCode";
-export class WrongPasswordException extends Error {
-  static message: string = "wrong password";
-  static statusCode = statusCode.clientError.unothorized;
+import { Exception_Interface } from "../type/exception/Exception_Interface";
+export class WrongPasswordException
+  extends Error
+  implements Exception_Interface
+{
+  message: string = "wrong password";
+  statusCode = statusCode.clientError.unothorized;
   constructor() {
     super();
   }

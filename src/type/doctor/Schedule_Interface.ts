@@ -10,4 +10,5 @@ export interface Schedule_Interface {
       "friday"
     ]
   >;
+  Date: Date;
 }

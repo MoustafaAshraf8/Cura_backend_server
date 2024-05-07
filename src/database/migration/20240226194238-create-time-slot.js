@@ -45,10 +45,10 @@ module.exports = {
         onUpdate: "CASCADE",
         type: Sequelize.INTEGER,
       },
-      Date: {
-        allowNull: false,
-        type: Sequelize.DATEONLY,
-      },
+      // Date: {
+      //   allowNull: false,
+      //   type: Sequelize.DATEONLY,
+      // },
       Start: {
         allowNull: false,
         type: Sequelize.TIME,

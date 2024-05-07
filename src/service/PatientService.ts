@@ -26,7 +26,7 @@ export class PatientService {
 
       return patient;
     } catch (err) {
-      throw UserNotFoundException;
+      throw new UserNotFoundException();
     }
   }
 
@@ -42,20 +42,21 @@ export class PatientService {
       const emr = await db.EMR.create({
         patient_id: patientData.dataValues.patient_id,
       });
+
+      const patientId = patientData.dataValues.patient_id;
+
+      // create mongo data entry
+      const emrMongo = await EMR.create({
+        patient_id: patientId,
+      });
+
       return patientData;
     });
 
-    const patientId = patientData.dataValues.patient_id;
-
-    // create mongo data entry
-    const emrMongo = await EMR.create({
-      patient_id: patientId,
-    });
-
     // create profile image
-    const ObjectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(
-      patientId
-    );
+    //  const ObjectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(
+    //    patientId
+    //  );
 
     //  const mongoDB = mongoose.connections[0].db;
     //  const gridFSBucket: mongoose.mongo.GridFSBucket =
@@ -93,7 +94,7 @@ export class PatientService {
       ],
     });
     if (emr == null) {
-      throw UserNotFoundException;
+      throw new UserNotFoundException();
     }
     return emr;
   }

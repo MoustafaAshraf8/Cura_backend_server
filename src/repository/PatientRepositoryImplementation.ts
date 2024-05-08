@@ -16,6 +16,7 @@ import { Repository } from "./Repository";
 import db from "../model/index";
 import { Patient } from "../class/Patient";
 import { User } from "../class/User";
+import { UnothorizedUserException } from "../error/UnothorizedUserException";
 
 export class PatientRepositoryImplementation
   extends Repository
@@ -64,6 +65,18 @@ export class PatientRepositoryImplementation
     });
 
     return new Patient(patientData.dataValues);
+  };
+
+  public authorize = async (patient_id: number): Promise<void> => {
+    const patient = await (this.model as typeof db.Patient).findOne({
+      where: {
+        patient_id: patient_id,
+      },
+    });
+
+    if (patient.dataValues.length == 0) throw new UnothorizedUserException();
+
+    return;
   };
 
   //   public getEMR = async (id: number): Promise<EMR_Interface> => {

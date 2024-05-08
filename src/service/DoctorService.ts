@@ -1,12 +1,14 @@
 import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import db from "../model/index";
 import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
-import { Association, Op, where } from "sequelize";
+import { Association, Op, Sequelize, where } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotFoundException";
 import { model } from "mongoose";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
+import { ForbiddenAccessException } from "../error/ForbiddenAccessException";
+import { TimeSlot } from "../class/TimeSlot";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface
@@ -195,5 +197,47 @@ export class DoctorService {
     }
 
     return doctorData;
+  }
+
+  static async reserveTimeSlot(targetTimeSlot: TimeSlot): Promise<TimeSlot> {
+    // const timeSlot = db.TimeSlot.findOne({
+    //    where:{
+    //       timeslot_id:timeslot_id
+    //    }
+    // });
+    // await timeSlot.update({patient_id:patient_id});
+    // timeSlot.save();
+
+    //  const timeSlot = await db.TimeSlot.update(
+    //    { patient_id: patient_id },
+    //    {
+    //      where: {
+    //        timeslot_id: timeslot_id,
+    //        patient_id: null,
+    //      },
+    //    }
+    //  );
+    //  console.log("-------------------------");
+    //  console.log(timeSlot);
+    //  if (timeSlot[0] == 0) throw new ForbiddenAccessException();
+
+    const timeSlotObj = await db.sequelize.transaction(async (t: any) => {
+      const timeslot = await db.TimeSlot.findOne({
+        where: {
+          timeslot_id: targetTimeSlot.timeslot_id,
+        },
+      });
+
+      if (timeslot.patient_id != null) {
+        throw new ForbiddenAccessException();
+      }
+
+      await timeslot.update({ patient_id: targetTimeSlot.patient_id });
+      await timeslot.save();
+
+      return timeslot.dataValues;
+    });
+
+    return new TimeSlot(timeSlotObj);
   }
 }

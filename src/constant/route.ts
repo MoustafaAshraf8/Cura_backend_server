@@ -8,6 +8,7 @@ const patientRoute = {
   signin: "/signin",
   signup: "/signup",
   emr: "/emr",
+  reserveTimeSlot: "/reserveTimeSlot",
 };
 
 const doctorRoute = {
@@ -19,7 +20,6 @@ const doctorRoute = {
   schedule: "/schedule/:id",
   timeSlot: "/timeslot",
   profile: "/profile/:id",
-  reserveTimeSlot: "/reserve",
 };
 
 export { patientRoute, serverRoute, doctorRoute };

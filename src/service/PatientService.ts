@@ -18,6 +18,8 @@ import { PatientServiceInterface } from "./PatientServiceInterface";
 import { Patient } from "../class/Patient";
 import { JWT } from "../utility/JWT";
 import { User } from "../class/User";
+import { DoctorService } from "./DoctorService";
+import { TimeSlot } from "../class/TimeSlot";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
     super(new PatientRepositoryImplementation());
@@ -42,6 +44,20 @@ export class PatientService extends Service implements PatientServiceInterface {
 
     return newPatient;
   };
+
+  public reserveTimeSlot = async (timeSlot: TimeSlot): Promise<TimeSlot> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(timeSlot.patient_id as number);
+
+    // 2- reserve
+    const updatedTimeSlot: TimeSlot = await DoctorService.reserveTimeSlot(
+      timeSlot
+    );
+    return updatedTimeSlot;
+  };
+
   // create sql data entry
   //       const patientData = await db.sequelize.transaction(async (t: any) => {
   //         const patientData = await db.Patient.create(patient, {

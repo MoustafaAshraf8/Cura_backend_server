@@ -4,6 +4,7 @@ import { patientRoute } from "../constant/route";
 import { PatientController } from "../controller/PatientController";
 import { tryCatch } from "../utility/tryCatch";
 import { setId } from "../middleware/setId";
+import { JWT } from "../utility/JWT";
 const PatientRouter: Router = express.Router();
 
 const patientController: PatientController = new PatientController();
@@ -20,5 +21,10 @@ PatientRouter.route(patientRoute.signin).post(
 //   setId,
 //   tryCatch(patientController.getEMR)
 // );
+
+PatientRouter.route(patientRoute.reserveTimeSlot).post(
+  JWT.verifyAccessToken,
+  tryCatch(patientController.reserveTimeSlot)
+);
 
 export { PatientRouter };

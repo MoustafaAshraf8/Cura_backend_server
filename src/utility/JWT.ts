@@ -33,16 +33,21 @@ export class JWT {
       throw ForbiddenAccessException;
     }
 
-    console.log(authHeader);
     const token = authHeader?.split(" ")[1];
     jwt.verify(
       token,
       String(process.env.ACCESS_TOKEN_SECRET),
       (err, decoded) => {
         if (err) {
+          console.log(err);
           throw InvalidTokenException;
         } else {
-          Object(req).user_id = decoded?.indexOf;
+          console.log("8888888888888888");
+          console.log(Object(decoded).id);
+          console.log("8888888888888888");
+
+          // Object(req).user_id = decoded?.indexOf;
+          Object(req).user_id = Object(decoded).id;
           next();
         }
       }

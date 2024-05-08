@@ -1,9 +1,10 @@
 import { Repository } from "../repository/Repository";
+import { Service } from "../service/Service";
 
 export abstract class Controller {
-  public repositoryImplementaion: Repository;
+  public service: Service;
 
-  constructor(repositoryImplementaion: Repository) {
-    this.repositoryImplementaion = repositoryImplementaion;
+  constructor(service: Service) {
+    this.service = service;
   }
 }

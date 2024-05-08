@@ -14,12 +14,14 @@ import { PatientRepositoryImplementation } from "../repository/PatientRepository
 import { PatientSignUpSchema } from "../validation/PatientSignUpSchema";
 import Joi from "joi";
 import { Validate } from "sequelize-typescript";
-export class PatientController
-  extends Controller
-  implements PatientControllerInterface
-{
+import { Patient } from "../class/Patient";
+import { statusCode } from "../constant/StatusCode";
+import { UserValidationSchema } from "../validation/UserValidationSchema";
+import { User } from "../class/User";
+export class PatientController extends Controller {
+  // implements PatientControllerInterface
   constructor() {
-    super(new PatientRepositoryImplementation());
+    super(new PatientService());
   }
 
   public signup = async (
@@ -28,47 +30,38 @@ export class PatientController
     next: NextFunction
   ): Promise<void> => {
     console.log("new PatientController");
+
     const validation = await PatientSignUpSchema.validateAsync(req.body);
-    console.log(validation);
-    res.json({ msg: validation });
-    //  const patientData: Patient_Interface = { ...req.body };
-    //  const headers: IncomingHttpHeaders = req.headers;
-    //  // to be properly implemented in model setter using hooks
-    //  // patientData.Password = await Hasher.hashPassword(patientData.Password);
-
-    //  const patient: Patient_Interface = await (
-    //    this.repositoryImplementaion as PatientRepositoryImplementation
-    //  ).signup(patientData, headers);
-    //  console.log(patient);
-
-    //  // await MailService.sendMail(patient.Email);
-    //  const jwt = await JWT.createAccessToken({ id: patient.patient_id });
-    //  patient.accessToken = jwt;
-    //  res.json(patient);
-    //  return;
+    const patient: Patient = new Patient(validation);
+    console.log(patient);
+    const newPatient: Patient = await (this.service as PatientService).signup(
+      patient
+    );
+    console.log(newPatient);
+    res.statusCode = statusCode.success.ok;
+    res.json(newPatient);
   };
 
-  //   public login = async (
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> => {
-  //     const credential: LoginCredential_Interface = { ...req.body };
-  //     const patient: Patient_Interface = await (
-  //       this.repositoryImplementaion as PatientRepositoryImplementation
-  //     ).login(credential);
+  public signin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const validation = await UserValidationSchema.validateAsync(req.body);
 
-  //     console.log(patient);
-  //     const verified: boolean = await Hasher.verifyPassword(
-  //       credential.Password,
-  //       patient.Password
-  //     );
-  //     if (!verified) {
-  //       throw new WrongPasswordException();
-  //     }
-  //     const jwt = await JWT.createAccessToken({ id: patient.patient_id });
-  //     res.json({ accessToken: jwt });
-  //   };
+    const user: User = new User(validation);
+    const patient: Patient = await (this.service as PatientService).signin(
+      user
+    );
+    res.statusCode = statusCode.success.ok;
+    res.json(patient);
+  };
+
+  public reserveTimeSlot = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {};
 
   //   public getEMR = async (
   //     req: Request,

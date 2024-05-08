@@ -3,23 +3,21 @@ import { LoginCredential_Interface } from "../type/generic/LoginCredential_Inter
 import { EMR_Interface } from "../type/patient/EMR_Interface";
 import { Patient_Interface } from "../type/patient/Patient_Interface";
 import { IncomingHttpHeaders } from "http";
+import { Patient } from "../class/Patient";
 export interface PatientRepository {
-  signup(
-    patient: Patient_Interface,
-    headers: IncomingHttpHeaders
-  ): Promise<Patient_Interface>;
+  signup(patient: Patient): Promise<Patient>;
 
-  login(credential: LoginCredential_Interface): Promise<Patient_Interface>;
+  //   login(credential: LoginCredential_Interface): Promise<Patient_Interface>;
 
-  getEMR(id: number): Promise<EMR_Interface>;
+  //   getEMR(id: number): Promise<EMR_Interface>;
 
-  getAll(): Promise<Patient_Interface>;
+  //   getAll(): Promise<Patient_Interface>;
 
-  addSurgery(
-    surgeryName: String,
-    //  name: String,
-    //  file: internal.Readable,
-    //  info: busboy.FileInfo,
-    headers: IncomingHttpHeaders
-  ): Promise<busboy.Busboy>;
+  //   addSurgery(
+  //     surgeryName: String,
+  //     //  name: String,
+  //     //  file: internal.Readable,
+  //     //  info: busboy.FileInfo,
+  //     headers: IncomingHttpHeaders
+  //   ): Promise<busboy.Busboy>;
 }

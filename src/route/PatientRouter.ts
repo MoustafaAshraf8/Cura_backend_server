@@ -13,7 +13,9 @@ const patientController: PatientController = new PatientController();
 PatientRouter.route(patientRoute.signup).post(
   tryCatch(patientController.signup)
 );
-// PatientRouter.route(patientRoute.login).post(tryCatch(patientController.login));
+PatientRouter.route(patientRoute.signin).post(
+  tryCatch(patientController.signin)
+);
 // PatientRouter.route(patientRoute.emr).get(
 //   setId,
 //   tryCatch(patientController.getEMR)

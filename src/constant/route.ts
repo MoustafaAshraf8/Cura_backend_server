@@ -5,7 +5,7 @@ const serverRoute = {
 const patientRoute = {
   baseUrl: `${serverRoute.baseUrl}/patient`,
   root: "/",
-  login: "/signin",
+  signin: "/signin",
   signup: "/signup",
   emr: "/emr",
 };
@@ -19,6 +19,7 @@ const doctorRoute = {
   schedule: "/schedule/:id",
   timeSlot: "/timeslot",
   profile: "/profile/:id",
+  reserveTimeSlot: "/reserve",
 };
 
 export { patientRoute, serverRoute, doctorRoute };

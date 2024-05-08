@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/MoustafaAshraf8/Cura_backend_server#readme",
   "dependencies": {
+    "@joi/date": "^2.1.1",
     "@types/bcrypt": "^5.0.2",
     "@types/busboy": "^1.5.3",
     "@types/express": "^4.17.21",

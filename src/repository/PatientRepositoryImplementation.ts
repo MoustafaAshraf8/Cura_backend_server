@@ -14,6 +14,8 @@ import { MailService } from "../service/MailService";
 import { PatientRepository } from "./PatientRepository";
 import { Repository } from "./Repository";
 import db from "../model/index";
+import { Patient } from "../class/Patient";
+import { User } from "../class/User";
 
 export class PatientRepositoryImplementation
   extends Repository
@@ -23,28 +25,23 @@ export class PatientRepositoryImplementation
     super(db.Patient);
   }
 
-  public login = async (
-    credential: LoginCredential_Interface
-  ): Promise<Patient_Interface> => {
+  public signin = async (user: User): Promise<Patient> => {
     try {
       const patientData = await db.Patient.findOne({
         where: {
-          [Op.and]: [{ Email: credential.Email }],
+          [Op.and]: [{ Email: user.Email }],
         },
-        attributes: ["patient_id", "Password"],
+        // attributes: ["patient_id", "Password"],
       });
-      const patient: Patient_Interface = patientData.dataValues;
 
+      const patient: Patient = new Patient(patientData.dataValues);
       return patient;
     } catch (err) {
       throw UserNotFoundException;
     }
   };
 
-  public signup = async (
-    patient: Patient_Interface,
-    headers: IncomingHttpHeaders
-  ): Promise<Patient_Interface> => {
+  public signup = async (patient: Patient): Promise<Patient> => {
     const patientData = await db.sequelize.transaction(async (t: any) => {
       const patientData = await (this.model as typeof db.Patient).create(
         patient,
@@ -66,83 +63,63 @@ export class PatientRepositoryImplementation
       return patientData;
     });
 
-    // create profile image
-    //  const ObjectId: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(
-    //    patientId
-    //  );
-
-    //  const mongoDB = mongoose.connections[0].db;
-    //  const gridFSBucket: mongoose.mongo.GridFSBucket =
-    //    new mongoose.mongo.GridFSBucket(mongoDB, {
-    //      bucketName: "Images",
-    //    });
-    //  const bb: busboy.Busboy = busboy({ headers: headers });
-    //  bb.on("file", async (name, file, info) => {
-    //    const { filename, encoding, mimeType } = info;
-    //    const newFileName = patientId + "_" + "profile_image";
-    //    const saveTo = path.join(".", newFileName);
-    //    const stream: mongoose.mongo.GridFSBucketWriteStream = await file.pipe(
-    //      gridFSBucket.openUploadStreamWithId(ObjectId, saveTo)
-    //    );
-    //  });
-
-    return patientData.dataValues;
+    return new Patient(patientData.dataValues);
   };
 
-  public getEMR = async (id: number): Promise<EMR_Interface> => {
-    console.log("get emr service");
+  //   public getEMR = async (id: number): Promise<EMR_Interface> => {
+  //     console.log("get emr service");
 
-    const emr = await db.EMR.findOne({
-      where: {
-        patient_id: id,
-      },
-      // include: [{ all: true, nested: true }],
-      include: [
-        {
-          model: db.Desease,
-          as: "desease",
-          include: [{ model: db.Prescription, as: "prescription" }],
-        },
-        { model: db.Surgery, as: "surgery", nested: true },
-      ],
-    });
-    if (emr == null) {
-      throw UserNotFoundException;
-    }
-    return emr;
-  };
+  //     const emr = await db.EMR.findOne({
+  //       where: {
+  //         patient_id: id,
+  //       },
+  //       // include: [{ all: true, nested: true }],
+  //       include: [
+  //         {
+  //           model: db.Desease,
+  //           as: "desease",
+  //           include: [{ model: db.Prescription, as: "prescription" }],
+  //         },
+  //         { model: db.Surgery, as: "surgery", nested: true },
+  //       ],
+  //     });
+  //     if (emr == null) {
+  //       throw UserNotFoundException;
+  //     }
+  //     return emr;
+  //   };
 
-  public getAll = async (): Promise<Patient_Interface> => {
-    const patients = await db.Patient.findAll({
-      include: [
-        { model: db.EMR, association: "emr" },
-        { model: db.PatientPhoneNumber, association: "patientphonenumber" },
-      ],
-    });
-    return patients;
-  };
+  //   public getAll = async (): Promise<Patient_Interface> => {
+  //     const patients = await db.Patient.findAll({
+  //       include: [
+  //         { model: db.EMR, association: "emr" },
+  //         { model: db.PatientPhoneNumber, association: "patientphonenumber" },
+  //       ],
+  //     });
+  //     return patients;
+  //   };
 
-  public addSurgery = async (
-    surgeryName: String,
-    //  name: String,
-    //  file: internal.Readable,
-    //  info: busboy.FileInfo,
-    headers: IncomingHttpHeaders
-  ): Promise<busboy.Busboy> => {
-    const db = mongoose.connections[0].db;
-    const gridFSBucket: mongoose.mongo.GridFSBucket =
-      new mongoose.mongo.GridFSBucket(db, {
-        bucketName: "newUploads",
-      });
-    const bb: busboy.Busboy = busboy({ headers: headers });
-    bb.on("file", (name, file, info) => {
-      console.log("file found");
-      const { filename, encoding, mimeType } = info;
-      const saveTo = path.join(".", filename);
-      // here we PIPE the file to DB.
-      file.pipe(gridFSBucket.openUploadStream(saveTo));
-    });
-    //  req.pipe(bb);
-    return bb;
-  };
+  //   public addSurgery = async (
+  //     surgeryName: String,
+  //     //  name: String,
+  //     //  file: internal.Readable,
+  //     //  info: busboy.FileInfo,
+  //     headers: IncomingHttpHeaders
+  //   ): Promise<busboy.Busboy> => {
+  //     const db = mongoose.connections[0].db;
+  //     const gridFSBucket: mongoose.mongo.GridFSBucket =
+  //       new mongoose.mongo.GridFSBucket(db, {
+  //         bucketName: "newUploads",
+  //       });
+  //     const bb: busboy.Busboy = busboy({ headers: headers });
+  //     bb.on("file", (name, file, info) => {
+  //       console.log("file found");
+  //       const { filename, encoding, mimeType } = info;
+  //       const saveTo = path.join(".", filename);
+  //       // here we PIPE the file to DB.
+  //       file.pipe(gridFSBucket.openUploadStream(saveTo));
+  //     });
+  //     //  req.pipe(bb);
+  //     return bb;
+  //   };
 }

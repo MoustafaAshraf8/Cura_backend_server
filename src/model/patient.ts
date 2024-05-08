@@ -72,7 +72,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       DOB: {
         allowNull: true,
         defaultValue: null,
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
       },
     },
     {

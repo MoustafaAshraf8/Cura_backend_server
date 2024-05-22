@@ -9,6 +9,9 @@ import { model } from "mongoose";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 import { ForbiddenAccessException } from "../error/ForbiddenAccessException";
 import { TimeSlot } from "../class/TimeSlot";
+import { ClinicDTO } from "../class/ClinicDTO";
+import { error } from "console";
+import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface
@@ -239,6 +242,19 @@ export class DoctorService {
     });
 
     return new TimeSlot(timeSlotObj);
+  }
+
+  static async getClinicData(clinicDTO: ClinicDTO): Promise<ClinicDTO> {
+    const clinic: ClinicDTO = await db.Clinic.findOne({
+      where: {
+        clinic_id: clinicDTO.clinic_id,
+      },
+    });
+
+    if (clinic == null) {
+      throw new ClinicNotFoundException();
+    }
+    return new ClinicDTO(clinic);
   }
 
   static async getPatientSchedule(patient_id: number): Promise<any> {

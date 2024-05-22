@@ -17,6 +17,12 @@ PatientRouter.route(patientRoute.signup).post(
 PatientRouter.route(patientRoute.signin).post(
   tryCatch(patientController.signin)
 );
+
+PatientRouter.route(patientRoute.payOnline).post(
+  //JWT.verifyAccessToken,
+  tryCatch(patientController.payOnline)
+);
+
 // PatientRouter.route(patientRoute.emr).get(
 //   setId,
 //   tryCatch(patientController.getEMR)

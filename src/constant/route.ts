@@ -10,6 +10,7 @@ const patientRoute = {
   emr: "/emr",
   reserveTimeSlot: "/reserveTimeSlot",
   schedule: "/schedule",
+  payOnline: "/payOnline",
 };
 
 const doctorRoute = {

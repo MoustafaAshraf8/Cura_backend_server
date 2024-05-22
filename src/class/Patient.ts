@@ -1,21 +1,21 @@
 export class Patient {
   public patient_id: number | null;
-  public FirstName: string;
-  public LastName: string;
-  public Email: string;
+  public FirstName: string | null;
+  public LastName: string | null;
+  public Email: string | null;
   public Password: string | null;
-  public Gender: string;
-  public DOB: string;
+  public Gender: string | null;
+  public DOB: string | null;
   public accessToken: string | null;
 
   constructor(json: any) {
     this.patient_id = json.patient_id || null;
-    this.FirstName = json.FirstName;
-    this.LastName = json.LastName;
-    this.Email = json.Email;
-    this.Password = json.Password;
-    this.Gender = json.Gender;
-    this.DOB = json.DOB;
+    this.FirstName = json.FirstName || null;
+    this.LastName = json.LastName || null;
+    this.Email = json.Email || null;
+    this.Password = json.Password || null;
+    this.Gender = json.Gender || null;
+    this.DOB = json.DOB || null;
     this.accessToken = json.accessToken || null;
   }
 

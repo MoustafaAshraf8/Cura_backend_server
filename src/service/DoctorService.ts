@@ -240,4 +240,42 @@ export class DoctorService {
 
     return new TimeSlot(timeSlotObj);
   }
+
+  static async getPatientSchedule(patient_id: number): Promise<any> {
+    const timeSlot = await db.TimeSlot.findAll({
+      // raw: true,
+      // include: [
+      //   {
+      //     association: "schedule",
+      //     as: "schedule",
+      //     include: [
+      //       {
+      //         association: "clinic",
+      //         as: "clinic",
+      //         include: [
+      //           {
+      //             association: "doctor",
+      //             as: "doctor",
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      where: {
+        patient_id: patient_id,
+      },
+      include: [
+        {
+          association: "schedule",
+
+          include: [
+            { association: "clinic", include: [{ association: "doctor" }] },
+          ],
+        },
+      ],
+    });
+    console.log(timeSlot);
+    return timeSlot;
+  }
 }

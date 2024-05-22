@@ -20,8 +20,10 @@ import { UserValidationSchema } from "../validation/UserValidationSchema";
 import { User } from "../class/User";
 import { TimeSlotReservationSchema } from "../validation/TimeSlotReservationSchema";
 import { TimeSlot } from "../class/TimeSlot";
-export class PatientController extends Controller {
-  // implements PatientControllerInterface
+export class PatientController
+  extends Controller
+  implements PatientControllerInterface
+{
   constructor() {
     super(new PatientService());
   }
@@ -77,6 +79,18 @@ export class PatientController extends Controller {
 
     res.statusCode = statusCode.success.ok;
     res.json(updatedTimeSlot);
+  };
+
+  public getSchedule = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const patient_id: number = Number(req.body.patient_id);
+    const result = await (this.service as PatientService).getSchedule(
+      patient_id
+    );
+    res.json(result);
   };
 
   //   public getEMR = async (

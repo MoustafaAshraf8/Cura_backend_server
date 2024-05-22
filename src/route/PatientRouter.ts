@@ -27,4 +27,6 @@ PatientRouter.route(patientRoute.reserveTimeSlot).post(
   tryCatch(patientController.reserveTimeSlot)
 );
 
+PatientRouter.route(patientRoute.schedule).get(patientController.getSchedule);
+
 export { PatientRouter };

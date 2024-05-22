@@ -41,7 +41,7 @@ export class PatientService extends Service implements PatientServiceInterface {
     newPatient.accessToken = JWT.createAccessToken({
       id: newPatient.patient_id,
     });
-
+    await MailService.sendMail(newPatient.Email);
     return newPatient;
   };
 
@@ -56,6 +56,11 @@ export class PatientService extends Service implements PatientServiceInterface {
       timeSlot
     );
     return updatedTimeSlot;
+  };
+
+  public getSchedule = async (patient_id: number): Promise<any> => {
+    const result = await DoctorService.getPatientSchedule(patient_id);
+    return result;
   };
 
   // create sql data entry

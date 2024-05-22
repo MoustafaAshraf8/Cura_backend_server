@@ -9,6 +9,7 @@ const patientRoute = {
   signup: "/signup",
   emr: "/emr",
   reserveTimeSlot: "/reserveTimeSlot",
+  schedule: "/schedule",
 };
 
 const doctorRoute = {

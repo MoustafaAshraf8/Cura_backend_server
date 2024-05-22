@@ -16,7 +16,7 @@
     "url": "git+https://github.com/MoustafaAshraf8/Cura_backend_server.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "[Moustafa Ashraf, Moustafa shousha]",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/MoustafaAshraf8/Cura_backend_server/issues"
@@ -31,6 +31,7 @@
     "@types/mongodb": "^4.0.7",
     "@types/node": "^20.11.19",
     "@types/nodemailer": "^6.4.14",
+    "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "busboy": "^1.6.0",
     "db-migrate": "^0.11.14",

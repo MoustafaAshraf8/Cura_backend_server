@@ -1,9 +1,9 @@
-import { Patient_Interface } from "../type/patient/Patient_Interface";
+//import { Patient_Interface } from "../type/patient/Patient_Interface";
 
-import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
+//import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
-import { EMR_Interface } from "../type/patient/EMR_Interface";
+//import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
 import { EMR } from "../database/mongo/model/EMR";
 import internal from "stream";
@@ -67,7 +67,7 @@ export class PatientRepositoryImplementation
     return new Patient(patientData.dataValues);
   };
 
-  public authorize = async (patient_id: number): Promise<void> => {
+  public authorize = async (patient_id: number): Promise<Patient> => {
     const patient = await (this.model as typeof db.Patient).findOne({
       where: {
         patient_id: patient_id,
@@ -76,7 +76,7 @@ export class PatientRepositoryImplementation
 
     if (patient.dataValues.length == 0) throw new UnothorizedUserException();
 
-    return;
+    return patient;
   };
 
   //   public getEMR = async (id: number): Promise<EMR_Interface> => {

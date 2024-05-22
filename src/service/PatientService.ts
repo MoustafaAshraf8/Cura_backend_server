@@ -1,9 +1,9 @@
-import { Patient_Interface } from "../type/patient/Patient_Interface";
+//import { Patient_Interface } from "../type/patient/Patient_Interface";
 import db from "../model/index";
-import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
+//import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
-import { EMR_Interface } from "../type/patient/EMR_Interface";
+//import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
 import { EMR } from "../database/mongo/model/EMR";
 import internal from "stream";
@@ -20,6 +20,8 @@ import { JWT } from "../utility/JWT";
 import { User } from "../class/User";
 import { DoctorService } from "./DoctorService";
 import { TimeSlot } from "../class/TimeSlot";
+import { ClinicDTO } from "../class/ClinicDTO";
+import { Payment } from "../utility/Payment";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
     super(new PatientRepositoryImplementation());
@@ -56,6 +58,21 @@ export class PatientService extends Service implements PatientServiceInterface {
       timeSlot
     );
     return updatedTimeSlot;
+  };
+
+  public payOnline = async (
+    clinicDTO: ClinicDTO,
+    patient_id: number
+  ): Promise<string> => {
+    const patient: Patient = new Patient({});
+    const clinic: ClinicDTO = new ClinicDTO({});
+    // const patient: Patient = await (
+    //   this.repositoryImplementaion as PatientRepositoryImplementation
+    // ).authorize(patient_id as number);
+    // const clinic: ClinicDTO = await DoctorService.getClinicData(clinicDTO);
+    const payment: Payment = new Payment(clinic, patient);
+    const URL: string = await payment.getPaymentKey();
+    return URL;
   };
 
   // create sql data entry

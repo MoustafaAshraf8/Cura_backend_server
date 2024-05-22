@@ -20,6 +20,8 @@ import { UserValidationSchema } from "../validation/UserValidationSchema";
 import { User } from "../class/User";
 import { TimeSlotReservationSchema } from "../validation/TimeSlotReservationSchema";
 import { TimeSlot } from "../class/TimeSlot";
+import { PaymentSchema } from "../validation/PaymentSchema";
+import { ClinicDTO } from "../class/ClinicDTO";
 export class PatientController extends Controller {
   // implements PatientControllerInterface
   constructor() {
@@ -77,6 +79,21 @@ export class PatientController extends Controller {
 
     res.statusCode = statusCode.success.ok;
     res.json(updatedTimeSlot);
+  };
+  public payOnline = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const validation = await PaymentSchema.validateAsync(req.body);
+    const clinicDTO: ClinicDTO = new ClinicDTO(validation);
+    //const patient = new Patient(Number(Object(req).user_id));
+    const URL: string = await (this.service as PatientService).payOnline(
+      clinicDTO,
+      Number(Object(req).user_id)
+    );
+    res.statusCode = statusCode.redirect.seeOther;
+    res.redirect(URL);
   };
 
   //   public getEMR = async (

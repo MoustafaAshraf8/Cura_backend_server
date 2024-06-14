@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "node build/server.js",
-    "dev": "nodemon src/server.ts",
+    "dev": "npx ts-node src/server.ts",
     "migrate_down": "npx sequelize-cli db:migrate:undo:all",
     "migrate_up": "npx sequelize-cli db:migrate"
   },

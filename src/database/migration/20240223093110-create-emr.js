@@ -5,8 +5,8 @@ module.exports = {
     await queryInterface.createTable("emr", {
       emr_id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
       patient_id: {
@@ -16,7 +16,7 @@ module.exports = {
           },
           key: "patient_id",
         },
-        primaryKey: true,
+        // primaryKey: true,
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
         type: Sequelize.INTEGER,

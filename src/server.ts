@@ -47,14 +47,17 @@ server.use(errorHandler);
 
 server.listen(port, async () => {
   console.log(`server listening on port: 8080`);
-  try {
-    await db.sequelize.authenticate();
-    // await db.sequelize.sync({ force: true });
+  //   try {
+  //     await db.sequelize.authenticate();
+  //     console.log(`connected ✔`);
+  //     // await db.sequelize.sync({ force: true });
 
-    // await mongoose.connect(process.env.MONGODB_URI as string);
-  } catch (error) {
-    console.log(error);
-  }
+  //     // await mongoose.connect(process.env.MONGODB_URI as string);
+  //   } catch (error) {
+  //     console.log(`connected ❌`);
+  //     console.log(error);
+  //   }
+  await db.sequelize.authenticate();
   //   const user = {
   //     FirstName: "user_001",
   //     LastName: "testLastName",

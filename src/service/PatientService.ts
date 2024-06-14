@@ -43,7 +43,7 @@ export class PatientService extends Service implements PatientServiceInterface {
     newPatient.accessToken = JWT.createAccessToken({
       id: newPatient.patient_id,
     });
-    await MailService.sendMail(newPatient.Email);
+    await MailService.sendMail(newPatient.Email as String);
     return newPatient;
   };
 

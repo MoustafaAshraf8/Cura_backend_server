@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  database_host:
+  mysql_server:
     image: mysql:latest # Use the official MySQL image from Docker Hub
     container_name: mysql_server_c
     restart: always # Automatically restart the container if it stops
@@ -12,10 +12,14 @@ services:
     ports:
       - "3307:3306"
 
-  mongo:
+  mongo_server:
     image: mongo:latest
     container_name: mongo_server_c
     restart: always
+    environment:
+      MONGO_INITDB_DATABASE: cura
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: mongopasswd
     ports:
       - "27018:27017"
 
@@ -26,6 +30,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - database_host
+      - mysql_server
+      - mongo_server
     env_file:
       - ./.env # Specify the path to your .env file

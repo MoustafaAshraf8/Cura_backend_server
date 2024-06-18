@@ -25,7 +25,11 @@ PatientRouter.route(patientRoute.payOnline).post(
 
 PatientRouter.route(patientRoute.emr + patientRoute.allergy)
   .post(JWT.verifyAccessToken, tryCatch(patientController.addAllergy))
-  .get(JWT.verifyAccessToken, tryCatch(patientController.getAllAlergy));
+  .get(JWT.verifyAccessToken, tryCatch(patientController.getAllAllergy));
+
+PatientRouter.route(patientRoute.emr + patientRoute.chronicIllness)
+  .post(JWT.verifyAccessToken, tryCatch(patientController.addChronicIllness))
+  .get(JWT.verifyAccessToken, tryCatch(patientController.getAllChronicIllness));
 
 PatientRouter.route(patientRoute.reserveTimeSlot).post(
   JWT.verifyAccessToken,

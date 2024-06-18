@@ -26,6 +26,7 @@ import { EMR, IEMRModel } from "../database/mongo/model/EMR";
 import { Allergy } from "../database/mongo/model/Allergy";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
+import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
 export class PatientController
   extends Controller
   implements PatientControllerInterface
@@ -133,14 +134,51 @@ export class PatientController
     res.json(result);
   };
 
-  public getAllAlergy = async (
+  public getAllAllergy = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });
 
-    const result = await (this.service as PatientService).getAllAlergy(patient);
+    const result = await (this.service as PatientService).getAllAllergy(
+      patient
+    );
+    res.json(result);
+  };
+
+  public addChronicIllness = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    console.log("55555555555");
+    const chronicIllnessData = req.body.data;
+    const fileData = req.body.files;
+
+    const patient = new Patient({ patient_id: Number(Object(req).user_id) });
+    const chronicIllness: ChronicIllnessDTO =
+      ChronicIllnessDTO.fromJson(chronicIllnessData);
+    const files: FileDTO[] = FileDTO.fromJSON(fileData);
+
+    const result = await (this.service as PatientService).addChronicIllness(
+      chronicIllness,
+      files,
+      patient
+    );
+    res.json(result);
+  };
+
+  public getAllChronicIllness = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: Number(Object(req).user_id) });
+
+    const result = await (this.service as PatientService).getAllChronicIllness(
+      patient
+    );
     res.json(result);
   };
 

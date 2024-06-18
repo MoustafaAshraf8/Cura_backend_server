@@ -25,6 +25,11 @@ import { Payment } from "../utility/Payment";
 import { Allergy, IAllergyModel } from "../database/mongo/model/Allergy";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
+import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
+import {
+  IChronicIllness,
+  IChronicIllnessModel,
+} from "../database/mongo/model/ChronicIllness";
 // import { AllergyGridFSBucket } from "../database/mongo/model/AllergyGridFSBucket";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
@@ -120,7 +125,7 @@ export class PatientService extends Service implements PatientServiceInterface {
     return emr;
   };
 
-  public getAllAlergy = async (patient: Patient): Promise<any> => {
+  public getAllAllergy = async (patient: Patient): Promise<any> => {
     // 1- authorize
     await (
       this.repositoryImplementaion as PatientRepositoryImplementation
@@ -129,8 +134,57 @@ export class PatientService extends Service implements PatientServiceInterface {
     // 2- getAllergy
     const allergies: AllergyDTO[] = await (
       this.repositoryImplementaion as PatientRepositoryImplementation
-    ).getAllAlergy(patient);
+    ).getAllAllergy(patient);
     return allergies;
+  };
+
+  public addChronicIllness = async (
+    chronicIllnessDTO: ChronicIllnessDTO,
+    files: FileDTO[],
+    patient: Patient
+  ): Promise<any> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient.patient_id as number);
+
+    // 2- get the emr
+    const emr: IEMRModel = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getEMR(patient.patient_id as number);
+
+    // 3- create the allergy document
+    const newChronicIllness: IChronicIllnessModel = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).addChronicIllness(chronicIllnessDTO);
+
+    // 4- add files to bucket
+
+    files.map(async (file) => {
+      const stream = await (
+        this.repositoryImplementaion as PatientRepositoryImplementation
+      ).addChronicIllnessFile(file);
+      newChronicIllness.file.push(stream.id);
+    });
+    await newChronicIllness.save();
+    // 5- add allergy to emr
+    emr.chronicIllness.push(newChronicIllness._id as mongoose.Types.ObjectId);
+    await emr.save();
+
+    return emr;
+  };
+
+  public getAllChronicIllness = async (patient: Patient): Promise<any> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient.patient_id as number);
+
+    // 2- getAllergy
+    const chronicIllness: ChronicIllnessDTO[] = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getAllChronicIllness(patient);
+    return chronicIllness;
   };
 
   // create sql data entry

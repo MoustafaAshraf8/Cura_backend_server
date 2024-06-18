@@ -24,6 +24,12 @@ import {
   IAllergyModel,
 } from "../database/mongo/model/Allergy";
 import { FileDTO } from "../dto/FileDTO";
+import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
+import {
+  ChronicIllness,
+  IChronicIllness,
+  IChronicIllnessModel,
+} from "../database/mongo/model/ChronicIllness";
 
 export class PatientRepositoryImplementation
   extends Repository
@@ -120,7 +126,7 @@ export class PatientRepositoryImplementation
     return stream;
   };
 
-  public getAllAlergy = async (patient: Patient): Promise<AllergyDTO[]> => {
+  public getAllAllergy = async (patient: Patient): Promise<AllergyDTO[]> => {
     const emr: IEMRModel | null = await EMR.findOne({
       patient_id: patient.patient_id,
     }).populate("allergy");
@@ -152,6 +158,52 @@ export class PatientRepositoryImplementation
     );
     // console.log(emr?.allergy);
     return allergies;
+  };
+
+  public addChronicIllness = async (
+    chronicIllnessDTO: ChronicIllnessDTO
+  ): Promise<IChronicIllnessModel> => {
+    const chronicIllness: IChronicIllnessModel = await ChronicIllness.create(
+      chronicIllnessDTO.toJson()
+    );
+
+    return chronicIllness;
+  };
+
+  public addChronicIllnessFile = async (file: FileDTO): Promise<any> => {
+    var fs = require("fs");
+    var Readable = require("stream").Readable;
+    const db = mongoose.connections[0].db;
+    const ChronicIllnessGridFSBucket: any = new mongoose.mongo.GridFSBucket(
+      db,
+      {
+        bucketName: "ChronicIllnessGridFSBucket",
+      }
+    );
+    const imgBuffer = Buffer.from(file.base64, "base64");
+    var s = new Readable();
+    const saveTo = path.join(".", file.filename);
+    await s.push(imgBuffer);
+    await s.push(null);
+    const stream = await s.pipe(
+      ChronicIllnessGridFSBucket.openUploadStream(saveTo)
+    );
+    return stream;
+  };
+
+  public getAllChronicIllness = async (
+    patient: Patient
+  ): Promise<ChronicIllnessDTO[]> => {
+    const emr: IEMRModel | null = await EMR.findOne({
+      patient_id: patient.patient_id,
+    }).populate("chronicIllness");
+
+    const chronicIllness: ChronicIllnessDTO[] = Object(emr).chronicIllness.map(
+      (chronicIllness: IChronicIllnessModel) =>
+        ChronicIllnessDTO.fromJson(Object(chronicIllness)._doc)
+    );
+
+    return chronicIllness;
   };
 
   //   public getEMR = async (id: number): Promise<EMR_Interface> => {

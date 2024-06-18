@@ -54,7 +54,7 @@ import mongoose from "mongoose";
 
 export interface IEMR {
   patient_id: number;
-  chronicIllnesse: mongoose.Types.ObjectId[];
+  chronicIllness: mongoose.Types.ObjectId[];
   previousIllnessesOrInfection: mongoose.Types.ObjectId[];
   surgeriesOrProcedure: mongoose.Types.ObjectId[];
   allergy: mongoose.Types.ObjectId[];
@@ -72,7 +72,7 @@ const emrSchema: mongoose.Schema<IEMRModel> = new mongoose.Schema<IEMRModel>({
     type: Number,
     required: true,
   },
-  chronicIllnesse: [{ type: mongoose.Types.ObjectId, ref: "ChronicIllness" }],
+  chronicIllness: [{ type: mongoose.Types.ObjectId, ref: "ChronicIllness" }],
   previousIllnessesOrInfection: [
     { type: mongoose.Types.ObjectId, ref: "PreviousIllnessOrInfection" },
   ],

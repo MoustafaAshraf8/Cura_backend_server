@@ -32,8 +32,18 @@ export class ChronicIllnessDTO implements IChronicIllness {
       json.illness,
       json.diagnosisDate,
       json.treatment,
-      json.notes,
-      json.file
+      json.file,
+      json.notes
     );
+  };
+
+  public toJson = (): Object => {
+    return {
+      illness: this.illness,
+      diagnosisDate: this.diagnosisDate,
+      treatment: this.treatment,
+      notes: this.notes,
+      file: this.file,
+    };
   };
 }

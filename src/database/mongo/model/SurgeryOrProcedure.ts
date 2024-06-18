@@ -1,12 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface ISurgeryOrProcedure extends Document {
+export interface ISurgeryOrProcedure {
   procedure: string;
   date: Date;
   outcome: string;
   complications?: string;
   notes?: string;
-  // fileId?: mongoose.Types.ObjectId; // File ID from GridFS
+  file: mongoose.Types.ObjectId[];
 }
 
 export interface ISurgeryOrProcedureModel
@@ -24,7 +24,12 @@ export const surgeryOrProcedureSchema: mongoose.Schema<ISurgeryOrProcedureModel>
     outcome: { type: String, required: true },
     complications: { type: String },
     notes: { type: String },
-    // fileId: { type: mongoose.Types.ObjectId, ref: "ReportFile" },
+    file: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "SurgeryOrProcedureGridFSBucket.files",
+      },
+    ],
   });
 
 export const SurgeryOrProcedure = mongoose.model<ISurgeryOrProcedureModel>(

@@ -1,12 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-interface IChronicIllness extends Document {
+export interface IChronicIllness {
   illness: string;
   diagnosisDate: Date;
   treatment: string;
   // recoveryDate?: Date;
   notes?: string;
-  // fileId?: mongoose.Types.ObjectId; // File ID from GridFS
+  file: mongoose.Types.ObjectId[];
 }
 export interface IChronicIllnessModel
   extends IChronicIllness,
@@ -23,7 +23,12 @@ export const chronicIllnessSchema: mongoose.Schema<IChronicIllnessModel> =
     treatment: { type: String, required: true },
     // recoveryDate: { type: Date },
     notes: { type: String, required: false },
-    // fileId: { type: mongoose.Types.ObjectId, ref: 'ReportFile' }
+    file: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "ChronicIllnessGridFSBucket.files",
+      },
+    ],
   });
 
 export const ChronicIllness = mongoose.model<IChronicIllnessModel>(

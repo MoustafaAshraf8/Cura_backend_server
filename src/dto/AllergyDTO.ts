@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { IAllergy } from "../database/mongo/model/Allergy";
 
 export class AllergyDTO implements IAllergy {

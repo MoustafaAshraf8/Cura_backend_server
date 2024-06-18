@@ -1,12 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IPreviousIllnessOrInfection extends Document {
+export interface IPreviousIllnessOrInfection {
   illness: string;
   diagnosisDate: Date;
   treatment: string;
   recoveryDate?: Date;
   notes?: string;
-  // fileId?: mongoose.Types.ObjectId; // File ID from GridFS
+  file: mongoose.Types.ObjectId[];
 }
 
 export interface IPreviousIllnessOrInfectionModel
@@ -14,7 +14,7 @@ export interface IPreviousIllnessOrInfectionModel
     mongoose.Document {}
 
 export const previousIllnessOrInfectionSchema: mongoose.Schema<IPreviousIllnessOrInfectionModel> =
-  new mongoose.Schema<IPreviousIllnessOrInfection>({
+  new mongoose.Schema<IPreviousIllnessOrInfectionModel>({
     _id: {
       type: mongoose.Schema.Types.ObjectId,
       auto: true,
@@ -24,7 +24,12 @@ export const previousIllnessOrInfectionSchema: mongoose.Schema<IPreviousIllnessO
     treatment: { type: String, required: true },
     recoveryDate: { type: Date },
     notes: { type: String },
-    // fileId: { type: mongoose.Types.ObjectId, ref: 'ReportFile' }
+    file: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "PreviousIllnessOrInfectionGridFSBucket.files",
+      },
+    ],
   });
 
 export const PreviousIllnessOrInfection =

@@ -1,11 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IImmunization extends Document {
+export interface IImmunization {
   vaccine: string;
   dateAdministered: Date;
   dose?: string;
   provider?: string;
   notes?: string;
+  file: mongoose.Types.ObjectId[];
 }
 
 export interface IImmunizationModel extends IImmunization, mongoose.Document {}
@@ -21,6 +22,9 @@ export const immunizationSchema: mongoose.Schema<IImmunizationModel> =
     dose: { type: String },
     provider: { type: String },
     notes: { type: String },
+    file: [
+      { type: mongoose.Types.ObjectId, ref: "ImmunizationGridFSBucket.files" },
+    ],
   });
 
 export const Immunization = mongoose.model<IImmunizationModel>(

@@ -14,14 +14,18 @@ import { PatientRepositoryImplementation } from "../repository/PatientRepository
 import { PatientSignUpSchema } from "../validation/PatientSignUpSchema";
 import Joi from "joi";
 import { Validate } from "sequelize-typescript";
-import { Patient } from "../class/Patient";
+import { Patient } from "../dto/Patient";
 import { statusCode } from "../constant/StatusCode";
 import { UserValidationSchema } from "../validation/UserValidationSchema";
-import { User } from "../class/User";
+import { User } from "../dto/User";
 import { TimeSlotReservationSchema } from "../validation/TimeSlotReservationSchema";
-import { TimeSlot } from "../class/TimeSlot";
+import { TimeSlot } from "../dto/TimeSlot";
 import { PaymentSchema } from "../validation/PaymentSchema";
-import { ClinicDTO } from "../class/ClinicDTO";
+import { ClinicDTO } from "../dto/ClinicDTO";
+import { EMR, IEMRModel } from "../database/mongo/model/EMR";
+import { Allergy } from "../database/mongo/model/Allergy";
+import { AllergyDTO } from "../dto/AllergyDTO";
+import { FileDTO } from "../dto/FileDTO";
 export class PatientController
   extends Controller
   implements PatientControllerInterface
@@ -108,6 +112,35 @@ export class PatientController
     const result = await (this.service as PatientService).getSchedule(
       patient_id
     );
+    res.json(result);
+  };
+
+  public addAllergy = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const allergyData = req.body.data;
+    const fileData = req.body.files;
+    const patient = new Patient({ patient_id: Number(Object(req).user_id) });
+    const allergy: AllergyDTO = AllergyDTO.fromJson(allergyData);
+    const files: FileDTO[] = FileDTO.fromJSON(fileData);
+    const result = await (this.service as PatientService).addAllergy(
+      allergy,
+      files,
+      patient
+    );
+    res.json(result);
+  };
+
+  public getAllAlergy = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: Number(Object(req).user_id) });
+
+    const result = await (this.service as PatientService).getAllAlergy(patient);
     res.json(result);
   };
 

@@ -8,6 +8,7 @@ const patientRoute = {
   signin: "/signin",
   signup: "/signup",
   emr: "/emr",
+  allergy: "/allergy",
   reserveTimeSlot: "/reserveTimeSlot",
   schedule: "/schedule",
   payOnline: "/payOnline",

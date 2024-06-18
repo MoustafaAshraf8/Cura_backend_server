@@ -52,7 +52,7 @@ import mongoose from "mongoose";
 
 // console.log("EMR model");
 
-export interface IEMR extends Document {
+export interface IEMR {
   patient_id: number;
   chronicIllnesse: mongoose.Types.ObjectId[];
   previousIllnessesOrInfection: mongoose.Types.ObjectId[];

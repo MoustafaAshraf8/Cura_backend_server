@@ -1,6 +1,6 @@
-import { ClinicDTO } from "../class/ClinicDTO";
-import { Patient } from "../class/Patient";
-import { User } from "../class/User";
+import { ClinicDTO } from "../dto/ClinicDTO";
+import { Patient } from "../dto/Patient";
+import { User } from "../dto/User";
 
 export interface PatientServiceInterface {
   signin(user: User): Promise<Patient>;

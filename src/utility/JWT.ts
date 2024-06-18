@@ -10,7 +10,7 @@ export class JWT {
     let accessToken = jwt.sign(
       credential,
       String(process.env.ACCESS_TOKEN_SECRET),
-      { expiresIn: "10m" }
+      { expiresIn: "365d" }
     );
     return accessToken;
   }
@@ -18,7 +18,7 @@ export class JWT {
     let refreshToken = jwt.sign(
       credentials,
       String(process.env.REFRESH_TOKEN_SECRET),
-      { expiresIn: "10m" }
+      { expiresIn: "365d" }
     );
     return refreshToken;
   }

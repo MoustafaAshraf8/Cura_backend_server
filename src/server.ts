@@ -11,7 +11,8 @@ dotenv.config();
 const port = process.env.PORT || 8080;
 const server: Application = express();
 
-server.use(express.json());
+server.use(express.json({ limit: "50mb" }));
+server.use(express.urlencoded({ limit: "50mb" }));
 server.use(
   serverRoute.baseUrl,
   (req: Request, res: Response, next: NextFunction) => {

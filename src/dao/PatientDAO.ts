@@ -1,5 +1,5 @@
-import { Patient } from "../class/Patient";
-import { User } from "../class/User";
+import { Patient } from "../dto/Patient";
+import { User } from "../dto/User";
 
 export interface PatientDAO {
   signup(patient: Patient): Promise<Patient>;

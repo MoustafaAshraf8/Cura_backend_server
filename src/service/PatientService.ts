@@ -5,7 +5,7 @@ import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
 //import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
-import { EMR } from "../database/mongo/model/EMR";
+import { EMR, IEMRModel } from "../database/mongo/model/EMR";
 import internal from "stream";
 import busboy from "busboy";
 import { IncomingHttpHeaders } from "http";
@@ -15,13 +15,17 @@ import { extend } from "joi";
 import { Service } from "./Service";
 import { PatientRepositoryImplementation } from "../repository/PatientRepositoryImplementation";
 import { PatientServiceInterface } from "./PatientServiceInterface";
-import { Patient } from "../class/Patient";
+import { Patient } from "../dto/Patient";
 import { JWT } from "../utility/JWT";
-import { User } from "../class/User";
+import { User } from "../dto/User";
 import { DoctorService } from "./DoctorService";
-import { TimeSlot } from "../class/TimeSlot";
-import { ClinicDTO } from "../class/ClinicDTO";
+import { TimeSlot } from "../dto/TimeSlot";
+import { ClinicDTO } from "../dto/ClinicDTO";
 import { Payment } from "../utility/Payment";
+import { Allergy, IAllergyModel } from "../database/mongo/model/Allergy";
+import { AllergyDTO } from "../dto/AllergyDTO";
+import { FileDTO } from "../dto/FileDTO";
+// import { AllergyGridFSBucket } from "../database/mongo/model/AllergyGridFSBucket";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
     super(new PatientRepositoryImplementation());
@@ -78,6 +82,55 @@ export class PatientService extends Service implements PatientServiceInterface {
   public getSchedule = async (patient_id: number): Promise<any> => {
     const result = await DoctorService.getPatientSchedule(patient_id);
     return result;
+  };
+
+  public addAllergy = async (
+    allergyDTO: AllergyDTO,
+    files: FileDTO[],
+    patient: Patient
+  ): Promise<any> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient.patient_id as number);
+
+    // 2- get the emr
+    const emr: IEMRModel = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getEMR(patient.patient_id as number);
+
+    // 3- create the allergy document
+    const newAllergy: IAllergyModel = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).addAllergy(allergyDTO);
+
+    // 4- add files to bucket
+
+    files.map(async (file) => {
+      const stream = await (
+        this.repositoryImplementaion as PatientRepositoryImplementation
+      ).addAllergyFile(file);
+      newAllergy.file.push(stream.id);
+    });
+    await newAllergy.save();
+    // 5- add allergy to emr
+    emr.allergy.push(newAllergy._id as mongoose.Types.ObjectId);
+    await emr.save();
+
+    return emr;
+  };
+
+  public getAllAlergy = async (patient: Patient): Promise<any> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient.patient_id as number);
+
+    // 2- getAllergy
+    const allergies: AllergyDTO[] = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getAllAlergy(patient);
+    return allergies;
   };
 
   // create sql data entry

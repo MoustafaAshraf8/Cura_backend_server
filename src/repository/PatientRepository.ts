@@ -3,7 +3,7 @@ import { LoginCredential_Interface } from "../type/generic/LoginCredential_Inter
 import { EMR_Interface } from "../type/patient/EMR_Interface";
 import { Patient_Interface } from "../type/patient/Patient_Interface";
 import { IncomingHttpHeaders } from "http";
-import { Patient } from "../class/Patient";
+import { Patient } from "../dto/Patient";
 export interface PatientRepository {
   signup(patient: Patient): Promise<Patient>;
 

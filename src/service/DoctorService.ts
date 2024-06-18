@@ -8,8 +8,8 @@ import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotF
 import { model } from "mongoose";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 import { ForbiddenAccessException } from "../error/ForbiddenAccessException";
-import { TimeSlot } from "../class/TimeSlot";
-import { ClinicDTO } from "../class/ClinicDTO";
+import { TimeSlot } from "../dto/TimeSlot";
+import { ClinicDTO } from "../dto/ClinicDTO";
 import { error } from "console";
 import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 export class DoctorService {

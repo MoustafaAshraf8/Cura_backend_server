@@ -5,8 +5,8 @@ import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
 //import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
-import { EMR } from "../database/mongo/model/EMR";
-import internal from "stream";
+import { EMR, IEMR, IEMRModel } from "../database/mongo/model/EMR";
+import internal, { Readable } from "stream";
 import busboy from "busboy";
 import { IncomingHttpHeaders } from "http";
 import path from "path";
@@ -14,9 +14,16 @@ import { MailService } from "../service/MailService";
 import { PatientRepository } from "./PatientRepository";
 import { Repository } from "./Repository";
 import db from "../model/index";
-import { Patient } from "../class/Patient";
-import { User } from "../class/User";
+import { Patient } from "../dto/Patient";
+import { User } from "../dto/User";
 import { UnothorizedUserException } from "../error/UnothorizedUserException";
+import { AllergyDTO } from "../dto/AllergyDTO";
+import {
+  Allergy,
+  IAllergy,
+  IAllergyModel,
+} from "../database/mongo/model/Allergy";
+import { FileDTO } from "../dto/FileDTO";
 
 export class PatientRepositoryImplementation
   extends Repository
@@ -77,6 +84,74 @@ export class PatientRepositoryImplementation
     if (patient.dataValues.length == 0) throw new UnothorizedUserException();
 
     return patient;
+  };
+
+  public getEMR = async (patient_id: number): Promise<IEMRModel> => {
+    const emr: IEMRModel | null = await EMR.findOne({
+      patient_id: patient_id,
+    });
+    if (emr == null) {
+      throw new Error("emr not found");
+    }
+    return emr;
+  };
+
+  public addAllergy = async (
+    allergyDTO: AllergyDTO
+  ): Promise<IAllergyModel> => {
+    const allergy: IAllergyModel = await Allergy.create(allergyDTO.toJson());
+
+    return allergy;
+  };
+
+  public addAllergyFile = async (file: FileDTO): Promise<any> => {
+    var fs = require("fs");
+    var Readable = require("stream").Readable;
+    const db = mongoose.connections[0].db;
+    const AllergyGridFSBucket: any = new mongoose.mongo.GridFSBucket(db, {
+      bucketName: "AllergyGridFSBucket",
+    });
+    const imgBuffer = Buffer.from(file.base64, "base64");
+    var s = new Readable();
+    const saveTo = path.join(".", file.filename);
+    await s.push(imgBuffer);
+    await s.push(null);
+    const stream = await s.pipe(AllergyGridFSBucket.openUploadStream(saveTo));
+    return stream;
+  };
+
+  public getAllAlergy = async (patient: Patient): Promise<AllergyDTO[]> => {
+    const emr: IEMRModel | null = await EMR.findOne({
+      patient_id: patient.patient_id,
+    }).populate("allergy");
+    //  const pipeline = [
+    //    {
+    //      $match: {
+    //        patient_id: 30,
+    //      },
+    //    },
+    //    {
+    //      $lookup: {
+    //        from: "Allergy",
+    //        localField: "allergy",
+    //        foreignField: "_id",
+    //        as: "allergies",
+    //      },
+    //    },
+    //  ];
+    //  var emr: any = await Object(mongoose.connections[0].db)
+    //    .collection("EMR")
+    //    .aggregate(pipeline);
+
+    //  console.log("xxxxxxxxxxxxxxxxxxxxxxxx");
+    //  emr = await emr.toArray();
+    //  console.log(emr);
+    //  console.log("xxxxxxxxxxxxxxxxxxxxxxxx");
+    const allergies: AllergyDTO[] = Object(emr).allergy.map(
+      (allergy: IAllergy) => AllergyDTO.fromJson(Object(allergy)._doc)
+    );
+    // console.log(emr?.allergy);
+    return allergies;
   };
 
   //   public getEMR = async (id: number): Promise<EMR_Interface> => {

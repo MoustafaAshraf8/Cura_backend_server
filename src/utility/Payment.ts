@@ -1,5 +1,5 @@
-import { ClinicDTO } from "../class/ClinicDTO";
-import { Patient } from "../class/Patient";
+import { ClinicDTO } from "../dto/ClinicDTO";
+import { Patient } from "../dto/Patient";
 import { Merchant } from "../type/paymentType/merchantInterface";
 import { Bill } from "../type/paymentType/bill";
 import axios, { AxiosResponse } from "axios";

@@ -114,15 +114,19 @@ export class PatientRepositoryImplementation
     var fs = require("fs");
     var Readable = require("stream").Readable;
     const db = mongoose.connections[0].db;
-    const AllergyGridFSBucket: any = new mongoose.mongo.GridFSBucket(db, {
-      bucketName: "AllergyGridFSBucket",
-    });
+    const AllergyGridFSBucket: mongoose.mongo.GridFSBucket =
+      new mongoose.mongo.GridFSBucket(db, {
+        bucketName: "AllergyGridFSBucket",
+      });
     const imgBuffer = Buffer.from(file.base64, "base64");
+    const metadata: object = file.getMetaData();
     var s = new Readable();
     const saveTo = path.join(".", file.filename);
     await s.push(imgBuffer);
     await s.push(null);
-    const stream = await s.pipe(AllergyGridFSBucket.openUploadStream(saveTo));
+    const stream = await s.pipe(
+      AllergyGridFSBucket.openUploadStream(saveTo, { metadata: metadata })
+    );
     return stream;
   };
 
@@ -158,6 +162,24 @@ export class PatientRepositoryImplementation
     );
     // console.log(emr?.allergy);
     return allergies;
+  };
+
+  public getAllergyFile = async (
+    file_id: string
+  ): Promise<mongoose.mongo.GridFSBucketReadStream> => {
+    // var fs = require("fs");
+    // var Readable = require("stream").Readable;
+    const db = mongoose.connections[0].db;
+    const AllergyGridFSBucket: mongoose.mongo.GridFSBucket =
+      new mongoose.mongo.GridFSBucket(db, {
+        bucketName: "AllergyGridFSBucket",
+      });
+
+    const readStream: mongoose.mongo.GridFSBucketReadStream =
+      await AllergyGridFSBucket.openDownloadStream(
+        new mongoose.Types.ObjectId(file_id)
+      );
+    return readStream;
   };
 
   public addChronicIllness = async (
@@ -204,6 +226,24 @@ export class PatientRepositoryImplementation
     );
 
     return chronicIllness;
+  };
+
+  public getChronicIllnessFile = async (
+    file_id: string
+  ): Promise<mongoose.mongo.GridFSBucketReadStream> => {
+    // var fs = require("fs");
+    // var Readable = require("stream").Readable;
+    const db = mongoose.connections[0].db;
+    const AllergyGridFSBucket: mongoose.mongo.GridFSBucket =
+      new mongoose.mongo.GridFSBucket(db, {
+        bucketName: "ChronicIllnessGridFSBucket",
+      });
+
+    const readStream: mongoose.mongo.GridFSBucketReadStream =
+      await AllergyGridFSBucket.openDownloadStream(
+        new mongoose.Types.ObjectId(file_id)
+      );
+    return readStream;
   };
 
   //   public getEMR = async (id: number): Promise<EMR_Interface> => {

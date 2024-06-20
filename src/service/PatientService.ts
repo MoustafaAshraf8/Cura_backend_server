@@ -187,6 +187,38 @@ export class PatientService extends Service implements PatientServiceInterface {
     return chronicIllness;
   };
 
+  public getAllergyFile = async (
+    patient: Patient,
+    file_id: string
+  ): Promise<mongoose.mongo.GridFSBucketReadStream> => {
+    // 1 - authorize;
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient.patient_id as number);
+
+    // 2- getAllergyFile
+    const readstream: mongoose.mongo.GridFSBucketReadStream = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getAllergyFile(file_id);
+    return readstream;
+  };
+
+  public getChronicIllnessFile = async (
+    patient: Patient,
+    file_id: string
+  ): Promise<mongoose.mongo.GridFSBucketReadStream> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient.patient_id as number);
+
+    // 2- getChronicIllnessFile
+    const readstream: mongoose.mongo.GridFSBucketReadStream = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getChronicIllnessFile(file_id);
+    return readstream;
+  };
+
   // create sql data entry
   //       const patientData = await db.sequelize.transaction(async (t: any) => {
   //         const patientData = await db.Patient.create(patient, {

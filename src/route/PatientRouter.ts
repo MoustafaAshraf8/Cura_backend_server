@@ -31,6 +31,15 @@ PatientRouter.route(patientRoute.emr + patientRoute.chronicIllness)
   .post(JWT.verifyAccessToken, tryCatch(patientController.addChronicIllness))
   .get(JWT.verifyAccessToken, tryCatch(patientController.getAllChronicIllness));
 
+PatientRouter.route(patientRoute.emr + patientRoute.allergyFileWithId).get(
+  JWT.verifyAccessToken,
+  tryCatch(patientController.getAllergyFile)
+);
+
+PatientRouter.route(
+  patientRoute.emr + patientRoute.chronicIllnessFileWithId
+).get(JWT.verifyAccessToken, tryCatch(patientController.getChronicIllnessFile));
+
 PatientRouter.route(patientRoute.reserveTimeSlot).post(
   JWT.verifyAccessToken,
   tryCatch(patientController.reserveTimeSlot)

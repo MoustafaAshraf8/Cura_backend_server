@@ -27,6 +27,7 @@ import { Allergy } from "../database/mongo/model/Allergy";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
 import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
+import mongoose from "mongoose";
 export class PatientController
   extends Controller
   implements PatientControllerInterface
@@ -180,6 +181,51 @@ export class PatientController
       patient
     );
     res.json(result);
+  };
+
+  public getAllergyFile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: Number(Object(req).user_id) });
+    const file_id: string = req.params.id;
+    const readstream: mongoose.mongo.GridFSBucketReadStream = await (
+      this.service as PatientService
+    ).getAllergyFile(patient, file_id);
+    // readstream.pipe(res);
+    // Convert stream to buffer
+    const streamToBuffer = (stream: mongoose.mongo.GridFSBucketReadStream) => {
+      return new Promise((resolve, reject) => {
+        const chunks: any = [];
+        stream.on("data", (chunk) => {
+          chunks.push(chunk);
+        });
+        stream.on("end", () => {
+          resolve(Buffer.concat(chunks));
+        });
+        stream.on("error", reject);
+      });
+    };
+
+    const buffer = await streamToBuffer(readstream);
+
+    // res.setHeader("Content-Type", "application/octet-stream");
+    // res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  };
+
+  public getChronicIllnessFile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: Number(Object(req).user_id) });
+    const file_id: string = req.params.id;
+    const readstream: mongoose.mongo.GridFSBucketReadStream = await (
+      this.service as PatientService
+    ).getChronicIllnessFile(patient, file_id);
+    readstream.pipe(res);
   };
 
   //   public getEMR = async (

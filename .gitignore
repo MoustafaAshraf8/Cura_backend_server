@@ -5,3 +5,4 @@ migrations
 database.json
 api
 src/template/
+build

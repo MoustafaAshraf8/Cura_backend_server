@@ -8,7 +8,8 @@ WORKDIR /app
 COPY package*.json .
 
 # Install dependencies
-RUN npm install
+RUN npm install && npm install typescript -g
+
 
 # Copy the rest of the application code
 COPY . .
@@ -22,5 +23,9 @@ EXPOSE 8080
 # # Command to run the application
 # CMD ["node", "./src/server.js"]
 
+# build the typescript -> javscript
+RUN tsc
+
 # CMD ["sh", "-c", "npm run migrate_up && npm run dev"]
+# CMD ["sh", "-c", "npm run dev"]
 CMD ["sh", "-c", "npm run dev"]

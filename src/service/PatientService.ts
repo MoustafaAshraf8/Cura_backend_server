@@ -44,6 +44,7 @@ export class PatientService extends Service implements PatientServiceInterface {
     });
     return patient;
   };
+
   public signup = async (patient: Patient): Promise<Patient> => {
     const newPatient: Patient = await (
       this.repositoryImplementaion as PatientRepositoryImplementation
@@ -67,6 +68,21 @@ export class PatientService extends Service implements PatientServiceInterface {
       timeSlot
     );
     return updatedTimeSlot;
+  };
+
+  public deleteReservedTimeSlot = async (
+    timeSlot: TimeSlot
+  ): Promise<boolean> => {
+    // 1- authorize
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(timeSlot.patient_id as number);
+
+    // 2- delete reservation
+    const result: boolean = await DoctorService.deleteReservedTimeSlot(
+      timeSlot
+    );
+    return result;
   };
 
   public payOnline = async (

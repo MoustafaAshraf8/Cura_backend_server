@@ -12,7 +12,7 @@ const patientRoute = {
   allergyFileWithId: "/allergy/file/:id",
   chronicIllness: "/chronicIllness",
   chronicIllnessFileWithId: "/chronicIllness/file/:id",
-  reserveTimeSlot: "/reserveTimeSlot",
+  timeslotWithId: "/timeslot/:id",
   schedule: "/schedule",
   payOnline: "/payOnline",
 };

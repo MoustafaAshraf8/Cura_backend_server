@@ -12,6 +12,7 @@ import { TimeSlot } from "../dto/TimeSlot";
 import { ClinicDTO } from "../dto/ClinicDTO";
 import { error } from "console";
 import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
+import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface
@@ -187,7 +188,17 @@ export class DoctorService {
             exclude: ["doctor_id"],
           },
           include: [
-            { association: "schedule", include: [{ association: "timeslot" }] },
+            {
+              association: "schedule",
+              include: [
+                {
+                  association: "timeslot",
+                  // where: {
+                  //   patient_id: null,
+                  // },
+                },
+              ],
+            },
           ],
         },
       ],
@@ -244,6 +255,65 @@ export class DoctorService {
     return new TimeSlot(timeSlotObj);
   }
 
+  static async deleteReservedTimeSlot(
+    targetTimeSlot: TimeSlot
+  ): Promise<boolean> {
+    // const timeSlot = db.TimeSlot.findOne({
+    //    where:{
+    //       timeslot_id:timeslot_id
+    //    }
+    // });
+    // await timeSlot.update({patient_id:patient_id});
+    // timeSlot.save();
+
+    //  const timeSlot = await db.TimeSlot.update(
+    //    { patient_id: patient_id },
+    //    {
+    //      where: {
+    //        timeslot_id: timeslot_id,
+    //        patient_id: null,
+    //      },
+    //    }
+    //  );
+    //  console.log("-------------------------");
+    //  console.log(timeSlot);
+    //  if (timeSlot[0] == 0) throw new ForbiddenAccessException();
+
+    //  const timeSlotObj = await db.sequelize.transaction(async (t: any) => {
+    //    const timeslot = await db.TimeSlot.findOne({
+    //      where: {
+    //        timeslot_id: targetTimeSlot.timeslot_id,
+    //      },
+    //    });
+
+    //    if (timeslot.patient_id != null) {
+    //      throw new ForbiddenAccessException();
+    //    }
+
+    //    await timeslot.update({ patient_id: targetTimeSlot.patient_id });
+    //    await timeslot.save();
+
+    //    return timeslot.dataValues;
+    //  });
+
+    const timeslotObj = await db.TimeSlot.update(
+      {
+        patient_id: null,
+      },
+      {
+        where: {
+          patient_id: targetTimeSlot.patient_id,
+          timeslot_id: targetTimeSlot.timeslot_id,
+        },
+      }
+    );
+
+    if (!timeslotObj[0]) {
+      throw new TimeSlotNotFoundException();
+    }
+    return true;
+  }
+
   static async getClinicData(clinicDTO: ClinicDTO): Promise<ClinicDTO> {
     const clinic: ClinicDTO = await db.Clinic.findOne({
       where: {
@@ -286,7 +356,15 @@ export class DoctorService {
           association: "schedule",
 
           include: [
-            { association: "clinic", include: [{ association: "doctor" }] },
+            {
+              association: "clinic",
+              include: [
+                {
+                  association: "doctor",
+                  include: [{ association: "speciality" }],
+                },
+              ],
+            },
           ],
         },
       ],

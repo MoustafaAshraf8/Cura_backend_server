@@ -30,6 +30,7 @@ import {
   IChronicIllness,
   IChronicIllnessModel,
 } from "../database/mongo/model/ChronicIllness";
+import { EMRNotFoundException } from "../error/EMRNotFoundException";
 
 export class PatientRepositoryImplementation
   extends Repository
@@ -157,6 +158,9 @@ export class PatientRepositoryImplementation
     //  emr = await emr.toArray();
     //  console.log(emr);
     //  console.log("xxxxxxxxxxxxxxxxxxxxxxxx");
+    if (emr === null) {
+      throw new EMRNotFoundException();
+    }
     const allergies: AllergyDTO[] = Object(emr).allergy.map(
       (allergy: IAllergy) => AllergyDTO.fromJson(Object(allergy)._doc)
     );

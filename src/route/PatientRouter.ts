@@ -40,11 +40,16 @@ PatientRouter.route(
   patientRoute.emr + patientRoute.chronicIllnessFileWithId
 ).get(JWT.verifyAccessToken, tryCatch(patientController.getChronicIllnessFile));
 
-PatientRouter.route(patientRoute.reserveTimeSlot).post(
-  JWT.verifyAccessToken,
-  tryCatch(patientController.reserveTimeSlot)
-);
+PatientRouter.route(patientRoute.timeslotWithId)
+  .post(JWT.verifyAccessToken, tryCatch(patientController.reserveTimeSlot))
+  .delete(
+    JWT.verifyAccessToken,
+    tryCatch(patientController.deleteReservedTimeSlot)
+  );
 
-PatientRouter.route(patientRoute.schedule).get(patientController.getSchedule);
+PatientRouter.route(patientRoute.schedule).get(
+  JWT.verifyAccessToken,
+  tryCatch(patientController.getSchedule)
+);
 
 export { PatientRouter };

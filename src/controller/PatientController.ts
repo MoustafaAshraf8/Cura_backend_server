@@ -75,8 +75,8 @@ export class PatientController
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const validation = await TimeSlotReservationSchema.validateAsync(req.body);
-    const timeslot_id = validation.timeslot_id;
+    // const validation = await TimeSlotReservationSchema.validateAsync(req.body);
+    const timeslot_id = Number(req.params.id);
     const patient_id = Number(Object(req).user_id);
     const timeSlot = new TimeSlot({
       timeslot_id: timeslot_id,
@@ -89,6 +89,28 @@ export class PatientController
     res.statusCode = statusCode.success.ok;
     res.json(updatedTimeSlot);
   };
+
+  public deleteReservedTimeSlot = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    // const validation = await TimeSlotReservationSchema.validateAsync(req.body);
+    const timeslot_id = Number(req.params.id);
+    const patient_id = Number(Object(req).user_id);
+    const timeSlot = new TimeSlot({
+      timeslot_id: timeslot_id,
+      patient_id: patient_id,
+    });
+    console.log("777777777");
+    const result: boolean = await (
+      this.service as PatientService
+    ).deleteReservedTimeSlot(timeSlot);
+
+    res.statusCode = statusCode.success.ok;
+    res.end();
+  };
+
   public payOnline = async (
     req: Request,
     res: Response,
@@ -110,7 +132,7 @@ export class PatientController
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const patient_id: number = Number(req.body.patient_id);
+    const patient_id: number = Number(Object(req).user_id);
     const result = await (this.service as PatientService).getSchedule(
       patient_id
     );

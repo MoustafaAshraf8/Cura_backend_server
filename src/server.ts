@@ -45,76 +45,40 @@ server.get(
 
 server.use(errorHandler);
 
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function connectToDB(tries: number) {
+  console.log(`try -> ${tries}`);
+  await sleep(5000);
+  if (tries >= 3) {
+    throw new Error("Cannot connect to DB!!");
+  }
+  try {
+    await db.sequelize.authenticate();
+    await mongoose.connect(process.env.MONGODB_URI as string);
+  } catch (err) {
+    console.log(err);
+    connectToDB(tries++);
+  }
+}
+
+async function runMigrations() {
+  await sleep(5000);
+  nrc.run("npm run migrate_up");
+}
+
+var nrc = require("node-run-cmd");
 server.listen(port, async () => {
-  console.log(`server listening on port: 8080`);
-  //   try {
-  //     await db.sequelize.authenticate();
-  //     console.log(`connected ✔`);
-  //     // await db.sequelize.sync({ force: true });
-
-  //     // await mongoose.connect(process.env.MONGODB_URI as string);
-  //   } catch (error) {
-  //     console.log(`connected ❌`);
-  //     console.log(error);
-  //   }
-  await db.sequelize.authenticate();
-  //   const user = {
-  //     FirstName: "user_001",
-  //     LastName: "testLastName",
-  //     Email: "email001",
-  //     Password: "123",
-  //     patientphonenumber: [
-  //       { PhoneNumber: 1111 },
-  //       { PhoneNumber: 2222 },
-  //       { PhoneNumber: 3333 },
-  //       { PhoneNumber: 4444 },
-  //       { PhoneNumber: 5555 },
-  //       { PhoneNumber: 6666 },
-  //       { PhoneNumber: 7777 },
-  //     ],
-  //   };
-
-  //   const patient = await db.Patient.create(user, {
-  //     include: [
-  //       { model: db.PatientPhoneNumber, as: "patientphonenumber" },
-  //       // { model: db.EMR, as: "emr" },
-  //     ],
-  //   });
-  //   const emr = {
-  //     patient_id: Number(patient.dataValues.patient_id),
-  //     desease: [
-  //       {
-  //         Diagnose: "test diagnose 01",
-  //         Note: "test note",
-  //         prescription: [
-  //           { Name: "pres0", Dose: 100, Frequency: 24 },
-  //           { Name: "pres1", Dose: 100, Frequency: 24 },
-  //           { Name: "pres2", Dose: 100, Frequency: 24 },
-  //           { Name: "pres3", Dose: 100, Frequency: 24 },
-  //         ],
-  //       },
-  //       {
-  //         Diagnose: "test diagnose 02",
-  //         Note: "test note",
-  //         prescription: [
-  //           { Name: "pres0", Dose: 100, Frequency: 24 },
-  //           { Name: "pres1", Dose: 100, Frequency: 24 },
-  //           { Name: "pres2", Dose: 100, Frequency: 24 },
-  //           { Name: "pres3", Dose: 100, Frequency: 24 },
-  //         ],
-  //       },
-  //     ],
-  //     surgery: [
-  //       { Name: "surgery001" },
-  //       { Name: "surgery002" },
-  //       { Name: "surgery003" },
-  //       { Name: "surgery004" },
-  //     ],
-  //   };
-  //   const res = await db.EMR.create(emr, {
-  //     include: [
-  //       { model: db.Desease, as: "desease" },
-  //       { model: db.Surgery, as: "surgery" },
-  //     ],
-  //   });
+  try {
+    await connectToDB(1);
+    await runMigrations();
+    console.log(`server listening on port: 8080`);
+  } catch (err) {
+    console.error(err);
+    process.exit(0);
+  }
 });

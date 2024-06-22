@@ -23,14 +23,14 @@ services:
     ports:
       - "27018:27017"
 
-  # app:
-  #   build: .
-  #   container_name: cura_c
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mysql_server
-  #     - mongo_server
-  #   env_file:
-  #     - ./.env # Specify the path to your .env file
+  app:
+    build: .
+    container_name: cura_c
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql_server
+      - mongo_server
+    env_file:
+      - ./.env # Specify the path to your .env file

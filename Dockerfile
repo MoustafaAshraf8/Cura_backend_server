@@ -22,5 +22,5 @@ EXPOSE 8080
 # # Command to run the application
 # CMD ["node", "./src/server.js"]
 
-CMD ["sh", "-c", "npm run migrate_up && npm run dev"]
-# CMD ["sh", "-c", "npm run dev"]
+# CMD ["sh", "-c", "npm run migrate_up && npm run dev"]
+CMD ["sh", "-c", "npm run dev"]

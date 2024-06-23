@@ -1,4 +1,5 @@
 version: "3.8"
+name: "cura"
 services:
   mysql_server:
     image: mysql:latest # Use the official MySQL image from Docker Hub

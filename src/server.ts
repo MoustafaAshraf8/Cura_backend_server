@@ -7,6 +7,7 @@ import { PatientRouter } from "./route/PatientRouter";
 import { DoctorRouter } from "./route/DoctorRouter";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
+import RabbitMQClient from "./RabbitMQ/RabbitMQClient";
 dotenv.config();
 const port = process.env.PORT || 8080;
 const server: Application = express();

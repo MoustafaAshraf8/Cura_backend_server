@@ -30,6 +30,8 @@ import {
   IChronicIllness,
   IChronicIllnessModel,
 } from "../database/mongo/model/ChronicIllness";
+import BookingServiceRabbitMQClient from "../RabbitMQ/BookingServiceRabbitMQClient";
+import { TimeSlotReservationConflictException } from "../error/TimeSlotReservationConflictException";
 // import { AllergyGridFSBucket } from "../database/mongo/model/AllergyGridFSBucket";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
@@ -64,9 +66,16 @@ export class PatientService extends Service implements PatientServiceInterface {
     ).authorize(timeSlot.patient_id as number);
 
     // 2- reserve
-    const updatedTimeSlot: TimeSlot = await DoctorService.reserveTimeSlot(
-      timeSlot
-    );
+    const data: any = {
+      timeslot_id: timeSlot.timeslot_id,
+      patient_id: timeSlot.patient_id,
+    };
+    const updatedTimeSlot: any = await BookingServiceRabbitMQClient.produce({
+      data: data,
+    });
+    if (updatedTimeSlot == null) {
+      throw new TimeSlotReservationConflictException();
+    }
     return updatedTimeSlot;
   };
 

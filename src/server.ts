@@ -7,7 +7,7 @@ import { PatientRouter } from "./route/PatientRouter";
 import { DoctorRouter } from "./route/DoctorRouter";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
-import RabbitMQClient from "./RabbitMQ/RabbitMQClient";
+import RabbitMQClient from "./RabbitMQ/BookingServiceRabbitMQClient";
 dotenv.config();
 const port = process.env.PORT || 8080;
 const server: Application = express();
@@ -42,6 +42,15 @@ server.get(
       include: [{ model: db.EMR, as: "emr" }],
     });
     res.json(patient);
+  }
+);
+
+server.post(
+  serverRoute.baseUrl,
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
+    const result: any = await RabbitMQClient.produce({ data: req.body });
+    res.json({ result: result });
   }
 );
 
@@ -117,4 +126,5 @@ server.listen(port, async () => {
   //       { model: db.Surgery, as: "surgery" },
   //     ],
   //   });
+  RabbitMQClient.initialize();
 });

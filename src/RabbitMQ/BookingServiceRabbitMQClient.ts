@@ -3,13 +3,13 @@
 import { Channel, Connection, connect } from "amqplib";
 import { Consumer } from "./Consumer";
 import { Producer } from "./Producer";
-import { RabbitMQConfig } from "./RabbitMQConfig";
+import { BookingServiceRabbitMQConfig } from "./BookingServiceRabbitMQConfig";
 import { EventEmitter } from "events";
 import { randomUUID } from "crypto";
 
 // singelton
-class RabbitMQClient {
-  private static instance: RabbitMQClient;
+class BookingServiceRabbitMQClient {
+  private static instance: BookingServiceRabbitMQClient;
   private isInitialized = false;
 
   private producer: Producer;
@@ -24,7 +24,7 @@ class RabbitMQClient {
 
   public static getInstance() {
     if (!this.instance) {
-      this.instance = new RabbitMQClient();
+      this.instance = new BookingServiceRabbitMQClient();
     }
     return this.instance;
   }
@@ -35,7 +35,8 @@ class RabbitMQClient {
     }
 
     try {
-      const rabbitMQConfig: RabbitMQConfig = new RabbitMQConfig();
+      const rabbitMQConfig: BookingServiceRabbitMQConfig =
+        new BookingServiceRabbitMQConfig();
       const uniqueUUID: string = randomUUID();
       this.eventEmitter = new EventEmitter();
 
@@ -75,6 +76,13 @@ class RabbitMQClient {
     }
     return await this.producer.produceMessage({ data: parameters.data });
   }
+
+  //   async produce(parameters: { data: any }) {
+  //     if (!this.isInitialized) {
+  //       await this.initialize();
+  //     }
+  //     return await this.producer.produceMessage({ data: parameters.data });
+  //   }
 }
 
-export default RabbitMQClient.getInstance();
+export default BookingServiceRabbitMQClient.getInstance();

@@ -1,5 +1,5 @@
 import { Channel, ConsumeMessage } from "amqplib";
-import { MessageHandler } from "../utils/MessageHandler";
+import { MessageHandler } from "../utility/MessageHandler";
 import { EventEmitter } from "events";
 
 export class Consumer {
@@ -28,10 +28,7 @@ export class Consumer {
         } else {
           await MessageHandler.handle({
             operation: operation,
-            data: {
-              num1: messageContent["num1"],
-              num2: messageContent["num2"],
-            },
+            data: messageContent,
             correlationId: correlationId,
             replyToQueue: replyTo,
           });

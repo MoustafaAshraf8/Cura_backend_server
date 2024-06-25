@@ -26,7 +26,6 @@ class RabbitMQClient {
   }
 
   async initialize() {
-    console.log("5555555555");
     if (this.isInitialized) {
       return;
     }

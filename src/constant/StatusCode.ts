@@ -94,6 +94,11 @@ export const statusCode = {
     notAcceptable: 406,
     // This is similar to 401 Unauthorized but authentication is needed to be done by a proxy.
     proxyAuthenticationRequired: 407,
+    // This response is sent on an idle connection by some servers, even without any previous request by the client. It means that the server would like to shut down this unused connection.
+    // This response is used much more since some browsers, like Chrome, Firefox 27+, or IE9, use HTTP pre-connection mechanisms to speed up surfing. Also note that some servers merely shut down the connection without sending this message.
+    requestTimeOut: 408,
+    // This response is sent when a request conflicts with the current state of the server.
+    conflict: 409,
   },
   serverError: {
     internalServerError: 500,

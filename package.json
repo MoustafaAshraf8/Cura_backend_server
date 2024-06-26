@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
-    "start": "node build/server.js",
-    "dev": "nodemon src/server.ts",
+    "start": "node build/src/server.js",
+    "dev": "npx ts-node src/server.ts",
     "migrate_down": "npx sequelize-cli db:migrate:undo:all",
     "migrate_up": "npx sequelize-cli db:migrate"
   },
@@ -47,6 +48,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.1",
     "mysql2": "^3.9.1",
+    "node-run-cmd": "^1.0.1",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.0.3",
     "sequelize": "^6.37.1",

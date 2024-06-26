@@ -71,9 +71,9 @@ export class PatientRepositoryImplementation
       const patientId = patientData.dataValues.patient_id;
 
       // create mongo data entry
-      const emrMongo = await EMR.create({
-        patient_id: patientId,
-      });
+      // const emrMongo = await EMR.create({
+      //   patient_id: patientId,
+      // });
 
       return patientData;
     });

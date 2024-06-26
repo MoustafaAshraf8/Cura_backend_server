@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction, json } from "express";
 import { PatientService } from "../service/PatientService";
-import { Patient_Interface } from "../type/patient/Patient_Interface";
+// import { Patient_Interface } from "../type/patient/Patient_Interface";
 import { Hasher } from "../utility/Hasher";
-import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
+// import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { WrongPasswordException } from "../error/WrongPasswordException";
 import { JWT } from "../utility/JWT";
 import { IncomingHttpHeaders } from "http";

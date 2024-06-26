@@ -1,18 +1,5 @@
 version: 2.1
 jobs:
-  code_test:
-    docker:
-      - image: cimg/node:20.14.0
-    steps:
-      - checkout
-      - run:
-          name: install npm dependencies
-          command: |
-            npm install
-      - run:
-          name: code testing stage
-          command: |
-            npm run test
   build_test:
     docker:
       - image: cimg/node:20.14.0
@@ -22,6 +9,16 @@ jobs:
           name: install npm dependencies
           command: |
             npm install
+  code_test:
+    docker:
+      - image: cimg/node:20.14.0
+    steps:
+      - checkout
+      - run:
+          name: run unit testing
+          command: |
+            npm install
+            npm run test
   build_docker_image:
     docker:
       - image: cimg/node:20.14.0
@@ -32,11 +29,12 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker build -t nodejsapp1 -t moustafaashraf/nodejsapp1:latest .
+            docker build -t nodejsapp1 -t moustafaashraf/nodejsapp1:v01 .
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push moustafaashraf/nodejsapp1:latest
+            docker push moustafaashraf/nodejsapp1:v01
 workflows:
   build_test:
     jobs:
       - build_test
+      - code_test
       - build_docker_image

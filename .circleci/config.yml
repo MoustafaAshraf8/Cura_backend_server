@@ -1,5 +1,18 @@
 version: 2.1
 jobs:
+  code_test:
+    docker:
+      - image: cimg/node:20.14.0
+    steps:
+      - checkout
+      - run:
+          name: install npm dependencies
+          command: |
+            npm install
+      - run:
+          name: code testing stage
+          command: |
+            npm run test
   build_test:
     docker:
       - image: cimg/node:20.14.0

@@ -24,7 +24,7 @@ EXPOSE 8080
 # CMD ["node", "./src/server.js"]
 
 # build the typescript -> javscript
-RUN tsc
+# RUN tsc
 
 # CMD ["sh", "-c", "npm run migrate_up && npm run dev"]
 # CMD ["sh", "-c", "npm run dev"]

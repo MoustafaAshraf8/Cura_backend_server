@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build_test:
     docker:
-      - image: circleci/node:20-alpine
+      - image: cimg/node:20.14.0
     steps:
       - checkout
       - run:
@@ -11,7 +11,7 @@ jobs:
             npm install
   build_docker_image:
     docker:
-      - image: circleci/node:20-alpine
+      - image: cimg/node:20.14.0
     steps:
       - checkout
       - setup_remote_docker:

@@ -2,14 +2,14 @@ version: "3.8"
 name: "cura"
 services:
   mysql_server:
-    image: mysql:latest # Use the official MySQL image from Docker Hub
+    image: mysql:latest
     container_name: mysql_server_c
-    restart: always # Automatically restart the container if it stops
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: mostafa # Set the root password for MySQL
-      MYSQL_DATABASE: test # Name of the database to create
-      MYSQL_USER: user # Username for MySQL user
-      MYSQL_PASSWORD: mostafa # Password for MySQL user
+      MYSQL_ROOT_PASSWORD: mostafa
+      MYSQL_DATABASE: test
+      MYSQL_USER: user
+      MYSQL_PASSWORD: mostafa
     ports:
       - "3307:3306"
 
@@ -24,8 +24,19 @@ services:
     ports:
       - "27018:27017"
 
+  rabbitmq:
+    # name: rabbitmq_image
+    image: rabbitmq:3.13.3-management
+    container_name: "rabbitmq_c"
+    ports:
+      - 5672:5672 # webUI
+      - 15672:15672 # broker port
+    # volumes:
+    #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+    #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
   app:
-    build: .
+    build: ./Server/
     container_name: cura_c
     restart: always
     ports:
@@ -34,4 +45,15 @@ services:
       - mysql_server
       - mongo_server
     env_file:
-      - ./.env # Specify the path to your .env file
+      - ./Server/.env.docker
+
+  bookingservice:
+    build: ./BookingService/
+    container_name: bookingservice_c
+    restart: always
+    depends_on:
+      - mysql_server
+      - mongo_server
+      - rabbitmq
+    env_file:
+      - ./BookingService/.env.docker

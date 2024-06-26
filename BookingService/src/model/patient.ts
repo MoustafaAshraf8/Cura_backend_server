@@ -1,7 +1,7 @@
 "use strict";
 import { Model, InferAttributes, InferCreationAttributes } from "sequelize";
-import { Hasher } from "../utility/Hasher";
-import { JWT } from "../utility/JWT";
+// import { Hasher } from "../utility/Hasher";
+// import { JWT } from "../utility/JWT";
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Patient extends Model<
@@ -88,9 +88,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
   );
 
-  Patient.beforeCreate(async (patient) => {
-    patient.Password = await Hasher.hashPassword(patient.Password);
-  });
+  //   Patient.beforeCreate(async (patient) => {
+  //     patient.Password = await Hasher.hashPassword(patient.Password);
+  //   });
 
   return Patient;
 };

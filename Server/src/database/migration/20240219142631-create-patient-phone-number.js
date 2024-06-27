@@ -21,7 +21,7 @@ module.exports = {
         field: "PhoneNumber",
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       // createdAt: {
       //   allowNull: false,

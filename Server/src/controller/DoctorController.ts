@@ -22,7 +22,8 @@ export class DoctorController {
     const doctor: Doctor_Interface = await DoctorService.signup(doctorData);
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
     // await MailService.sendMail(doctor.Email);
-    res.json({ accessToken: jwt });
+    Object(doctor).accessToken = jwt;
+    res.json(doctor);
     // res.json(doctor);
   }
 
@@ -44,6 +45,7 @@ export class DoctorController {
     }
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
     // res.json({ accessToken: jwt });
+    Object(doctor).accessToken = jwt;
     res.json(doctor);
   }
 

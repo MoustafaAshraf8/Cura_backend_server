@@ -1,0 +1,62 @@
+[
+  {
+    "speciality_id": 1,
+    "Name": "Dermatology"
+  },
+  {
+    "speciality_id": 2,
+    "Name": "Dentistry"
+  },
+  {
+    "speciality_id": 3,
+    "Name": "Neurology"
+  },
+  {
+    "speciality_id": 4,
+    "Name": "Orthopedics"
+  },
+  {
+    "speciality_id": 5,
+    "Name": "Pediatrics"
+  },
+  {
+    "speciality_id": 6,
+    "Name": "Psychiatry"
+  },
+  {
+    "speciality_id": 7,
+    "Name": "Cardiology"
+  },
+  {
+    "speciality_id": 8,
+    "Name": "Internal"
+  },
+  {
+    "speciality_id": 9,
+    "Name": "Gynaecology"
+  },
+  {
+    "speciality_id": 10,
+    "Name": "Throat"
+  },
+  {
+    "speciality_id": 11,
+    "Name": "Diabetes"
+  },
+  {
+    "speciality_id": 12,
+    "Name": "Respiratory"
+  },
+  {
+    "speciality_id": 13,
+    "Name": "Audiology"
+  },
+  {
+    "speciality_id": 14,
+    "Name": "Andrology"
+  },
+  {
+    "speciality_id": 15,
+    "Name": "Allergy"
+  }
+]

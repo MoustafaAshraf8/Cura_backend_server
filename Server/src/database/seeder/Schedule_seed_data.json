@@ -1,0 +1,362 @@
+[
+  {
+    "schedule_id": 1,
+    "clinic_id": 1,
+    "Day": "saturday",
+    "Date": "2024-07-06"
+  },
+  {
+    "schedule_id": 2,
+    "clinic_id": 1,
+    "Day": "sunday",
+    "Date": "2024-07-07"
+  },
+  {
+    "schedule_id": 3,
+    "clinic_id": 2,
+    "Day": "monday",
+    "Date": "2024-07-08"
+  },
+  {
+    "schedule_id": 4,
+    "clinic_id": 2,
+    "Day": "tuesday",
+    "Date": "2024-07-09"
+  },
+  {
+    "schedule_id": 5,
+    "clinic_id": 3,
+    "Day": "wednesday",
+    "Date": "2024-07-10"
+  },
+  {
+    "schedule_id": 6,
+    "clinic_id": 3,
+    "Day": "thursday",
+    "Date": "2024-07-11"
+  },
+  {
+    "schedule_id": 7,
+    "clinic_id": 4,
+    "Day": "friday",
+    "Date": "2024-07-12"
+  },
+  {
+    "schedule_id": 8,
+    "clinic_id": 4,
+    "Day": "saturday",
+    "Date": "2024-07-13"
+  },
+  {
+    "schedule_id": 9,
+    "clinic_id": 5,
+    "Day": "sunday",
+    "Date": "2024-07-14"
+  },
+  {
+    "schedule_id": 10,
+    "clinic_id": 5,
+    "Day": "monday",
+    "Date": "2024-07-15"
+  },
+  {
+    "schedule_id": 11,
+    "clinic_id": 6,
+    "Day": "tuesday",
+    "Date": "2024-07-16"
+  },
+  {
+    "schedule_id": 12,
+    "clinic_id": 6,
+    "Day": "wednesday",
+    "Date": "2024-07-17"
+  },
+  {
+    "schedule_id": 13,
+    "clinic_id": 7,
+    "Day": "thursday",
+    "Date": "2024-07-18"
+  },
+  {
+    "schedule_id": 14,
+    "clinic_id": 7,
+    "Day": "friday",
+    "Date": "2024-07-19"
+  },
+  {
+    "schedule_id": 15,
+    "clinic_id": 8,
+    "Day": "saturday",
+    "Date": "2024-07-20"
+  },
+  {
+    "schedule_id": 16,
+    "clinic_id": 8,
+    "Day": "sunday",
+    "Date": "2024-07-21"
+  },
+  {
+    "schedule_id": 17,
+    "clinic_id": 9,
+    "Day": "monday",
+    "Date": "2024-07-22"
+  },
+  {
+    "schedule_id": 18,
+    "clinic_id": 9,
+    "Day": "tuesday",
+    "Date": "2024-07-23"
+  },
+  {
+    "schedule_id": 19,
+    "clinic_id": 10,
+    "Day": "wednesday",
+    "Date": "2024-07-24"
+  },
+  {
+    "schedule_id": 20,
+    "clinic_id": 10,
+    "Day": "thursday",
+    "Date": "2024-07-25"
+  },
+  {
+    "schedule_id": 21,
+    "clinic_id": 11,
+    "Day": "friday",
+    "Date": "2024-07-26"
+  },
+  {
+    "schedule_id": 22,
+    "clinic_id": 11,
+    "Day": "saturday",
+    "Date": "2024-07-27"
+  },
+  {
+    "schedule_id": 23,
+    "clinic_id": 12,
+    "Day": "sunday",
+    "Date": "2024-07-28"
+  },
+  {
+    "schedule_id": 24,
+    "clinic_id": 12,
+    "Day": "monday",
+    "Date": "2024-07-29"
+  },
+  {
+    "schedule_id": 25,
+    "clinic_id": 13,
+    "Day": "tuesday",
+    "Date": "2024-07-30"
+  },
+  {
+    "schedule_id": 26,
+    "clinic_id": 13,
+    "Day": "wednesday",
+    "Date": "2024-07-31"
+  },
+  {
+    "schedule_id": 27,
+    "clinic_id": 14,
+    "Day": "thursday",
+    "Date": "2024-08-01"
+  },
+  {
+    "schedule_id": 28,
+    "clinic_id": 14,
+    "Day": "friday",
+    "Date": "2024-08-02"
+  },
+  {
+    "schedule_id": 29,
+    "clinic_id": 15,
+    "Day": "saturday",
+    "Date": "2024-08-03"
+  },
+  {
+    "schedule_id": 30,
+    "clinic_id": 15,
+    "Day": "sunday",
+    "Date": "2024-08-04"
+  },
+  {
+    "schedule_id": 31,
+    "clinic_id": 16,
+    "Day": "monday",
+    "Date": "2024-08-05"
+  },
+  {
+    "schedule_id": 32,
+    "clinic_id": 16,
+    "Day": "tuesday",
+    "Date": "2024-08-06"
+  },
+  {
+    "schedule_id": 33,
+    "clinic_id": 17,
+    "Day": "wednesday",
+    "Date": "2024-08-07"
+  },
+  {
+    "schedule_id": 34,
+    "clinic_id": 17,
+    "Day": "thursday",
+    "Date": "2024-08-08"
+  },
+  {
+    "schedule_id": 35,
+    "clinic_id": 18,
+    "Day": "friday",
+    "Date": "2024-08-09"
+  },
+  {
+    "schedule_id": 36,
+    "clinic_id": 18,
+    "Day": "saturday",
+    "Date": "2024-08-10"
+  },
+  {
+    "schedule_id": 37,
+    "clinic_id": 19,
+    "Day": "sunday",
+    "Date": "2024-08-11"
+  },
+  {
+    "schedule_id": 38,
+    "clinic_id": 19,
+    "Day": "monday",
+    "Date": "2024-08-12"
+  },
+  {
+    "schedule_id": 39,
+    "clinic_id": 20,
+    "Day": "tuesday",
+    "Date": "2024-08-13"
+  },
+  {
+    "schedule_id": 40,
+    "clinic_id": 20,
+    "Day": "wednesday",
+    "Date": "2024-08-14"
+  },
+  {
+    "schedule_id": 41,
+    "clinic_id": 21,
+    "Day": "thursday",
+    "Date": "2024-08-15"
+  },
+  {
+    "schedule_id": 42,
+    "clinic_id": 21,
+    "Day": "friday",
+    "Date": "2024-08-16"
+  },
+  {
+    "schedule_id": 43,
+    "clinic_id": 22,
+    "Day": "saturday",
+    "Date": "2024-08-17"
+  },
+  {
+    "schedule_id": 44,
+    "clinic_id": 22,
+    "Day": "sunday",
+    "Date": "2024-08-18"
+  },
+  {
+    "schedule_id": 45,
+    "clinic_id": 23,
+    "Day": "monday",
+    "Date": "2024-08-19"
+  },
+  {
+    "schedule_id": 46,
+    "clinic_id": 23,
+    "Day": "tuesday",
+    "Date": "2024-08-20"
+  },
+  {
+    "schedule_id": 47,
+    "clinic_id": 24,
+    "Day": "wednesday",
+    "Date": "2024-08-21"
+  },
+  {
+    "schedule_id": 48,
+    "clinic_id": 24,
+    "Day": "thursday",
+    "Date": "2024-08-22"
+  },
+  {
+    "schedule_id": 49,
+    "clinic_id": 25,
+    "Day": "friday",
+    "Date": "2024-08-23"
+  },
+  {
+    "schedule_id": 50,
+    "clinic_id": 25,
+    "Day": "saturday",
+    "Date": "2024-08-24"
+  },
+  {
+    "schedule_id": 51,
+    "clinic_id": 26,
+    "Day": "sunday",
+    "Date": "2024-08-25"
+  },
+  {
+    "schedule_id": 52,
+    "clinic_id": 26,
+    "Day": "monday",
+    "Date": "2024-08-26"
+  },
+  {
+    "schedule_id": 53,
+    "clinic_id": 27,
+    "Day": "tuesday",
+    "Date": "2024-08-27"
+  },
+  {
+    "schedule_id": 54,
+    "clinic_id": 27,
+    "Day": "wednesday",
+    "Date": "2024-08-28"
+  },
+  {
+    "schedule_id": 55,
+    "clinic_id": 28,
+    "Day": "thursday",
+    "Date": "2024-08-29"
+  },
+  {
+    "schedule_id": 56,
+    "clinic_id": 28,
+    "Day": "friday",
+    "Date": "2024-08-30"
+  },
+  {
+    "schedule_id": 57,
+    "clinic_id": 29,
+    "Day": "saturday",
+    "Date": "2024-08-31"
+  },
+  {
+    "schedule_id": 58,
+    "clinic_id": 29,
+    "Day": "sunday",
+    "Date": "2024-09-01"
+  },
+  {
+    "schedule_id": 59,
+    "clinic_id": 30,
+    "Day": "monday",
+    "Date": "2024-09-02"
+  },
+  {
+    "schedule_id": 60,
+    "clinic_id": 30,
+    "Day": "tuesday",
+    "Date": "2024-09-03"
+  }
+]

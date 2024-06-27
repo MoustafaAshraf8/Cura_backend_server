@@ -73,6 +73,11 @@ module.exports = {
         defaultValue: false,
         type: Sequelize.BOOLEAN,
       },
+      Image: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.BLOB("long"), // 'long' is optional, depends on MySQL version and size of data
+      },
       // createdAt: {
       //   allowNull: false,
       //   type: Sequelize.DATE,

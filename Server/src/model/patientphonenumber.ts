@@ -32,7 +32,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       PhoneNumber: {
         primaryKey: true,
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
     },
     {

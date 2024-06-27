@@ -16,6 +16,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare Rating: number;
     declare Experience: number;
     declare Approved: boolean;
+    declare Image: Buffer;
     static associate(models: any) {
       Doctor.hasOne(models.Clinic, {
         foreignKey: "doctor_id",
@@ -89,6 +90,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Approved: {
         defaultValue: false,
         type: DataTypes.BOOLEAN,
+      },
+      Image: {
+        allowNull: true,
+        defaultValue: null,
+        type: DataTypes.BLOB("long"), // 'long' is optional, depends on MySQL version and size of data
       },
     },
     {

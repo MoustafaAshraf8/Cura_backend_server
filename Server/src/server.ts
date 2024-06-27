@@ -87,7 +87,7 @@ server.listen(port, async () => {
   try {
     await connectToDB(1);
     await runMigrations();
-    console.log(`server listening on port: 8080`);
+    console.log(`server listening on port: ${port}`);
   } catch (err) {
     console.error(err);
     process.exit(0);

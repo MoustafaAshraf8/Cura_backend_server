@@ -15,6 +15,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare Password: string;
     declare Gender: string;
     declare DOB: Date;
+    declare Image: Buffer;
 
     static associate(models: any) {
       Patient.hasOne(models.EMR, {
@@ -73,6 +74,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: true,
         defaultValue: null,
         type: DataTypes.DATE,
+      },
+      Image: {
+        allowNull: true,
+        defaultValue: null,
+        type: DataTypes.BLOB("long"), // 'long' is optional, depends on MySQL version and size of data
       },
     },
     {

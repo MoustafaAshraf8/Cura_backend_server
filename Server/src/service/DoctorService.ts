@@ -13,6 +13,8 @@ import { ClinicDTO } from "../dto/ClinicDTO";
 import { error } from "console";
 import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";
+import { ScheduleDTO } from "../dto/ScheduleDTO";
+import logger from "../utility/logger";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface
@@ -50,8 +52,8 @@ export class DoctorService {
 
   static async addSchedule(
     doctor_id: number,
-    schedule: Schedule_Interface
-  ): Promise<Schedule_Interface> {
+    schedule: ScheduleDTO
+  ): Promise<ScheduleDTO> {
     console.log("doctor addSchedule service");
 
     const clinic_id = await db.Clinic.findOne({
@@ -64,16 +66,33 @@ export class DoctorService {
     if (clinic_id == null) {
       throw new UserNotFoundException();
     }
+
     const scheduleObj = {
       clinic_id: clinic_id.dataValues.clinic_id,
-      ...schedule,
+      Day: schedule.Day,
+      Date: schedule.Date,
     };
+
     const scheduleData = await db.Schedule.create(scheduleObj);
     if (scheduleData == null) {
       throw new Error();
     }
 
-    return scheduleData.dataValues;
+    const timeslotObjList = schedule.timeslot.map((slot) => {
+      return {
+        schedule_id: scheduleData.dataValues.schedule_id,
+        Start: slot.Start,
+        End: slot.End,
+      };
+    });
+
+    const timeslotData = await db.TimeSlot.bulkCreate(timeslotObjList);
+    const newSchedule = new ScheduleDTO({
+      ...scheduleData.dataValues,
+      timeslot: timeslotData,
+    });
+
+    return newSchedule;
   }
 
   static async getMySchedule(doctor_id: number): Promise<Schedule_Interface[]> {
@@ -89,13 +108,15 @@ export class DoctorService {
     if (clinic_id == null) {
       throw UserNotFoundException;
     }
+
     const scheduleData: Schedule_Interface[] = await db.Schedule.findAll({
       where: {
         clinic_id: clinic_id.dataValues.clinic_id,
       },
-      attributes: {
-        exclude: ["clinic_id"],
-      },
+      include: [{ association: "timeslot" }],
+      // attributes: {
+      //   exclude: ["clinic_id"],
+      // },
     });
     if (scheduleData == null) {
       throw new ScheduleNotFoundException();
@@ -135,6 +156,86 @@ export class DoctorService {
     }
 
     return scheduleData;
+  }
+
+  static async getReservedTimeSlot(doctor_id: number): Promise<any> {
+    const timeslots = await db.TimeSlot.findAll({
+      include: [
+        {
+          association: "schedule",
+          include: [
+            {
+              association: "clinic",
+              include: [
+                {
+                  association: "doctor",
+                  where: { doctor_id: doctor_id }, // Filter by doctor_id
+                },
+              ],
+            },
+          ],
+        },
+        {
+          association: "patient",
+        },
+      ],
+      where: {
+        patient_id: {
+          [Op.ne]: null,
+        },
+      },
+    })
+      .then((timeSlots: any) => {
+        return timeSlots;
+      })
+      .catch((err: any) => {
+        // Handle errors
+        console.error("Error fetching time slots:", err);
+      });
+    return timeslots;
+  }
+
+  static async deleteReservedTimeSlot2(doctor_id: number, timeslot_id: number) {
+    try {
+      // Find the TimeSlot that matches the criteria
+      const timeSlot = await db.TimeSlot.findOne({
+        where: {
+          timeslot_id: timeslot_id,
+        },
+        include: [
+          {
+            association: "schedule",
+            include: [
+              {
+                association: "clinic",
+                include: [
+                  {
+                    association: "doctor",
+                    where: { doctor_id: doctor_id }, // Filter by doctor_id
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            association: "patient",
+          },
+        ],
+      });
+
+      // If the time slot is found, update the patient_id to null
+      if (timeSlot) {
+        timeSlot.patient_id = null;
+        await timeSlot.save();
+        return timeSlot;
+      } else {
+        throw new TimeSlotNotFoundException();
+      }
+    } catch (err) {
+      // Handle errors
+      console.error("Error updating time slot:", err);
+      throw err; // Rethrow the error or handle it as needed
+    }
   }
 
   static async getDoctorBySpeciality(

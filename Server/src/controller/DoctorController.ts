@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { PatientService } from "../service/PatientService";
-import { Patient_Interface } from "../type/patient/Patient_Interface";
 import { Hasher } from "../utility/Hasher";
 import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { WrongPasswordException } from "../error/WrongPasswordException";
@@ -9,7 +7,8 @@ import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import { DoctorService } from "../service/DoctorService";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
-import { MailService } from "../service/MailService";
+import { ScheduleDTO } from "../dto/ScheduleDTO";
+import logger from "../utility/logger";
 export class DoctorController {
   static async signup(
     req: Request,
@@ -49,19 +48,32 @@ export class DoctorController {
     res.json(doctor);
   }
 
+  //   static async addSchedule(
+  //     req: Request,
+  //     res: Response,
+  //     next: NextFunction
+  //   ): Promise<void> {
+  //     const doctor_id: number = Object(req).doctor_id;
+  //     console.log(`doctor_id --> ${doctor_id}`);
+  //     const schedule: Schedule_Interface = { ...req.body };
+  //     console.log(`schedule: ${schedule}`);
+  //     const result: Schedule_Interface = await DoctorService.addSchedule(
+  //       doctor_id,
+  //       schedule
+  //     );
+  //     res.statusCode = 200;
+  //     res.json(result);
+  //   }
+
   static async addSchedule(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const doctor_id: number = Object(req).doctor_id;
+    const doctor_id: number = Object(req).user_id;
     console.log(`doctor_id --> ${doctor_id}`);
-    const schedule: Schedule_Interface = { ...req.body };
-    console.log(`schedule: ${schedule}`);
-    const result: Schedule_Interface = await DoctorService.addSchedule(
-      doctor_id,
-      schedule
-    );
+    const schedule: ScheduleDTO = new ScheduleDTO(req.body);
+    const result = await DoctorService.addSchedule(doctor_id, schedule);
     res.statusCode = 200;
     res.json(result);
   }
@@ -71,12 +83,39 @@ export class DoctorController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const doctor_id: number = Object(req).doctor_id;
+    const doctor_id: number = Object(req).user_id;
     const schedule: Schedule_Interface[] = await DoctorService.getMySchedule(
       doctor_id
     );
     res.statusCode = 200;
     res.json(schedule);
+  }
+
+  static async getReservedTimeSlot(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const doctor_id: number = Object(req).user_id;
+
+    const result: any = await DoctorService.getReservedTimeSlot(doctor_id);
+    res.statusCode = 200;
+    res.json(result);
+  }
+  static async deleteReservedTimeSlot(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const doctor_id: number = Object(req).user_id;
+    const timeslot_id = Number(req.params.id);
+    const result: any = await DoctorService.deleteReservedTimeSlot2(
+      doctor_id,
+      timeslot_id
+    );
+    logger.info(result.dataValues.patient.dataValues.Email);
+    res.statusCode = 200;
+    res.end();
   }
 
   static async addTimeSlot(

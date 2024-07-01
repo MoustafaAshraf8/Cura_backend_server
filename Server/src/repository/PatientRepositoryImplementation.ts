@@ -87,8 +87,7 @@ export class PatientRepositoryImplementation
         patient_id: patient_id,
       },
     });
-
-    if (patient.dataValues.length == 0) throw new UnothorizedUserException();
+    if (patient == null) throw new UnothorizedUserException();
 
     return patient;
   };

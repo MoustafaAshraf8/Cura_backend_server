@@ -53,7 +53,7 @@ module.exports = {
       },
       Experience: {
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: "0",
         type: Sequelize.STRING,
       },
       speciality_id: {

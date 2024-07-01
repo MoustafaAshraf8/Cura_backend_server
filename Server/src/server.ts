@@ -56,6 +56,7 @@ server.post(
 
 server.use(errorHandler);
 
+import logger from "./utility/logger";
 function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -63,14 +64,14 @@ function sleep(ms: number) {
 }
 
 async function connectToDB(tries: number) {
-  console.log(`try -> ${tries}`);
-  await sleep(5000);
+  logger.info(`try -> ${tries}`);
+  //   await sleep(5000);
   if (tries >= 3) {
     throw new Error("Cannot connect to DB!!");
   }
   try {
     await db.sequelize.authenticate();
-    await mongoose.connect(process.env.MONGODB_URI as string);
+    //  await mongoose.connect(process.env.MONGODB_URI as string);
   } catch (err) {
     console.log(err);
     connectToDB(tries++);
@@ -86,8 +87,8 @@ var nrc = require("node-run-cmd");
 server.listen(port, async () => {
   try {
     await connectToDB(1);
-    await runMigrations();
-    console.log(`server listening on port: ${port}`);
+    //  await runMigrations();
+    logger.info(`server listening on port: ${port}`);
   } catch (err) {
     console.error(err);
     process.exit(0);

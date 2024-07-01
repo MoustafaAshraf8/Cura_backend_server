@@ -81,7 +81,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Experience: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: "0",
       },
       speciality_id: {
         allowNull: false,

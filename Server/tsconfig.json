@@ -101,7 +101,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
 
     //===============
-    "baseUrl": ".", // Base directory for resolving non-relative modules
+    //  "baseUrl": ".", // Base directory for resolving non-relative modules
     //  "paths": {
     //    "*": ["src/type/*"] // Paths to resolve modules
     //  },

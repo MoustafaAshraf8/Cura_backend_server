@@ -1,12 +1,12 @@
 export class TimeSlot {
-  public timeslot_id: number;
+  public timeslot_id: number | null;
   public schedule_id: number | null;
   public patient_id: number | null;
   public Start: string | null;
   public End: string | null;
 
   constructor(json: any) {
-    this.timeslot_id = json.timeslot_id;
+    this.timeslot_id = json.timeslot_id || null;
     this.schedule_id = json.schedule_id || null;
     this.patient_id = json.patient_id || null;
     this.Start = json.Start || null;

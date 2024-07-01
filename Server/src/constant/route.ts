@@ -23,9 +23,11 @@ const doctorRoute = {
   login: "/login",
   signup: "/signup",
   mySchedule: "/schedule",
-  schedule: "/schedule/:id",
+  scheduleWithId: "/schedule/:id",
   timeSlot: "/timeslot",
+  timeSlotWithId: "/timeslot/:id",
   profile: "/profile/:id",
+  reserved: "/schedule/reserved",
 };
 
 export { patientRoute, serverRoute, doctorRoute };

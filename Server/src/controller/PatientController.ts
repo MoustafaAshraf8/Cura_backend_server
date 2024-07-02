@@ -1,38 +1,23 @@
-import { Request, Response, NextFunction, json } from "express";
+import mongoose from "mongoose";
+import { Request, Response, NextFunction } from "express";
 import { PatientService } from "../service/PatientService";
-// import { Patient_Interface } from "../type/patient/Patient_Interface";
-import { Hasher } from "../utility/Hasher";
-// import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
-import { WrongPasswordException } from "../error/WrongPasswordException";
-import { JWT } from "../utility/JWT";
-import { IncomingHttpHeaders } from "http";
-import busboy from "busboy";
-import { MailService } from "../service/MailService";
 import { Controller } from "./Controller";
 import { PatientControllerInterface } from "./PatientControllerInterface";
-import { PatientRepositoryImplementation } from "../repository/PatientRepositoryImplementation";
 import { PatientSignUpSchema } from "../validation/PatientSignUpSchema";
-import Joi from "joi";
-import { Validate } from "sequelize-typescript";
 import { Patient } from "../dto/Patient";
 import { statusCode } from "../constant/StatusCode";
 import { UserValidationSchema } from "../validation/UserValidationSchema";
 import { User } from "../dto/User";
-import { TimeSlotReservationSchema } from "../validation/TimeSlotReservationSchema";
 import { TimeSlot } from "../dto/TimeSlot";
 import { PaymentSchema } from "../validation/PaymentSchema";
 import { ClinicDTO } from "../dto/ClinicDTO";
-import { EMR, IEMRModel } from "../database/mongo/model/EMR";
-import { Allergy } from "../database/mongo/model/Allergy";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
 import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
-import mongoose from "mongoose";
 export class PatientController
   extends Controller
   implements PatientControllerInterface
 {
-  // implements PatientControllerInterface
   constructor() {
     super(new PatientService());
   }
@@ -42,8 +27,6 @@ export class PatientController
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    console.log("new PatientController");
-
     const validation = await PatientSignUpSchema.validateAsync(req.body);
     const patient: Patient = new Patient(validation);
     console.log(patient);

@@ -1,17 +1,6 @@
-//import { Patient_Interface } from "../type/patient/Patient_Interface";
-import db from "../model/index";
-//import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
-import { Op } from "sequelize";
-import { UserNotFoundException } from "../error/UserNotFoundException";
-//import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
-import { EMR, IEMRModel } from "../database/mongo/model/EMR";
-import internal from "stream";
-import busboy from "busboy";
-import { IncomingHttpHeaders } from "http";
-import path from "path";
+import { IEMRModel } from "../database/mongo/model/EMR";
 import { MailService } from "./MailService";
-import { extend } from "joi";
 import { Service } from "./Service";
 import { PatientRepositoryImplementation } from "../repository/PatientRepositoryImplementation";
 import { PatientServiceInterface } from "./PatientServiceInterface";
@@ -22,17 +11,13 @@ import { DoctorService } from "./DoctorService";
 import { TimeSlot } from "../dto/TimeSlot";
 import { ClinicDTO } from "../dto/ClinicDTO";
 import { Payment } from "../utility/Payment";
-import { Allergy, IAllergyModel } from "../database/mongo/model/Allergy";
+import { IAllergyModel } from "../database/mongo/model/Allergy";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
 import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
-import {
-  IChronicIllness,
-  IChronicIllnessModel,
-} from "../database/mongo/model/ChronicIllness";
+import { IChronicIllnessModel } from "../database/mongo/model/ChronicIllness";
 import BookingServiceRabbitMQClient from "../RabbitMQ/BookingServiceRabbitMQClient";
 import { TimeSlotReservationConflictException } from "../error/TimeSlotReservationConflictException";
-// import { AllergyGridFSBucket } from "../database/mongo/model/AllergyGridFSBucket";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
     super(new PatientRepositoryImplementation());

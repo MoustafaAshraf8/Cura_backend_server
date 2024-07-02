@@ -1,20 +1,17 @@
-import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import db from "../model/index";
+import { Doctor_Interface } from "../type/doctor/Doctor_Interface";
 import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
-import { Association, Op, Sequelize, where } from "sequelize";
+import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
 import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotFoundException";
-import { model } from "mongoose";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 import { ForbiddenAccessException } from "../error/ForbiddenAccessException";
 import { TimeSlot } from "../dto/TimeSlot";
 import { ClinicDTO } from "../dto/ClinicDTO";
-import { error } from "console";
 import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";
 import { ScheduleDTO } from "../dto/ScheduleDTO";
-import logger from "../utility/logger";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface

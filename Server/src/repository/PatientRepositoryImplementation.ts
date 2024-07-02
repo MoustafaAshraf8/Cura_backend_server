@@ -1,16 +1,11 @@
-//import { Patient_Interface } from "../type/patient/Patient_Interface";
-
-//import { LoginCredential_Interface } from "../type/generic/LoginCredential_Interface";
 import { Op } from "sequelize";
 import { UserNotFoundException } from "../error/UserNotFoundException";
-//import { EMR_Interface } from "../type/patient/EMR_Interface";
 import mongoose from "mongoose";
-import { EMR, IEMR, IEMRModel } from "../database/mongo/model/EMR";
+import { EMR, IEMRModel } from "../database/mongo/model/EMR";
 import internal, { Readable } from "stream";
 import busboy from "busboy";
 import { IncomingHttpHeaders } from "http";
 import path from "path";
-import { MailService } from "../service/MailService";
 import { PatientRepository } from "./PatientRepository";
 import { Repository } from "./Repository";
 import db from "../model/index";
@@ -27,7 +22,6 @@ import { FileDTO } from "../dto/FileDTO";
 import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
 import {
   ChronicIllness,
-  IChronicIllness,
   IChronicIllnessModel,
 } from "../database/mongo/model/ChronicIllness";
 import { EMRNotFoundException } from "../error/EMRNotFoundException";

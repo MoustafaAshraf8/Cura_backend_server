@@ -11,10 +11,10 @@ module.exports = {
         "utf-8"
       )
     );
-    return queryInterface.bulkInsert("TimeSlot", dataArray);
+    return queryInterface.bulkInsert("timeslot", dataArray);
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("TimeSlot", null, {});
+    return queryInterface.bulkDelete("timeslot", null, {});
   },
 };

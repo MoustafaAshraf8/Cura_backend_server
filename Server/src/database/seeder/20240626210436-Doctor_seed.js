@@ -56,10 +56,10 @@ module.exports = {
     //    }
     //    return e;
     //  });
-    return queryInterface.bulkInsert("Doctor", dataArray);
+    return queryInterface.bulkInsert("doctor", dataArray);
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("Doctor", null, {});
+    return queryInterface.bulkDelete("doctor", null, {});
   },
 };

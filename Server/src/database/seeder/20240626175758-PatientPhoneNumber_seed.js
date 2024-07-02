@@ -12,10 +12,10 @@ module.exports = {
       )
     );
 
-    return queryInterface.bulkInsert("PatientPhoneNumber", dataArray);
+    return queryInterface.bulkInsert("patientphonenumber", dataArray);
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("PatientPhoneNumber", null, {});
+    return queryInterface.bulkDelete("patientphonenumber", null, {});
   },
 };

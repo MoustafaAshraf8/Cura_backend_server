@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mostafa
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: cura_sql_db
       MYSQL_USER: user
       MYSQL_PASSWORD: mostafa
     ports:
@@ -18,7 +18,7 @@ services:
     container_name: mongo_server_c
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: cura
+      MONGO_INITDB_DATABASE: cura_nosql_db
       MONGO_INITDB_ROOT_USERNAME: mongoadmin
       MONGO_INITDB_ROOT_PASSWORD: mongopasswd
     ports:

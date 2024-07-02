@@ -65,13 +65,13 @@ function sleep(ms: number) {
 
 async function connectToDB(tries: number) {
   logger.info(`try -> ${tries}`);
-  //   await sleep(5000);
+  await sleep(5000);
   if (tries >= 3) {
     throw new Error("Cannot connect to DB!!");
   }
   try {
     await db.sequelize.authenticate();
-    //  await mongoose.connect(process.env.MONGODB_URI as string);
+    await mongoose.connect(process.env.MONGODB_URI as string);
   } catch (err) {
     console.log(err);
     connectToDB(tries++);
@@ -80,14 +80,24 @@ async function connectToDB(tries: number) {
 
 async function runMigrations() {
   await sleep(5000);
+  logger.info("running migrations...");
   nrc.run("npm run migrate_up");
+  logger.info("migrations ✔");
+}
+
+async function runSeeds() {
+  await sleep(5000);
+  logger.info("running seeds...");
+  nrc.run("npm run seed_up");
+  logger.info("seeds ✔");
 }
 
 var nrc = require("node-run-cmd");
 server.listen(port, async () => {
   try {
     await connectToDB(1);
-    //  await runMigrations();
+    await runMigrations();
+    await runSeeds();
     logger.info(`server listening on port: ${port}`);
   } catch (err) {
     console.error(err);

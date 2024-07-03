@@ -14,6 +14,7 @@ import { ClinicDTO } from "../dto/ClinicDTO";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
 import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
+import logger from "../utility/logger";
 export class PatientController
   extends Controller
   implements PatientControllerInterface
@@ -127,6 +128,8 @@ export class PatientController
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    logger.info(req.body.data);
+    //  logger.info(req.body.files.split("A")[0]);
     const allergyData = req.body.data;
     const fileData = req.body.files;
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });

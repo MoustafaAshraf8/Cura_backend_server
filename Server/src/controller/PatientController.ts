@@ -26,13 +26,13 @@ export class PatientController
   public signup = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const validation = await PatientSignUpSchema.validateAsync(req.body);
     const patient: Patient = new Patient(validation);
     console.log(patient);
     const newPatient: Patient = await (this.service as PatientService).signup(
-      patient
+      patient,
     );
     console.log(newPatient);
     res.statusCode = statusCode.success.ok;
@@ -42,13 +42,13 @@ export class PatientController
   public signin = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const validation = await UserValidationSchema.validateAsync(req.body);
 
     const user: User = new User(validation);
     const patient: Patient = await (this.service as PatientService).signin(
-      user
+      user,
     );
     res.statusCode = statusCode.success.ok;
     res.json(patient);
@@ -57,7 +57,7 @@ export class PatientController
   public reserveTimeSlot = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     // const validation = await TimeSlotReservationSchema.validateAsync(req.body);
     const timeslot_id = Number(req.params.id);
@@ -77,7 +77,7 @@ export class PatientController
   public deleteReservedTimeSlot = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     // const validation = await TimeSlotReservationSchema.validateAsync(req.body);
     const timeslot_id = Number(req.params.id);
@@ -98,14 +98,14 @@ export class PatientController
   public payOnline = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const validation = await PaymentSchema.validateAsync(req.body);
     const clinicDTO: ClinicDTO = new ClinicDTO(validation);
     //const patient = new Patient(Number(Object(req).user_id));
     const URL: string = await (this.service as PatientService).payOnline(
       clinicDTO,
-      Number(Object(req).user_id)
+      Number(Object(req).user_id),
     );
     res.statusCode = statusCode.redirect.seeOther;
     res.redirect(URL);
@@ -114,11 +114,11 @@ export class PatientController
   public getSchedule = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const patient_id: number = Number(Object(req).user_id);
     const result = await (this.service as PatientService).getSchedule(
-      patient_id
+      patient_id,
     );
     res.json(result);
   };
@@ -126,7 +126,7 @@ export class PatientController
   public addAllergy = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     logger.info(req.body.data);
     //  logger.info(req.body.files.split("A")[0]);
@@ -138,7 +138,7 @@ export class PatientController
     const result = await (this.service as PatientService).addAllergy(
       allergy,
       files,
-      patient
+      patient,
     );
     res.json(result);
   };
@@ -146,12 +146,12 @@ export class PatientController
   public getAllAllergy = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });
 
     const result = await (this.service as PatientService).getAllAllergy(
-      patient
+      patient,
     );
     res.json(result);
   };
@@ -159,7 +159,7 @@ export class PatientController
   public addChronicIllness = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     console.log("55555555555");
     const chronicIllnessData = req.body.data;
@@ -173,7 +173,7 @@ export class PatientController
     const result = await (this.service as PatientService).addChronicIllness(
       chronicIllness,
       files,
-      patient
+      patient,
     );
     res.json(result);
   };
@@ -181,12 +181,12 @@ export class PatientController
   public getAllChronicIllness = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });
 
     const result = await (this.service as PatientService).getAllChronicIllness(
-      patient
+      patient,
     );
     res.json(result);
   };
@@ -194,7 +194,7 @@ export class PatientController
   public getAllergyFile = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });
     const file_id: string = req.params.id;
@@ -203,30 +203,32 @@ export class PatientController
     ).getAllergyFile(patient, file_id);
     // readstream.pipe(res);
     // Convert stream to buffer
-    const streamToBuffer = (stream: mongoose.mongo.GridFSBucketReadStream) => {
-      return new Promise((resolve, reject) => {
-        const chunks: any = [];
-        stream.on("data", (chunk) => {
-          chunks.push(chunk);
-        });
-        stream.on("end", () => {
-          resolve(Buffer.concat(chunks));
-        });
-        stream.on("error", reject);
-      });
-    };
+    //  const streamToBuffer = (stream: mongoose.mongo.GridFSBucketReadStream) => {
+    //    return new Promise((resolve, reject) => {
+    //      const chunks: any = [];
+    //      stream.on("data", (chunk) => {
+    //        chunks.push(chunk);
+    //      });
+    //      stream.on("end", () => {
+    //        resolve(Buffer.concat(chunks));
+    //      });
+    //      stream.on("error", reject);
+    //    });
+    //  };
 
-    const buffer = await streamToBuffer(readstream);
+    //  const buffer = await streamToBuffer(readstream);
 
     // res.setHeader("Content-Type", "application/octet-stream");
     // res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.send(buffer);
+    //  res.send(buffer);
+
+    readstream.pipe(res);
   };
 
   public getChronicIllnessFile = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });
     const file_id: string = req.params.id;

@@ -28,6 +28,10 @@ const doctorRoute = {
   timeSlotWithId: "/timeslot/:id",
   profile: "/profile/:id",
   reserved: "/schedule/reserved",
+  allergyWithId: "/emr/allergy/:id",
+  allergyFileWithId: "/allergy/file/:id",
+  chronicIllnessWithId: "/emr/chronicIllness/:id",
+  chronicIllnessFileWithId: "/chronicIllness/file/:id",
 };
 
 export { patientRoute, serverRoute, doctorRoute };

@@ -9,71 +9,58 @@ import { Schedule_Interface } from "../type/doctor/Schedule_Interface";
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 import { ScheduleDTO } from "../dto/ScheduleDTO";
 import logger from "../utility/logger";
+import { Patient } from "../dto/Patient";
+import { PatientService } from "../service/PatientService";
+import { AllergyDTO } from "../dto/AllergyDTO";
+import { FileDTO } from "../dto/FileDTO";
+import mongoose from "mongoose";
+import { MailService } from "../service/MailService";
 export class DoctorController {
   static async signup(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const doctorData: Doctor_Interface = { ...req.body };
-    // to be properly implemented in model setter using hooks
     doctorData.Password = await Hasher.hashPassword(doctorData.Password);
     const doctor: Doctor_Interface = await DoctorService.signup(doctorData);
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
-    // await MailService.sendMail(doctor.Email);
+    await MailService.sendMail(doctor.Email);
     Object(doctor).accessToken = jwt;
     res.json(doctor);
-    // res.json(doctor);
   }
 
   static async login(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const credential: LoginCredential_Interface = { ...req.body };
     const doctor: Doctor_Interface = await DoctorService.login(credential);
 
-    console.log(doctor);
     const verified: boolean = await Hasher.verifyPassword(
       credential.Password,
-      doctor.Password
+      doctor.Password,
     );
     if (!verified) {
       throw new WrongPasswordException();
     }
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
-    // res.json({ accessToken: jwt });
     Object(doctor).accessToken = jwt;
     res.json(doctor);
   }
 
-  //   static async addSchedule(
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> {
-  //     const doctor_id: number = Object(req).doctor_id;
-  //     console.log(`doctor_id --> ${doctor_id}`);
-  //     const schedule: Schedule_Interface = { ...req.body };
-  //     console.log(`schedule: ${schedule}`);
-  //     const result: Schedule_Interface = await DoctorService.addSchedule(
-  //       doctor_id,
-  //       schedule
-  //     );
-  //     res.statusCode = 200;
-  //     res.json(result);
-  //   }
-
   static async addSchedule(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const doctor_id: number = Object(req).user_id;
-    console.log(`doctor_id --> ${doctor_id}`);
     const schedule: ScheduleDTO = new ScheduleDTO(req.body);
-    const result = await DoctorService.addSchedule(doctor_id, schedule);
+    const result: ScheduleDTO = await DoctorService.addSchedule(
+      doctor_id,
+      schedule,
+    );
     res.statusCode = 200;
     res.json(result);
   }
@@ -81,20 +68,31 @@ export class DoctorController {
   static async getMySchedule(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const doctor_id: number = Object(req).user_id;
-    const schedule: Schedule_Interface[] = await DoctorService.getMySchedule(
-      doctor_id
-    );
+    const schedule: Schedule_Interface[] =
+      await DoctorService.getMySchedule(doctor_id);
     res.statusCode = 200;
     res.json(schedule);
+  }
+
+  static async addTimeSlot(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const doctor_id: number = Object(req).doctor_id;
+    const timeSlot: TimeSlot_Interface = { ...req.body };
+    const result = await DoctorService.addTimeSlot(doctor_id, timeSlot);
+    res.statusCode = 200;
+    res.json(result);
   }
 
   static async getReservedTimeSlot(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const doctor_id: number = Object(req).user_id;
 
@@ -102,48 +100,40 @@ export class DoctorController {
     res.statusCode = 200;
     res.json(result);
   }
+
   static async deleteReservedTimeSlot(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const doctor_id: number = Object(req).user_id;
     const timeslot_id = Number(req.params.id);
-    const result: any = await DoctorService.deleteReservedTimeSlot2(
+    const result: any = await DoctorService.deleteReservedTimeSlot(
       doctor_id,
-      timeslot_id
+      timeslot_id,
     );
-    logger.info(result.dataValues.patient.dataValues.Email);
     res.statusCode = 200;
     res.end();
   }
 
-  static async addTimeSlot(
+  static async getDoctorProfile(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
-    const doctor_id: number = Object(req).doctor_id;
-    const timeSlot: TimeSlot_Interface = { ...req.body };
-    // const result: Schedule_Interface = await DoctorService.addTimeSlot(
-    //   doctor_id,
-    //   schedule
-    // );
-
-    const result = await DoctorService.addTimeSlot(doctor_id, timeSlot);
-    res.statusCode = 200;
-    res.json(result);
+    const doctor_id: number = Number(req.params.id);
+    const doctorData = await DoctorService.getDoctorProfile(doctor_id);
+    res.json(doctorData);
   }
 
   static async getScheduleById(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const doctor_id: number = Number(req.params.id);
-    const schedule: Schedule_Interface[] = await DoctorService.getScheduleById(
-      doctor_id
-    );
+    const schedule: Schedule_Interface[] =
+      await DoctorService.getScheduleById(doctor_id);
     console.log(schedule);
     res.statusCode = 200;
     res.json(schedule);
@@ -152,38 +142,86 @@ export class DoctorController {
   static async getDoctorBySpeciality(
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     const speciality = req.query.speciality as String;
     const result = await DoctorService.getDoctorBySpeciality(speciality);
     res.json(result);
   }
 
-  static async getDoctorById(
+  static getAllAllergy = async (
     req: Request,
     res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const doctor_id: number = Number(req.params.id);
-  }
+    next: NextFunction,
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: Number(req.params.id) });
+    const patientService = new PatientService();
+    const result = await patientService.getAllAllergy(patient);
+    res.json(result);
+  };
 
-  static async getDoctorProfile(
+  public getAllergyFile = async (
     req: Request,
     res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const doctor_id: number = Number(req.params.id);
-    const doctorData = await DoctorService.getDoctorProfile(doctor_id);
-    res.json(doctorData);
-  }
+    next: NextFunction,
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: 30 });
+    const file_id: string = req.params.id;
+    const patientService = new PatientService();
+    const readstream: mongoose.mongo.GridFSBucketReadStream =
+      await patientService.getAllergyFile(patient, file_id);
+    readstream.pipe(res);
+    //  // Convert stream to buffer
+    //  const streamToBuffer = (stream: mongoose.mongo.GridFSBucketReadStream) => {
+    //    return new Promise((resolve, reject) => {
+    //      const chunks: any = [];
+    //      stream.on("data", (chunk) => {
+    //        chunks.push(chunk);
+    //      });
+    //      stream.on("end", () => {
+    //        resolve(Buffer.concat(chunks));
+    //      });
+    //      stream.on("error", reject);
+    //    });
+    //  };
+  };
+  public getChronicIllnessFile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: 30 });
+    const file_id: string = req.params.id;
+    const patientService = new PatientService();
+    const readstream: mongoose.mongo.GridFSBucketReadStream =
+      await patientService.getChronicIllnessFile(patient, file_id);
+    readstream.pipe(res);
+  };
+  static addAllergy = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    logger.info(req.body.data);
+    //  logger.info(req.body.files.split("A")[0]);
+    const allergyData = req.body.data;
+    const fileData = req.body.files;
+    const patient = new Patient({ patient_id: Number(req.params.id) });
+    const allergy: AllergyDTO = AllergyDTO.fromJson(allergyData);
+    const files: FileDTO[] = FileDTO.fromJSON(fileData);
+    const patientService = new PatientService();
+    const result = await patientService.addAllergy(allergy, files, patient);
+    res.json(result);
+  };
 
-  //   static async getAll(
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> {
-  //     const patients = await PatientService.getAll();
-  //     res.statusCode = 200;
-  //     res.json(patients);
-  //   }
+  static getAllChronicIllness = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    const patient = new Patient({ patient_id: Number(req.params.id) });
+    const patientService = new PatientService();
+    const result = await patientService.getAllChronicIllness(patient);
+    res.json(result);
+  };
 }

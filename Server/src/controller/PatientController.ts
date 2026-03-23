@@ -30,11 +30,9 @@ export class PatientController
   ): Promise<void> => {
     const validation = await PatientSignUpSchema.validateAsync(req.body);
     const patient: Patient = new Patient(validation);
-    console.log(patient);
     const newPatient: Patient = await (this.service as PatientService).signup(
       patient,
     );
-    console.log(newPatient);
     res.statusCode = statusCode.success.ok;
     res.json(newPatient);
   };
@@ -59,7 +57,6 @@ export class PatientController
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    // const validation = await TimeSlotReservationSchema.validateAsync(req.body);
     const timeslot_id = Number(req.params.id);
     const patient_id = Number(Object(req).user_id);
     const timeSlot = new TimeSlot({
@@ -79,17 +76,13 @@ export class PatientController
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    // const validation = await TimeSlotReservationSchema.validateAsync(req.body);
     const timeslot_id = Number(req.params.id);
     const patient_id = Number(Object(req).user_id);
     const timeSlot = new TimeSlot({
       timeslot_id: timeslot_id,
       patient_id: patient_id,
     });
-    console.log("777777777");
-    const result: boolean = await (
-      this.service as PatientService
-    ).deleteReservedTimeSlot(timeSlot);
+    await (this.service as PatientService).deleteReservedTimeSlot(timeSlot);
 
     res.statusCode = statusCode.success.ok;
     res.end();
@@ -102,7 +95,6 @@ export class PatientController
   ): Promise<void> => {
     const validation = await PaymentSchema.validateAsync(req.body);
     const clinicDTO: ClinicDTO = new ClinicDTO(validation);
-    //const patient = new Patient(Number(Object(req).user_id));
     const URL: string = await (this.service as PatientService).payOnline(
       clinicDTO,
       Number(Object(req).user_id),
@@ -129,7 +121,6 @@ export class PatientController
     next: NextFunction,
   ): Promise<void> => {
     logger.info(req.body.data);
-    //  logger.info(req.body.files.split("A")[0]);
     const allergyData = req.body.data;
     const fileData = req.body.files;
     const patient = new Patient({ patient_id: Number(Object(req).user_id) });
@@ -161,7 +152,6 @@ export class PatientController
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    console.log("55555555555");
     const chronicIllnessData = req.body.data;
     const fileData = req.body.files;
 

@@ -74,7 +74,7 @@ export class PatientService extends Service implements PatientServiceInterface {
 
     // 2- delete reservation
     const result: boolean =
-      await DoctorService.deleteReservedTimeSlot(timeSlot);
+      await DoctorService.deleteReservationByPatient(timeSlot);
     return result;
   };
 
@@ -82,13 +82,11 @@ export class PatientService extends Service implements PatientServiceInterface {
     clinicDTO: ClinicDTO,
     patient_id: number,
   ): Promise<string> => {
-    const patient: Patient = new Patient({});
-    const clinic: ClinicDTO = new ClinicDTO({});
-    // const patient: Patient = await (
-    //   this.repositoryImplementaion as PatientRepositoryImplementation
-    // ).authorize(patient_id as number);
-    // const clinic: ClinicDTO = await DoctorService.getClinicData(clinicDTO);
-    const payment: Payment = new Payment(clinic, patient);
+    const authorizedPatient: Patient = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).authorize(patient_id as number);
+    const clinic: ClinicDTO = await DoctorService.getClinicData(clinicDTO);
+    const payment: Payment = new Payment(clinic, authorizedPatient);
     const URL: string = await payment.getPaymentKey();
     return URL;
   };

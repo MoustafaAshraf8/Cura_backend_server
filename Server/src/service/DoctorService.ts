@@ -12,6 +12,7 @@ import { ClinicDTO } from "../dto/ClinicDTO";
 import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";
 import { ScheduleDTO } from "../dto/ScheduleDTO";
+import { MailService } from "./MailService";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface,
@@ -37,7 +38,7 @@ export class DoctorService {
         doctor_id: doctorData.dataValues.doctor_id,
         Name: doctorData.dataValues.FirstName + "'s " + "clinic",
       });
-
+      await MailService.SignUpDoctorCongrats(doctorData.dataValues.Email);
       return doctorData.dataValues;
     });
 

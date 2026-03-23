@@ -25,7 +25,6 @@ export class DoctorController {
     doctorData.Password = await Hasher.hashPassword(doctorData.Password);
     const doctor: Doctor_Interface = await DoctorService.signup(doctorData);
     const jwt = await JWT.createAccessToken({ id: doctor.doctor_id });
-    await MailService.sendMail(doctor.Email);
     Object(doctor).accessToken = jwt;
     res.json(doctor);
   }

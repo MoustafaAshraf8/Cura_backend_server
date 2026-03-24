@@ -26,9 +26,9 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false,
-        validate: {
-          isEmail: true,
-        },
+        //   validate: {
+        //     isEmail: true,
+        //   },
       },
       Password: {
         field: "Password",
@@ -55,10 +55,12 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
+        defaultValue: Sequelize.literal("NOW()"),
         type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
+        defaultValue: Sequelize.literal("NOW()"),
         type: Sequelize.DATE,
       },
     });

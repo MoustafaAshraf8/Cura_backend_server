@@ -37,6 +37,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATEONLY,
       },
+      createdAt: {
+        allowNull: false,
+        defaultValue: Sequelize.literal("NOW()"),
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        defaultValue: Sequelize.literal("NOW()"),
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

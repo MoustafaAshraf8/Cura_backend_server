@@ -24,11 +24,11 @@ module.exports = {
       Email: {
         field: "Email",
         type: Sequelize.STRING,
-        // unique: true,
+        unique: true,
         allowNull: false,
-        //   validate: {
-        //     isEmail: true,
-        //   },
+        validate: {
+          isEmail: true,
+        },
       },
       Password: {
         field: "Password",
@@ -51,16 +51,16 @@ module.exports = {
       Image: {
         allowNull: true,
         defaultValue: null,
-        type: Sequelize.BLOB("long"), // 'long' is optional, depends on MySQL version and size of data
+        type: Sequelize.BLOB("long"),
       },
-      // createdAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE,
-      // },
-      // updatedAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE,
-      // },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

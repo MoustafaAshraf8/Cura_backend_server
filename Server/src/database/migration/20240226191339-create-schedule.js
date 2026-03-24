@@ -30,7 +30,7 @@ module.exports = {
           "tuesday",
           "wednesday",
           "thursday",
-          "friday"
+          "friday",
         ),
       },
       Date: {

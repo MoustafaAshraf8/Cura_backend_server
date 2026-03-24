@@ -8,18 +8,6 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
-      // clinic_id: {
-      //   references: {
-      //     model: {
-      //       tableName: "clinic",
-      //     },
-      //     key: "clinic_id",
-      //   },
-      //   onDelete: "CASCADE",
-      //   onUpdate: "CASCADE",
-      //   allowNull: false,
-      //   type: Sequelize.INTEGER,
-      // },
       schedule_id: {
         references: {
           model: {
@@ -45,10 +33,18 @@ module.exports = {
         onUpdate: "CASCADE",
         type: Sequelize.INTEGER,
       },
-      // Date: {
-      //   allowNull: false,
-      //   type: Sequelize.DATEONLY,
-      // },
+      doctor_id: {
+        references: {
+          model: {
+            tableName: "doctor",
+          },
+          key: "doctor_id",
+        },
+        allowNull: false,
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        type: Sequelize.INTEGER,
+      },
       Start: {
         allowNull: false,
         type: Sequelize.TIME,
@@ -57,20 +53,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TIME,
       },
-      // available: {
-      //   allowNull: true,
-      //   defaultValue: true,
-      //   type: Sequelize.BOOLEAN,
-      // },
-
-      // createdAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE,
-      // },
-      // updatedAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE,
-      // },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

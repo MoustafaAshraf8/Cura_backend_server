@@ -1,12 +1,12 @@
 import { Channel, Connection, connect } from "amqplib";
 import { Consumer } from "./Consumer";
 import { Producer } from "./Producer";
-import { BookingServiceRabbitMQConfig } from "./BookingServiceRabbitMQConfig";
 import { EventEmitter } from "events";
 import { randomUUID } from "crypto";
+import { MAilServiceRabbitMQConfig } from "./MailServiceRabbitMQConfig";
 
-class BookingServiceRabbitMQClient {
-  private static instance: BookingServiceRabbitMQClient;
+class MailServiceRabbitMQClient {
+  private static instance: MailServiceRabbitMQClient;
   private isInitialized = false;
   private producer: Producer;
   private consumer: Consumer;
@@ -19,7 +19,7 @@ class BookingServiceRabbitMQClient {
 
   public static getInstance() {
     if (!this.instance) {
-      this.instance = new BookingServiceRabbitMQClient();
+      this.instance = new MailServiceRabbitMQClient();
     }
     return this.instance;
   }
@@ -30,8 +30,8 @@ class BookingServiceRabbitMQClient {
     }
 
     try {
-      const rabbitMQConfig: BookingServiceRabbitMQConfig =
-        new BookingServiceRabbitMQConfig();
+      const rabbitMQConfig: MAilServiceRabbitMQConfig =
+        new MAilServiceRabbitMQConfig();
       const uniqueUUID: string = randomUUID();
       this.eventEmitter = new EventEmitter();
 
@@ -73,4 +73,4 @@ class BookingServiceRabbitMQClient {
   }
 }
 
-export default BookingServiceRabbitMQClient.getInstance();
+export default MailServiceRabbitMQClient.getInstance();

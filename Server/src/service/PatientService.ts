@@ -18,6 +18,7 @@ import { ChronicIllnessDTO } from "../dto/ChronicIllnessDTO";
 import { IChronicIllnessModel } from "../database/mongo/model/ChronicIllness";
 import BookingServiceRabbitMQClient from "../RabbitMQ/BookingServiceRabbitMQClient";
 import { TimeSlotReservationConflictException } from "../error/TimeSlotReservationConflictException";
+import MailServiceRabbitMQClient from "../RabbitMQ/MailServiceRabbitMQClient";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
     super(new PatientRepositoryImplementation());
@@ -46,7 +47,7 @@ export class PatientService extends Service implements PatientServiceInterface {
 
   public reserveTimeSlot = async (timeSlot: TimeSlot): Promise<TimeSlot> => {
     // 1- authorize
-    await (
+    const patient = await (
       this.repositoryImplementaion as PatientRepositoryImplementation
     ).authorize(timeSlot.patient_id as number);
 
@@ -61,6 +62,25 @@ export class PatientService extends Service implements PatientServiceInterface {
     if (updatedTimeSlot == null) {
       throw new TimeSlotReservationConflictException();
     }
+    console.log(updatedTimeSlot);
+    const doctor = await DoctorService.getDoctorProfileFromTimeSlot(
+      updatedTimeSlot.timeslot_id,
+    );
+
+    MailServiceRabbitMQClient.produce({
+      data: {
+        operation: "patient-reserved",
+        patient: {
+          firstName: patient.FirstName,
+          email: patient.Email,
+        },
+        doctor: {
+          firstName: doctor.firstname,
+          email: doctor.firstname,
+        },
+      },
+    });
+
     return updatedTimeSlot;
   };
 

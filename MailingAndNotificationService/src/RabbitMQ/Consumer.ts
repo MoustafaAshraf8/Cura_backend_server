@@ -12,17 +12,13 @@ export class Consumer {
   }
 
   async consumeMessage() {
-    console.log("MailingAndNotificationService consuming...");
     this.channel.consume(
       this.rpcQueueName,
       async (message: ConsumeMessage | null) => {
         const { correlationId, replyTo } = message!.properties;
-        const operation: string = message?.properties.headers!.function;
         const messageContent = JSON.parse(message!.content.toString());
-        console.log(
-          `MailingAndNotificationService received message, correlationId: ${correlationId}`
-        );
-
+        const operation: string =
+          message?.properties.headers!.function || messageContent.operation;
         if (!correlationId || !replyTo) {
           console.log("missing some properties...");
         } else {
@@ -36,7 +32,7 @@ export class Consumer {
       },
       {
         noAck: true,
-      }
+      },
     );
   }
 }

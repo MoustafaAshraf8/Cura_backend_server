@@ -16,22 +16,17 @@ export class Consumer {
   }
 
   async consumeMessage() {
-    console.log("Ready to consume message...");
-
     this.channel.consume(
       this.replyQueueName,
       (message: ConsumeMessage | null) => {
-        console.log(
-          "the reply is -> " + JSON.parse(message!.content.toString())
-        );
         this.eventEmitter.emit(
           message?.properties.correlationId.toString(),
-          message
+          message,
         );
       },
       {
         noAck: true,
-      }
+      },
     );
   }
 }

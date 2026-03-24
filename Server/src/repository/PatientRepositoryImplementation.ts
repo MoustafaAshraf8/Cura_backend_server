@@ -82,7 +82,7 @@ export class PatientRepositoryImplementation
     });
     if (patient == null) throw new UnothorizedUserException();
 
-    return patient;
+    return new Patient(patient.dataValues);
   };
 
   public getEMR = async (patient_id: number): Promise<IEMRModel> => {

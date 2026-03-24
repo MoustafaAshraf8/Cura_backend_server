@@ -1,39 +1,233 @@
-/*
-import RabbitMQClient from "../RabbitMQ/RabbitMQClient";
-
+import nodemailer from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { INTEGER } from "sequelize";
 export class MessageHandler {
-  static async handle(parameters: {
-    operation: string;
-    data: any;
-    correlationId: string;
-    replyToQueue: string;
-  }) {
-    let response = {};
-    const { num1, num2 } = parameters.data;
-    console.log(`The operation is: ${parameters.operation}`);
-    switch (parameters.operation.toLowerCase()) {
-      case "multiply":
-        response = num1 * num2;
-        break;
-      case "addition":
-        response = num1 + num2;
-        break;
-      default:
-        response = 0;
-    }
+  private static transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
 
-    await RabbitMQClient.produce({
-      data: response,
-      correlationId: parameters.correlationId,
-      replyToQueue: parameters.replyToQueue,
+  static {
+    this.transport = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE,
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      secure: false,
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASSWORD,
+      },
     });
   }
-}
 
-*/
-import RabbitMQClient from "../RabbitMQ/RabbitMQClient";
-import db from "../model";
-export class MessageHandler {
+  static async SignUpPatientCongrats(parameters: {
+    firstName: string;
+    email: String;
+  }) {
+    const { firstName, email } = { ...parameters };
+    try {
+      const mailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [email],
+        subject: "Cura sign up",
+        text: "Cura sign up",
+        html: "<h1>Thank you for signing up at Cura for Patients</h1>",
+      };
+
+      await this.transport.sendMail(mailOptions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async SignUpDoctorCongrats(parameters: {
+    firstName: string;
+    email: String;
+  }) {
+    const { firstName, email } = { ...parameters };
+    try {
+      const mailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [email],
+        subject: "Cura sign up",
+        text: "hello world",
+        html: "<h1>thank you for signing up at Cura for Doctors</h1>",
+      };
+
+      await this.transport.sendMail(mailOptions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async patientReservedTimeSlot(parameters: {
+    doctorFirstName: string;
+    doctorEmail: String;
+    patientFirstName: string;
+    patientEmail: String;
+  }) {
+    const { doctorFirstName, patientFirstName, doctorEmail, patientEmail } = {
+      ...parameters,
+    };
+    try {
+      const doctorMailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [doctorEmail],
+        subject: "Time slot update",
+        text: "Time slot update",
+        html: `
+               <p>
+                  <h1>Hello ${doctorFirstName},</h1>
+               </p>
+               <p>
+                  <h4>
+                     ${patientFirstName} just reserved one of your time slots, get into the app to see the updates
+                  </h4>
+               </p>`,
+      };
+
+      const patientMailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [doctorEmail],
+        subject: "Reservation update",
+        text: "Reservation update",
+        html: `
+               <p>
+                  <h1>Hello ${patientFirstName},</h1>
+               </p>
+               <p>
+                  <h4>
+                     your reservation was succeed, get into the app to see the updates
+                  </h4>
+               </p>`,
+      };
+
+      await this.transport.sendMail(doctorMailOptions);
+      await this.transport.sendMail(patientMailOptions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async patientCancelledTimeSlot(parameters: {
+    doctorFirstName: string;
+    doctorEmail: String;
+    patientFirstName: string;
+    patientEmail: String;
+  }) {
+    const { doctorFirstName, patientFirstName, doctorEmail, patientEmail } = {
+      ...parameters,
+    };
+    try {
+      const doctorMailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [doctorEmail],
+        subject: "Time slot update",
+        text: "Time slot update",
+        html: `
+               <p>
+                  <h1>Hello ${doctorFirstName},</h1>
+               </p>
+               <p>
+                  <h4>
+                     ${patientFirstName} just cancelled one of your time slots, get into the app to see the updates
+                  </h4>
+               </p>`,
+      };
+
+      const patientMailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [doctorEmail],
+        subject: "Reservation update",
+        text: "Reservation update",
+        html: `
+               <p>
+                  <h1>Hello ${patientFirstName},</h1>
+               </p>
+               <p>
+                  <h4>
+                     your cancellation was succeed, get into the app to see the updates
+                  </h4>
+               </p>`,
+      };
+
+      await this.transport.sendMail(doctorMailOptions);
+      await this.transport.sendMail(patientMailOptions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async doctorCancelledTimeSlot(parameters: {
+    doctorFirstName: string;
+    doctorEmail: String;
+    patientFirstName: string;
+    patientEmail: String;
+  }) {
+    const { doctorFirstName, patientFirstName, doctorEmail, patientEmail } = {
+      ...parameters,
+    };
+    try {
+      const doctorMailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [doctorEmail],
+        subject: "Time slot update",
+        text: "Time slot update",
+        html: `
+               <p>
+                  <h1>Hello ${doctorFirstName},</h1>
+               </p>
+               <p>
+                  <h4>
+                     your cancellation was succeed, get into the app to see the updates
+                  </h4>
+               </p>`,
+      };
+
+      const patientMailOptions: any = {
+        from: {
+          name: "Cura",
+          address: process.env.USER,
+        },
+        to: [doctorEmail],
+        subject: "Reservation update",
+        text: "Reservation update",
+        html: `
+               <p>
+                  <h1>Hello ${patientFirstName},</h1>
+               </p>
+               <p>
+                  <h4>
+                     your reservation for Dr/ ${doctorFirstName} appointement was cancelled by him, get into the app to see the updates
+                  </h4>
+               </p>`,
+      };
+
+      await this.transport.sendMail(doctorMailOptions);
+      await this.transport.sendMail(patientMailOptions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   static async handle(parameters: {
     operation: string;
     data: any;
@@ -41,50 +235,39 @@ export class MessageHandler {
     replyToQueue: string;
   }) {
     let response: any;
-
-    try {
-      // const timeSlotObj = await db.sequelize.transaction(async (t: any) => {
-      //   const timeslot = await db.TimeSlot.findOne({
-      //     where: {
-      //       timeslot_id: parameters.data.timeslot_id,
-      //     },
-      //   });
-
-      //   if (timeslot.patient_id != null) {
-      //     throw new Error("cannot reserver");
-      //   }
-
-      //   await timeslot.update({ patient_id: parameters.data.patient_id });
-      //   await timeslot.save();
-
-      //   return timeslot.dataValues;
-      // });
-      const timeslot = await db.TimeSlot.update(
-        {
-          patient_id: parameters.data.patient_id,
-        },
-        {
-          where: {
-            timeslot_id: parameters.data.timeslot_id,
-            patient_id: null,
-          },
-        }
-      );
-
-      if (timeslot[0] == 0) {
-        throw new Error("cannot reserver");
-      }
-
-      response = timeslot;
-    } catch (error) {
-      console.log(error);
-      response = null;
+    const { operation, data, correlationId, replyToQueue } = { ...parameters };
+    switch (operation) {
+      case "patient-signup":
+        this.SignUpPatientCongrats({
+          firstName: data.patientFirstName,
+          email: data.patientEmail,
+        });
+      case "doctor-signup":
+        this.SignUpDoctorCongrats({
+          firstName: data.doctorFirstName,
+          email: data.doctorEmail,
+        });
+      case "patient-reserved":
+        this.patientReservedTimeSlot({
+          doctorEmail: data.doctorEmail,
+          doctorFirstName: data.doctorFirstName,
+          patientEmail: data.patientEmail,
+          patientFirstName: data.patientFirstName,
+        });
+      case "patient-cancelled":
+        this.patientCancelledTimeSlot({
+          doctorEmail: data.doctorEmail,
+          doctorFirstName: data.doctorFirstName,
+          patientEmail: data.patientEmail,
+          patientFirstName: data.patientFirstName,
+        });
+      case "doctor-cancelled":
+        this.doctorCancelledTimeSlot({
+          doctorEmail: data.doctorEmail,
+          doctorFirstName: data.doctorFirstName,
+          patientEmail: data.patientEmail,
+          patientFirstName: data.patientFirstName,
+        });
     }
-
-    await RabbitMQClient.produce({
-      data: response,
-      correlationId: parameters.correlationId,
-      replyToQueue: parameters.replyToQueue,
-    });
   }
 }

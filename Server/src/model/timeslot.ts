@@ -8,6 +8,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     declare timeslot_id: number;
     declare schedule_id: number;
     declare patient_id: number | null;
+    declare doctor_id: number;
     // Date: 'YYYY-MM-DD'
     // Start/End: 'hh:mm:ss'
     //  declare Date: Date;
@@ -35,6 +36,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
         onDelete: "SET NULL",
         onUpdate: "CASCADE",
       });
+
+      TimeSlot.belongsTo(models.Doctor, {
+        foreignKey: "doctor_id",
+        as: "doctor",
+        targetKey: "doctor_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
   }
   TimeSlot.init(
@@ -49,6 +58,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
       },
       patient_id: {
+        allowNull: true,
+        defaultValue: null,
+        type: DataTypes.INTEGER,
+      },
+      doctor_id: {
         allowNull: true,
         defaultValue: null,
         type: DataTypes.INTEGER,
@@ -71,7 +85,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       timestamps: false,
       modelName: "TimeSlot",
       tableName: "timeslot",
-    }
+    },
   );
   return TimeSlot;
 };

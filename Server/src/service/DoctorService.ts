@@ -372,4 +372,27 @@ export class DoctorService {
     });
     return timeSlot;
   }
+
+  static async getDoctorProfileFromTimeSlot(timeslot_id: number): Promise<any> {
+    // Query the TimeSlot table
+    const timeSlotData = await db.TimeSlot.findOne({
+      where: {
+        timeslot_id: timeslot_id,
+      },
+      include: [
+        {
+          model: db.Doctor,
+          as: "doctor", // make sure your TimeSlot model has `belongsTo(Doctor)` with alias 'doctor'
+          attributes: ["doctor_id", "firstname", "email"],
+        },
+      ],
+      attributes: [], // exclude timeslot fields if you only want doctor info
+    });
+
+    if (!timeSlotData || !timeSlotData.doctor) {
+      throw UserNotFoundException;
+    }
+
+    return timeSlotData.doctor.dataValues;
+  }
 }

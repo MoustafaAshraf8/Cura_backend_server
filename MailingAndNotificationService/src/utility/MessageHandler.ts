@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-import { INTEGER } from "sequelize";
 export class MessageHandler {
   private static transport: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
 
@@ -31,7 +30,7 @@ export class MessageHandler {
         to: [email],
         subject: "Cura sign up",
         text: "Cura sign up",
-        html: "<h1>Thank you for signing up at Cura for Patients</h1>",
+        html: `<h1>Hello ${firstName}, Thank you for signing up at Cura for Patients</h1>`,
       };
 
       await this.transport.sendMail(mailOptions);
@@ -54,7 +53,7 @@ export class MessageHandler {
         to: [email],
         subject: "Cura sign up",
         text: "hello world",
-        html: "<h1>thank you for signing up at Cura for Doctors</h1>",
+        html: `<h1>Hello ${firstName}, thank you for signing up at Cura for Doctors</h1>`,
       };
 
       await this.transport.sendMail(mailOptions);
@@ -234,40 +233,50 @@ export class MessageHandler {
     correlationId: string;
     replyToQueue: string;
   }) {
-    let response: any;
-    const { operation, data, correlationId, replyToQueue } = { ...parameters };
-    switch (operation) {
-      case "patient-signup":
-        this.SignUpPatientCongrats({
-          firstName: data.patientFirstName,
-          email: data.patientEmail,
-        });
-      case "doctor-signup":
-        this.SignUpDoctorCongrats({
-          firstName: data.doctorFirstName,
-          email: data.doctorEmail,
-        });
-      case "patient-reserved":
-        this.patientReservedTimeSlot({
-          doctorEmail: data.doctorEmail,
-          doctorFirstName: data.doctorFirstName,
-          patientEmail: data.patientEmail,
-          patientFirstName: data.patientFirstName,
-        });
-      case "patient-cancelled":
-        this.patientCancelledTimeSlot({
-          doctorEmail: data.doctorEmail,
-          doctorFirstName: data.doctorFirstName,
-          patientEmail: data.patientEmail,
-          patientFirstName: data.patientFirstName,
-        });
-      case "doctor-cancelled":
-        this.doctorCancelledTimeSlot({
-          doctorEmail: data.doctorEmail,
-          doctorFirstName: data.doctorFirstName,
-          patientEmail: data.patientEmail,
-          patientFirstName: data.patientFirstName,
-        });
+    const { operation, data } = { ...parameters };
+    try {
+      switch (operation) {
+        case "patient-signup":
+          this.SignUpPatientCongrats({
+            firstName: data.patient.firstName,
+            email: data.patient.email,
+          });
+          break;
+        case "doctor-signup":
+          this.SignUpDoctorCongrats({
+            firstName: data.doctorFirstName,
+            email: data.doctorEmail,
+          });
+          break;
+        case "patient-reserved":
+          this.patientReservedTimeSlot({
+            doctorEmail: data.doctor.email,
+            doctorFirstName: data.doctor.firstName,
+            patientEmail: data.patient.email,
+            patientFirstName: data.patient.firstName,
+          });
+          break;
+        case "patient-cancelled":
+          this.patientCancelledTimeSlot({
+            doctorEmail: data.doctor.email,
+            doctorFirstName: data.doctor.firstName,
+            patientEmail: data.patient.email,
+            patientFirstName: data.patient.firstName,
+          });
+          break;
+        case "doctor-cancelled":
+          this.doctorCancelledTimeSlot({
+            doctorEmail: data.doctor.email,
+            doctorFirstName: data.doctor.firstName,
+            patientEmail: data.patient.email,
+            patientFirstName: data.patient.firstName,
+          });
+          break;
+        default:
+          console.log("handler default function");
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }

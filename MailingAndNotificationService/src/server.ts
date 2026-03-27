@@ -5,9 +5,10 @@ dotenv.config();
 const operateService = async () => {
   try {
     await RabbitMQClient.initialize();
+    console.log("MailingAndNotificationService consuming...");
   } catch (error) {
     console.log(error);
-    process.exit(0);
+    operateService();
   }
 };
 

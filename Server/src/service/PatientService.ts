@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
 import { IEMRModel } from "../database/mongo/model/EMR";
-import { MailService } from "./MailService";
 import { Service } from "./Service";
 import { PatientRepositoryImplementation } from "../repository/PatientRepositoryImplementation";
 import { PatientServiceInterface } from "./PatientServiceInterface";
 import { Patient } from "../dto/Patient";
 import { JWT } from "../utility/JWT";
 import { User } from "../dto/User";
-import { DoctorService } from "./DoctorService";
 import { TimeSlot } from "../dto/TimeSlot";
 import { ClinicDTO } from "../dto/ClinicDTO";
 import { Payment } from "../utility/Payment";
@@ -19,6 +17,7 @@ import { IChronicIllnessModel } from "../database/mongo/model/ChronicIllness";
 import BookingServiceRabbitMQClient from "../RabbitMQ/BookingServiceRabbitMQClient";
 import { TimeSlotReservationConflictException } from "../error/TimeSlotReservationConflictException";
 import MailServiceRabbitMQClient from "../RabbitMQ/MailServiceRabbitMQClient";
+import { DoctorDTO } from "../dto/DoctorDTO";
 export class PatientService extends Service implements PatientServiceInterface {
   constructor() {
     super(new PatientRepositoryImplementation());
@@ -41,7 +40,15 @@ export class PatientService extends Service implements PatientServiceInterface {
     newPatient.accessToken = JWT.createAccessToken({
       id: newPatient.patient_id,
     });
-    await MailService.SignUpPatientCongrats(newPatient.Email as String);
+
+    const patientSignUpMailData = {
+      operation: "patient-signup",
+      patient: {
+        firstName: newPatient.FirstName,
+        email: newPatient.Email,
+      },
+    };
+    MailServiceRabbitMQClient.produce({ data: patientSignUpMailData });
     return newPatient;
   };
 
@@ -62,10 +69,9 @@ export class PatientService extends Service implements PatientServiceInterface {
     if (updatedTimeSlot == null) {
       throw new TimeSlotReservationConflictException();
     }
-    console.log(updatedTimeSlot);
-    const doctor = await DoctorService.getDoctorProfileFromTimeSlot(
-      updatedTimeSlot.timeslot_id,
-    );
+    const doctor: DoctorDTO = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getDoctorProfileFromTimeSlot(updatedTimeSlot.timeslot_id);
 
     MailServiceRabbitMQClient.produce({
       data: {
@@ -75,8 +81,8 @@ export class PatientService extends Service implements PatientServiceInterface {
           email: patient.Email,
         },
         doctor: {
-          firstName: doctor.firstname,
-          email: doctor.firstname,
+          firstName: doctor.FirstName,
+          email: doctor.Email,
         },
       },
     });
@@ -84,18 +90,36 @@ export class PatientService extends Service implements PatientServiceInterface {
     return updatedTimeSlot;
   };
 
-  public deleteReservedTimeSlot = async (
-    timeSlot: TimeSlot,
-  ): Promise<boolean> => {
+  public deleteReservedTimeSlot = async (timeSlot: TimeSlot): Promise<void> => {
     // 1- authorize
-    await (
+    const patient: Patient = await (
       this.repositoryImplementaion as PatientRepositoryImplementation
     ).authorize(timeSlot.patient_id as number);
 
     // 2- delete reservation
-    const result: boolean =
-      await DoctorService.deleteReservationByPatient(timeSlot);
-    return result;
+    await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).deleteReservationByPatient(timeSlot);
+
+    const doctor: DoctorDTO = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getDoctorProfileFromTimeSlot(timeSlot.timeslot_id!);
+
+    MailServiceRabbitMQClient.produce({
+      data: {
+        operation: "patient-cancelled",
+        patient: {
+          firstName: patient.FirstName,
+          email: patient.Email,
+        },
+        doctor: {
+          firstName: doctor.FirstName,
+          email: doctor.Email,
+        },
+      },
+    });
+
+    return;
   };
 
   public payOnline = async (
@@ -105,14 +129,18 @@ export class PatientService extends Service implements PatientServiceInterface {
     const authorizedPatient: Patient = await (
       this.repositoryImplementaion as PatientRepositoryImplementation
     ).authorize(patient_id as number);
-    const clinic: ClinicDTO = await DoctorService.getClinicData(clinicDTO);
+    const clinic: ClinicDTO = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getClinicData(clinicDTO);
     const payment: Payment = new Payment(clinic, authorizedPatient);
     const URL: string = await payment.getPaymentKey();
     return URL;
   };
 
   public getSchedule = async (patient_id: number): Promise<any> => {
-    const result = await DoctorService.getPatientSchedule(patient_id);
+    const result = await (
+      this.repositoryImplementaion as PatientRepositoryImplementation
+    ).getPatientSchedule(patient_id);
     return result;
   };
 

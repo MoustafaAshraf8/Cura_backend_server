@@ -14,7 +14,6 @@ import { PatientService } from "../service/PatientService";
 import { AllergyDTO } from "../dto/AllergyDTO";
 import { FileDTO } from "../dto/FileDTO";
 import mongoose from "mongoose";
-import { MailService } from "../service/MailService";
 export class DoctorController {
   static async signup(
     req: Request,

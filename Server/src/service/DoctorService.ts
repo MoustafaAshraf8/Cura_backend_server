@@ -8,11 +8,11 @@ import { ScheduleNotFoundException } from "../error/doctorException/ScheduleNotF
 import { TimeSlot_Interface } from "../type/doctor/TimeSlot_Interface";
 import { ForbiddenAccessException } from "../error/ForbiddenAccessException";
 import { TimeSlot } from "../dto/TimeSlot";
-import { ClinicDTO } from "../dto/ClinicDTO";
-import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";
 import { ScheduleDTO } from "../dto/ScheduleDTO";
-import { MailService } from "./MailService";
+import MailServiceRabbitMQClient from "../RabbitMQ/MailServiceRabbitMQClient";
+import { Patient } from "../dto/Patient";
+import { DoctorDTO } from "../dto/DoctorDTO";
 export class DoctorService {
   static async login(
     credential: LoginCredential_Interface,
@@ -38,9 +38,17 @@ export class DoctorService {
         doctor_id: doctorData.dataValues.doctor_id,
         Name: doctorData.dataValues.FirstName + "'s " + "clinic",
       });
-      await MailService.SignUpDoctorCongrats(doctorData.dataValues.Email);
       return doctorData.dataValues;
     });
+
+    const doctorSignUpMailData = {
+      operation: "doctor-signup",
+      doctor: {
+        firstName: doctorData.FirstName,
+        email: doctorData.Email,
+      },
+    };
+    MailServiceRabbitMQClient.produce({ data: doctorSignUpMailData });
 
     return doctorData;
   }
@@ -185,31 +193,44 @@ export class DoctorService {
       const timeSlot = await db.TimeSlot.findOne({
         where: {
           timeslot_id: timeslot_id,
+          doctor_id: doctor_id,
         },
         include: [
           {
-            association: "schedule",
-            include: [
-              {
-                association: "clinic",
-                include: [
-                  {
-                    association: "doctor",
-                    where: { doctor_id: doctor_id },
-                  },
-                ],
-              },
-            ],
+            association: "patient",
+            require: true,
           },
           {
-            association: "patient",
+            association: "doctor",
+            require: true,
           },
         ],
       });
-      // If the time slot is found, update the patient_id to null
+
       if (timeSlot) {
         timeSlot.patient_id = null;
         await timeSlot.save();
+
+        const patient: Patient = new Patient(
+          timeSlot.dataValues.patient.dataValues,
+        );
+        const doctor: DoctorDTO = new DoctorDTO(
+          timeSlot.dataValues.doctor.dataValues,
+        );
+        MailServiceRabbitMQClient.produce({
+          data: {
+            operation: "doctor-cancelled",
+            patient: {
+              firstName: patient.FirstName,
+              email: patient.Email,
+            },
+            doctor: {
+              firstName: doctor.FirstName,
+              email: doctor.Email,
+            },
+          },
+        });
+
         return timeSlot;
       } else {
         throw new TimeSlotNotFoundException();
@@ -311,88 +332,5 @@ export class DoctorService {
     });
 
     return new TimeSlot(timeSlotObj);
-  }
-
-  static async deleteReservationByPatient(
-    targetTimeSlot: TimeSlot,
-  ): Promise<boolean> {
-    const timeslotObj = await db.TimeSlot.update(
-      {
-        patient_id: null,
-      },
-      {
-        where: {
-          patient_id: targetTimeSlot.patient_id,
-          timeslot_id: targetTimeSlot.timeslot_id,
-        },
-      },
-    );
-
-    if (!timeslotObj[0]) {
-      throw new TimeSlotNotFoundException();
-    }
-    return true;
-  }
-
-  static async getClinicData(clinicDTO: ClinicDTO): Promise<ClinicDTO> {
-    const clinic: ClinicDTO = await db.Clinic.findOne({
-      where: {
-        clinic_id: clinicDTO.clinic_id,
-      },
-    });
-
-    if (clinic == null) {
-      throw new ClinicNotFoundException();
-    }
-    return new ClinicDTO(clinic);
-  }
-
-  static async getPatientSchedule(patient_id: number): Promise<any> {
-    const timeSlot = await db.TimeSlot.findAll({
-      where: {
-        patient_id: patient_id,
-      },
-      include: [
-        {
-          association: "schedule",
-
-          include: [
-            {
-              association: "clinic",
-              include: [
-                {
-                  association: "doctor",
-                  include: [{ association: "speciality" }],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-    return timeSlot;
-  }
-
-  static async getDoctorProfileFromTimeSlot(timeslot_id: number): Promise<any> {
-    // Query the TimeSlot table
-    const timeSlotData = await db.TimeSlot.findOne({
-      where: {
-        timeslot_id: timeslot_id,
-      },
-      include: [
-        {
-          model: db.Doctor,
-          as: "doctor", // make sure your TimeSlot model has `belongsTo(Doctor)` with alias 'doctor'
-          attributes: ["doctor_id", "firstname", "email"],
-        },
-      ],
-      attributes: [], // exclude timeslot fields if you only want doctor info
-    });
-
-    if (!timeSlotData || !timeSlotData.doctor) {
-      throw UserNotFoundException;
-    }
-
-    return timeSlotData.doctor.dataValues;
   }
 }

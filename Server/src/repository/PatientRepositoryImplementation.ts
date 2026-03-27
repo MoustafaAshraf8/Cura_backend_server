@@ -24,6 +24,11 @@ import {
 import { EMRNotFoundException } from "../error/EMRNotFoundException";
 import { DatabaseConnectionError } from "../error/DatabaseConnectionError";
 import { Encryptor } from "../utility/Encryptor";
+import { DoctorDTO } from "../dto/DoctorDTO";
+import { TimeSlot } from "../dto/TimeSlot";
+import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";
+import { ClinicDTO } from "../dto/ClinicDTO";
+import { ClinicNotFoundException } from "../error/doctorException/ClinicNotFoundException";
 
 export class PatientRepositoryImplementation
   extends Repository
@@ -147,7 +152,9 @@ export class PatientRepositoryImplementation
     return allergies;
   };
 
-  public addAllergyFile = async (file: FileDTO): Promise<any> => {
+  public addAllergyFile = async (
+    file: FileDTO,
+  ): Promise<mongoose.mongo.GridFSBucketWriteStream> => {
     var Readable = require("stream").Readable;
     const db = mongoose.connections[0].db;
     const AllergyGridFSBucket: mongoose.mongo.GridFSBucket =
@@ -160,7 +167,7 @@ export class PatientRepositoryImplementation
     const saveTo = path.join(".", file.filename);
     await s.push(imgBuffer);
     await s.push(null);
-    const stream = await s.pipe(
+    const stream: mongoose.mongo.GridFSBucketWriteStream = await s.pipe(
       AllergyGridFSBucket.openUploadStream(saveTo, { metadata: metadata }),
     );
     return stream;
@@ -239,22 +246,22 @@ export class PatientRepositoryImplementation
     return chronicIllness;
   };
 
-  public addChronicIllnessFile = async (file: FileDTO): Promise<any> => {
+  public addChronicIllnessFile = async (
+    file: FileDTO,
+  ): Promise<mongoose.mongo.GridFSBucketWriteStream> => {
     var Readable = require("stream").Readable;
     const db = mongoose.connections[0].db;
-    const ChronicIllnessGridFSBucket: any = new mongoose.mongo.GridFSBucket(
-      db,
-      {
+    const ChronicIllnessGridFSBucket: mongoose.mongo.GridFSBucket =
+      new mongoose.mongo.GridFSBucket(db, {
         bucketName: "ChronicIllnessGridFSBucket",
-      },
-    );
+      });
     const imgBuffer = Buffer.from(file.base64, "base64");
     const metadata: object = file.getMetaData();
     var s = new Readable();
     const saveTo = path.join(".", file.filename);
     await s.push(imgBuffer);
     await s.push(null);
-    const stream = await s.pipe(
+    const stream: mongoose.mongo.GridFSBucketWriteStream = await s.pipe(
       ChronicIllnessGridFSBucket.openUploadStream(saveTo, {
         metadata: metadata,
       }),
@@ -280,5 +287,90 @@ export class PatientRepositoryImplementation
         new mongoose.Types.ObjectId(file_id),
       );
     return readStream;
+  };
+
+  public getDoctorProfileFromTimeSlot = async (
+    timeslot_id: number,
+  ): Promise<DoctorDTO> => {
+    // Query the TimeSlot table
+    const timeSlotData = await db.TimeSlot.findOne({
+      where: {
+        timeslot_id: timeslot_id,
+      },
+      include: [
+        {
+          model: db.Doctor,
+          as: "doctor", // make sure your TimeSlot model has `belongsTo(Doctor)` with alias 'doctor'
+          attributes: ["doctor_id", "firstname", "email"],
+        },
+      ],
+      attributes: [], // exclude timeslot fields if you only want doctor info
+    });
+
+    if (!timeSlotData || !timeSlotData.doctor) {
+      throw UserNotFoundException;
+    }
+
+    return new DoctorDTO(timeSlotData.doctor.dataValues);
+  };
+
+  public deleteReservationByPatient = async (
+    targetTimeSlot: TimeSlot,
+  ): Promise<void> => {
+    const timeslotObj = await db.TimeSlot.update(
+      {
+        patient_id: null,
+      },
+      {
+        where: {
+          patient_id: targetTimeSlot.patient_id,
+          timeslot_id: targetTimeSlot.timeslot_id,
+        },
+      },
+    );
+
+    if (!timeslotObj[0]) {
+      throw new TimeSlotNotFoundException();
+    }
+    return;
+  };
+
+  public getPatientSchedule = async (patient_id: number): Promise<any> => {
+    const timeSlot = await db.TimeSlot.findAll({
+      where: {
+        patient_id: patient_id,
+      },
+      include: [
+        {
+          association: "schedule",
+
+          include: [
+            {
+              association: "clinic",
+              include: [
+                {
+                  association: "doctor",
+                  include: [{ association: "speciality" }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    return timeSlot;
+  };
+
+  public getClinicData = async (clinicDTO: ClinicDTO): Promise<ClinicDTO> => {
+    const clinic: ClinicDTO = await db.Clinic.findOne({
+      where: {
+        clinic_id: clinicDTO.clinic_id,
+      },
+    });
+
+    if (clinic == null) {
+      throw new ClinicNotFoundException();
+    }
+    return new ClinicDTO(clinic);
   };
 }

@@ -13,7 +13,13 @@ import { ScheduleDTO } from "../dto/ScheduleDTO";
 import MailServiceRabbitMQClient from "../RabbitMQ/MailServiceRabbitMQClient";
 import { Patient } from "../dto/Patient";
 import { DoctorDTO } from "../dto/DoctorDTO";
-export class DoctorService {
+import { DoctorServiceInterface } from "./DoctorServiceInterface";
+import { Service } from "./Service";
+import { DoctorRepositoryImplementation } from "../repository/DoctorRepositoryImplementation";
+export class DoctorService extends Service implements DoctorServiceInterface {
+  constructor() {
+    super(new DoctorRepositoryImplementation());
+  }
   static async login(
     credential: LoginCredential_Interface,
   ): Promise<Doctor_Interface> {

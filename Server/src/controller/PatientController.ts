@@ -227,43 +227,4 @@ export class PatientController
     ).getChronicIllnessFile(patient, file_id);
     readstream.pipe(res);
   };
-
-  //   public getEMR = async (
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> => {
-  //     const id: number = Object(req).id;
-  //     const emr = await (
-  //       this.repositoryImplementaion as PatientRepositoryImplementation
-  //     ).getEMR(id);
-  //     res.statusCode = 200;
-  //     res.json(emr);
-  //   };
-
-  //   public getAll = async (
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> => {
-  //     const patients = await (
-  //       this.repositoryImplementaion as PatientRepositoryImplementation
-  //     ).getAll();
-  //     res.statusCode = 200;
-  //     res.json(patients);
-  //   };
-
-  //   public addSurgery = async (
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ): Promise<void> => {
-  //     const headers: IncomingHttpHeaders = req.headers;
-  //     const surgeryName: String = req.body!.surgeryName;
-  //     const bb: busboy.Busboy = await (
-  //       this.repositoryImplementaion as PatientRepositoryImplementation
-  //     ).addSurgery(surgeryName, headers);
-  //     req.pipe(bb);
-  //     res.end();
-  //   };
 }

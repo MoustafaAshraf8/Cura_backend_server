@@ -23,7 +23,7 @@ import {
 } from "../database/mongo/model/ChronicIllness";
 import { EMRNotFoundException } from "../error/EMRNotFoundException";
 import { DatabaseConnectionError } from "../error/DatabaseConnectionError";
-import { Encryptor } from "../utility/Encryptor";
+// import { Encryptor } from "../utility/Encryptor";
 import { DoctorDTO } from "../dto/DoctorDTO";
 import { TimeSlot } from "../dto/TimeSlot";
 import { TimeSlotNotFoundException } from "../error/TimeSlotNotFoundException";

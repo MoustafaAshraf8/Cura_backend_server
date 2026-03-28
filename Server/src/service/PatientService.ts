@@ -167,7 +167,7 @@ export class PatientService extends Service implements PatientServiceInterface {
     // 4- add files to bucket
 
     files.map(async (file) => {
-      const stream = await (
+      const stream: mongoose.mongo.GridFSBucketWriteStream = await (
         this.repositoryImplementaion as PatientRepositoryImplementation
       ).addAllergyFile(file);
       newAllergy.file.push(stream.id);

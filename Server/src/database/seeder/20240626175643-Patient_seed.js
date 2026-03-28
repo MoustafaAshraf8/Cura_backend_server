@@ -1,4 +1,6 @@
-"use strict";
+import mongoose from "mongoose";
+import { EMR } from "../mongo/model/EMR";
+("use strict");
 
 const fs = require("fs");
 const path = require("path");
@@ -13,6 +15,11 @@ module.exports = {
         "utf-8"
       )
     );
+    Array(dataArray).map(async (element, index) => {
+      const emr = await EMR.create({
+        patient_id: index,
+      });
+    });
     return queryInterface.bulkInsert("patient", dataArray);
   },
 

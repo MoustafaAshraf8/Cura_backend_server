@@ -1,0 +1,303 @@
+[
+  {
+    "clinic_id": 1,
+    "doctor_id": 1,
+    "Name": "John's clinic",
+    "City": "New York",
+    "Longtitude": "-74.005974",
+    "Latitude": "40.712776",
+    "Fee": 100,
+    "PatientCount": 50
+  },
+  {
+    "clinic_id": 2,
+    "doctor_id": 2,
+    "Name": "Jane's clinic",
+    "City": "Los Angeles",
+    "Longtitude": "-118.243683",
+    "Latitude": "34.052235",
+    "Fee": 120,
+    "PatientCount": 45
+  },
+  {
+    "clinic_id": 3,
+    "doctor_id": 3,
+    "Name": "Alice's clinic",
+    "City": "Chicago",
+    "Longtitude": "-87.629798",
+    "Latitude": "41.878113",
+    "Fee": 110,
+    "PatientCount": 55
+  },
+  {
+    "clinic_id": 4,
+    "doctor_id": 4,
+    "Name": "Michael's clinic",
+    "City": "Houston",
+    "Longtitude": "-95.369804",
+    "Latitude": "29.760427",
+    "Fee": 130,
+    "PatientCount": 60
+  },
+  {
+    "clinic_id": 5,
+    "doctor_id": 5,
+    "Name": "Emily's clinic",
+    "City": "Phoenix",
+    "Longtitude": "-112.074036",
+    "Latitude": "33.448376",
+    "Fee": 115,
+    "PatientCount": 48
+  },
+  {
+    "clinic_id": 6,
+    "doctor_id": 6,
+    "Name": "David's clinic",
+    "City": "Philadelphia",
+    "Longtitude": "-75.165222",
+    "Latitude": "39.952583",
+    "Fee": 105,
+    "PatientCount": 52
+  },
+  {
+    "clinic_id": 7,
+    "doctor_id": 7,
+    "Name": "Jessica's clinic",
+    "City": "San Antonio",
+    "Longtitude": "-98.493628",
+    "Latitude": "29.424122",
+    "Fee": 125,
+    "PatientCount": 58
+  },
+  {
+    "clinic_id": 8,
+    "doctor_id": 8,
+    "Name": "William's clinic",
+    "City": "San Diego",
+    "Longtitude": "-117.161087",
+    "Latitude": "32.715736",
+    "Fee": 135,
+    "PatientCount": 62
+  },
+  {
+    "clinic_id": 9,
+    "doctor_id": 9,
+    "Name": "Sophia's clinic",
+    "City": "Dallas",
+    "Longtitude": "-96.796989",
+    "Latitude": "32.776665",
+    "Fee": 110,
+    "PatientCount": 54
+  },
+  {
+    "clinic_id": 10,
+    "doctor_id": 10,
+    "Name": "Daniel's clinic",
+    "City": "San Jose",
+    "Longtitude": "-121.886330",
+    "Latitude": "37.338207",
+    "Fee": 120,
+    "PatientCount": 56
+  },
+  {
+    "clinic_id": 11,
+    "doctor_id": 11,
+    "Name": "Olivia's clinic",
+    "City": "Austin",
+    "Longtitude": "-97.743057",
+    "Latitude": "30.267153",
+    "Fee": 115,
+    "PatientCount": 50
+  },
+  {
+    "clinic_id": 12,
+    "doctor_id": 12,
+    "Name": "James's clinic",
+    "City": "Jacksonville",
+    "Longtitude": "-81.655647",
+    "Latitude": "30.332184",
+    "Fee": 125,
+    "PatientCount": 55
+  },
+  {
+    "clinic_id": 13,
+    "doctor_id": 13,
+    "Name": "Ella's clinic",
+    "City": "Indianapolis",
+    "Longtitude": "-86.158066",
+    "Latitude": "39.768402",
+    "Fee": 130,
+    "PatientCount": 60
+  },
+  {
+    "clinic_id": 14,
+    "doctor_id": 14,
+    "Name": "Matthew's clinic",
+    "City": "San Francisco",
+    "Longtitude": "-122.419418",
+    "Latitude": "37.774929",
+    "Fee": 110,
+    "PatientCount": 52
+  },
+  {
+    "clinic_id": 15,
+    "doctor_id": 15,
+    "Name": "Sophia's clinic",
+    "City": "Seattle",
+    "Longtitude": "-122.3320708",
+    "Latitude": "47.6062095",
+    "Fee": 125,
+    "PatientCount": 58
+  },
+  {
+    "clinic_id": 16,
+    "doctor_id": 16,
+    "Name": "Alexander's clinic",
+    "City": "Denver",
+    "Longtitude": "-104.990250",
+    "Latitude": "39.739235",
+    "Fee": 120,
+    "PatientCount": 54
+  },
+  {
+    "clinic_id": 17,
+    "doctor_id": 17,
+    "Name": "Isabella's clinic",
+    "City": "Washington D.C.",
+    "Longtitude": "-77.036873",
+    "Latitude": "38.907192",
+    "Fee": 115,
+    "PatientCount": 48
+  },
+  {
+    "clinic_id": 18,
+    "doctor_id": 18,
+    "Name": "William's clinic",
+    "City": "Boston",
+    "Longtitude": "-71.058880",
+    "Latitude": "42.360082",
+    "Fee": 130,
+    "PatientCount": 62
+  },
+  {
+    "clinic_id": 19,
+    "doctor_id": 19,
+    "Name": "Mia's clinic",
+    "City": "Detroit",
+    "Longtitude": "-83.045753",
+    "Latitude": "42.331429",
+    "Fee": 110,
+    "PatientCount": 50
+  },
+  {
+    "clinic_id": 20,
+    "doctor_id": 20,
+    "Name": "Michael's clinic",
+    "City": "Nashville",
+    "Longtitude": "-86.781602",
+    "Latitude": "36.162664",
+    "Fee": 125,
+    "PatientCount": 55
+  },
+  {
+    "clinic_id": 21,
+    "doctor_id": 21,
+    "Name": "Abigail's clinic",
+    "City": "Memphis",
+    "Longtitude": "-90.048981",
+    "Latitude": "35.149532",
+    "Fee": 120,
+    "PatientCount": 56
+  },
+  {
+    "clinic_id": 22,
+    "doctor_id": 22,
+    "Name": "Jayden's clinic",
+    "City": "Portland",
+    "Longtitude": "-122.676483",
+    "Latitude": "45.523064",
+    "Fee": 115,
+    "PatientCount": 54
+  },
+  {
+    "clinic_id": 23,
+    "doctor_id": 23,
+    "Name": "Charlotte's clinic",
+    "City": "Oklahoma City",
+    "Longtitude": "-97.516427",
+    "Latitude": "35.467560",
+    "Fee": 130,
+    "PatientCount": 60
+  },
+  {
+    "clinic_id": 24,
+    "doctor_id": 24,
+    "Name": "David's clinic",
+    "City": "Las Vegas",
+    "Longtitude": "-115.139830",
+    "Latitude": "36.169941",
+    "Fee": 110,
+    "PatientCount": 52
+  },
+  {
+    "clinic_id": 25,
+    "doctor_id": 25,
+    "Name": "Joseph's clinic",
+    "City": "Louisville",
+    "Longtitude": "-85.758456",
+    "Latitude": "38.252665",
+    "Fee": 125,
+    "PatientCount": 58
+  },
+  {
+    "clinic_id": 26,
+    "doctor_id": 26,
+    "Name": "Ava's clinic",
+    "City": "Baltimore",
+    "Longtitude": "-76.612190",
+    "Latitude": "39.290386",
+    "Fee": 120,
+    "PatientCount": 55
+  },
+  {
+    "clinic_id": 27,
+    "doctor_id": 27,
+    "Name": "Scarlett's clinic",
+    "City": "Milwaukee",
+    "Longtitude": "-87.906474",
+    "Latitude": "43.038902",
+    "Fee": 115,
+    "PatientCount": 48
+  },
+
+  {
+    "clinic_id": 28,
+    "doctor_id": 28,
+    "Name": "Benjamin's clinic",
+    "City": "Albuquerque",
+    "Longtitude": "-106.650421",
+    "Latitude": "35.084492",
+    "Fee": 130,
+    "PatientCount": 60
+  },
+  {
+    "clinic_id": 29,
+    "doctor_id": 29,
+    "Name": "Madison's clinic",
+    "City": "Tucson",
+    "Longtitude": "-110.974846",
+    "Latitude": "32.222607",
+    "Fee": 110,
+    "PatientCount": 52
+  },
+  {
+    "clinic_id": 30,
+    "doctor_id": 30,
+    "Name": "Elijah's clinic",
+    "City": "Fresno",
+    "Longtitude": "-119.787125",
+    "Latitude": "36.737232",
+    "Fee": 125,
+    "PatientCount": 58
+  }
+]

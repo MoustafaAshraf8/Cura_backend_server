@@ -1,8 +1,0 @@
-node_modules
-
-.vscode
-migrations
-database.json
-api
-src/template/
-build

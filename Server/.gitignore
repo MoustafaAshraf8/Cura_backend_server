@@ -1,0 +1,9 @@
+node_modules
+.env
+.env.docker
+.vscode
+migrations
+database.json
+api
+src/template/
+build

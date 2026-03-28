@@ -7,8 +7,8 @@ jobs:
       - checkout
       - run:
           name: install npm dependencies
-          working-directory: ./Server
           command: |
+            cd ./Server
             npm install
   code_test:
     docker:
@@ -17,8 +17,8 @@ jobs:
       - checkout
       - run:
           name: run unit testing
-          working-directory: ./Server
           command: |
+            cd ./Server
             npm install
             npm run test
   build_docker_image:
@@ -30,9 +30,9 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Build docker image
-          working-directory: ./Server
           command: |
-            docker build -t nodejsapp1 -t moustafaashraf/nodejsapp1:v01 .
+            cd ./Server
+            docker build -f Server/Dockerfile -t nodejsapp1 -t moustafaashraf/nodejsapp1:v01 Server/
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push moustafaashraf/nodejsapp1:v01
 workflows:

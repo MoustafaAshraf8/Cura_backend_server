@@ -31,9 +31,6 @@ services:
     ports:
       - 5672:5672 # webUI
       - 15672:15672 # broker port
-    # volumes:
-    #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-    #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
   app:
     build: ./Server/
@@ -57,3 +54,12 @@ services:
       - rabbitmq
     env_file:
       - ./BookingService/.env.docker
+
+  mailingandnotificationservice:
+    build: ./MailingAndNotificationService/
+    container_name: mailingandnotificationservice_c
+    restart: always
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./MailingAndNotificationService/.env.docker
